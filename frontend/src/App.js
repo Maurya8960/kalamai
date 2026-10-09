@@ -48,6 +48,8 @@ function App() {
     { role: 'ai', text: "Hello! I am your KalamAI Smart Assistant. Which subject or unit do you want to study today?" }
   ]);
   const [input, setInput] = useState('');
+  const [selectedFile, setSelectedFile] = useState(null);
+  const fileInputRef = useRef(null);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -111,6 +113,41 @@ function App() {
     setCurrentView('home');
   };
 
+  
+  const handleFileSelect = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    if (file.type.startsWith('image/')) {
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        setSelectedFile({
+          name: file.name,
+          type: file.type,
+          content: `[Image File: ${file.name}]`,
+          preview: event.target.result
+        });
+      };
+      reader.readAsDataURL(file);
+    } else {
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        setSelectedFile({
+          name: file.name,
+          type: file.type,
+          content: event.target.result,
+          preview: null
+        });
+      };
+      reader.readAsText(file);
+    }
+  };
+
+  const removeSelectedFile = () => {
+    setSelectedFile(null);
+    if (fileInputRef.current) fileInputRef.current.value = "";
+  };
+
   const sendMessage = async (e) => {
     e.preventDefault();
     if (!input.trim()) return;
@@ -119,7 +156,15 @@ function App() {
     setInput('');
     setLoading(true);
     try {
-      const res = await axios.post(`${BACKEND_URL}/api/chat`, { userPrompt: userMsg.text });
+      const currentFile = selectedFile;
+    setSelectedFile(null);
+    if (fileInputRef.current) fileInputRef.current.value = "";
+
+    try {
+      const res = await axios.post(`${BACKEND_URL}/api/chat`, {
+        userPrompt: userMsg.text,
+        fileData: currentFile ? { name: currentFile.name, type: currentFile.type, content: currentFile.content } : null
+      });
       setMessages((prev) => [...prev, { role: 'ai', text: res.data.reply }]);
     } catch (error) {
       setMessages((prev) => [...prev, { role: 'ai', text: "❌ Connection error with AI server." }]);
@@ -331,10 +376,48 @@ function App() {
                 ))}
                 {loading && <div style={{ alignSelf: 'flex-start', color: '#EA580C', fontStyle: 'italic' }}>AI is typing...</div>}
               </div>
-              <form onSubmit={sendMessage} style={{ display: 'flex', gap: '15px' }}>
-                <input value={input} onChange={e=>setInput(e.target.value)} placeholder="Ask for notes..." style={{ flex: 1, padding: '20px', borderRadius: '30px', border: '1px solid #ddd', outlineColor: '#EA580C' }} />
-                <button type="submit" style={{ padding: '0 40px', background: 'linear-gradient(to right, #F97316, #F59E0B)', color: 'white', border: 'none', borderRadius: '30px', fontWeight: 'bold', cursor: 'pointer' }}>Send</button>
-              </form>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', width: '100%' }}>
+                {selectedFile && (
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px', background: '#FFF7ED', border: '1px solid #FDBA74', padding: '8px 16px', borderRadius: '14px', width: 'fit-content' }}>
+                    {selectedFile.preview ? (
+                      <img src={selectedFile.preview} alt="upload" style={{ width: '32px', height: '32px', borderRadius: '6px', objectFit: 'cover' }} />
+                    ) : (
+                      <span style={{ fontSize: '18px' }}>📄</span>
+                    )}
+                    <span style={{ fontSize: '13px', fontWeight: 'bold', color: '#C2410C', maxWidth: '220px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{selectedFile.name}</span>
+                    <button type="button" onClick={removeSelectedFile} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#EA580C', fontWeight: 'bold', fontSize: '16px' }}>×</button>
+                  </div>
+                )}
+                <form onSubmit={sendMessage} style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+                  <input
+                    type="file"
+                    ref={fileInputRef}
+                    onChange={handleFileSelect}
+                    accept="image/*,.txt,.pdf,.doc,.docx,.c,.cpp,.py,.java"
+                    style={{ display: 'none' }}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => fileInputRef.current?.click()}
+                    title="Attach Photo or Document"
+                    style={{ width: '52px', height: '52px', borderRadius: '50%', border: '1px solid #E5E7EB', background: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', fontSize: '20px', flexShrink: 0 }}
+                  >
+                    📎
+                  </button>
+                  <input
+                    value={input}
+                    onChange={e => setInput(e.target.value)}
+                    placeholder="Ask doubt, request notes, or ask about attached file..."
+                    style={{ flex: 1, padding: '16px 22px', borderRadius: '30px', border: '1px solid #E5E7EB', outlineColor: '#EA580C', fontSize: '15px' }}
+                  />
+                  <button
+                    type="submit"
+                    style={{ padding: '0 32px', height: '52px', background: 'linear-gradient(to right, #F97316, #F59E0B)', color: 'white', border: 'none', borderRadius: '30px', fontWeight: 'bold', cursor: 'pointer', flexShrink: 0 }}
+                  >
+                    Send 🚀
+                  </button>
+                </form>
+              </div>
             </div>
           )}
         </main>

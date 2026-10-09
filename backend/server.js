@@ -97,11 +97,16 @@ app.post('/api/auth/login', async (req, res) => {
     }
 });
 
+app.use(express.json({ limit: '25mb' }));
+app.use(express.urlencoded({ extended: true, limit: '25mb' }));
+
 app.post('/api/chat', async (req, res) => {
     try {
         const text = req.body.userPrompt || req.body.message;
-        if (!text) {
-            return res.status(400).json({ error: "Message or userPrompt is required" });
+        const attachedFile = req.body.fileData;
+        
+        if (!text && !attachedFile) {
+            return res.status(400).json({ error: "Message or file is required" });
         }
 
         const apiKey = process.env.GROQ_API_KEY;
@@ -111,7 +116,14 @@ app.post('/api/chat', async (req, res) => {
 
         const groq = new Groq({ apiKey });
 
-        // Exactly active models in your Groq account
+        let fullPrompt = text || "Please summarize and explain the attached material for AKTU exam prep.";
+        if (attachedFile) {
+            fullPrompt += `
+
+[Attached File: ${attachedFile.name}]
+${attachedFile.content || ""}`;
+        }
+
         const modelsToTry = ["openai/gpt-oss-20b", "openai/gpt-oss-120b", "qwen/qwen3.8-27b"];
         let reply = null;
         let lastError = null;
@@ -122,9 +134,19 @@ app.post('/api/chat', async (req, res) => {
                     messages: [
                         {
                             role: "system",
-                            content: "You are KalamAI, an expert academic tutor for AKTU B.Tech engineering students. Provide structured, accurate, exam-focused explanations with bullet points and key formulas."
+                            content: `You are KalamAI, the premier AI Academic Assistant for AKTU (Dr. A.P.J. Abdul Kalam Technical University) B.Tech engineering students.
+
+Whenever a student asks a doubt, asks for notes, or uploads notes/questions:
+1. 🎯 Format as Clean Revision Notes:
+   - 📌 Core Definition / Concept: Clear, crisp, and easy to understand (simple technical English with intuitive Hinglish touch).
+   - ⚡ Key Principles / Important Points: Bulleted breakdown.
+   - 📐 Formulas / Derivation / Circuit / Diagram Representation: Include wherever relevant with standard variables defined.
+   - 📝 AKTU Exam Tip / Marking Scheme: Point out what examiners look for (e.g. 7-mark vs 2-mark answer style).
+   - 💡 Real-world Analogy: 1 quick line to retain before exams.
+2. 🎨 Rich Formatting: Use clear emojis, bold text, bullet points, and codeblocks. Avoid unstructured plain text.
+3. If an attached file or image is provided, analyze it step-by-step with clear derivation steps.`
                         },
-                        { role: "user", content: text }
+                        { role: "user", content: fullPrompt }
                     ],
                     model: model
                 });
