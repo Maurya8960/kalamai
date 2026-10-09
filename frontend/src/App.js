@@ -151,20 +151,24 @@ function App() {
 
   const sendMessage = async (e) => {
     e.preventDefault();
-    if (!input.trim()) return;
-    const userMsg = { role: 'user', text: input };
+    if (!input.trim() && !selectedFile) return;
+
+    const filePayload = selectedFile;
+    const displayText = selectedFile 
+      ? (selectedFile.preview ? `📷 **[Photo Attached: ${selectedFile.name}]**\n\n${input}` : `📄 **[File Attached: ${selectedFile.name}]**\n\n${input}`)
+      : input;
+
+    const userMsg = { role: 'user', text: displayText };
     setMessages((prev) => [...prev, userMsg]);
     setInput('');
-    setLoading(true);
-    try {
-      const currentFile = selectedFile;
     setSelectedFile(null);
     if (fileInputRef.current) fileInputRef.current.value = "";
+    setLoading(true);
 
     try {
       const res = await axios.post(`${BACKEND_URL}/api/chat`, {
-        userPrompt: userMsg.text,
-        fileData: currentFile ? { name: currentFile.name, type: currentFile.type, content: currentFile.content } : null
+        userPrompt: input || "Explain the attached material in detail for AKTU exams",
+        fileData: filePayload ? { name: filePayload.name, type: filePayload.type, content: filePayload.content } : null
       });
       setMessages((prev) => [...prev, { role: 'ai', text: res.data.reply }]);
     } catch (error) {
@@ -438,35 +442,48 @@ function App() {
                     <button type="button" onClick={removeSelectedFile} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#EA580C', fontWeight: 'bold', fontSize: '16px' }}>×</button>
                   </div>
                 )}
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', width: '100%', marginTop: '10px' }}>
+                {selectedFile && (
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '12px', background: '#FFF7ED', border: '1.5px solid #FDBA74', padding: '8px 16px', borderRadius: '16px', width: 'fit-content' }}>
+                    {selectedFile.preview ? (
+                      <img src={selectedFile.preview} alt="preview" style={{ width: '38px', height: '38px', borderRadius: '8px', objectFit: 'cover' }} />
+                    ) : (
+                      <span style={{ fontSize: '22px' }}>📄</span>
+                    )}
+                    <span style={{ fontSize: '13px', fontWeight: 'bold', color: '#C2410C', maxWidth: '240px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{selectedFile.name}</span>
+                    <button type="button" onClick={removeSelectedFile} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#EA580C', fontWeight: 'bold', fontSize: '18px', padding: '0 4px' }}>×</button>
+                  </div>
+                )}
                 <form onSubmit={sendMessage} style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
                   <input
                     type="file"
                     ref={fileInputRef}
                     onChange={handleFileSelect}
-                    accept="image/*,.txt,.pdf,.doc,.docx,.c,.cpp,.py,.java"
+                    accept="image/*,.txt,.pdf,.doc,.docx,.c,.cpp,.py,.java,.json"
                     style={{ display: 'none' }}
                   />
                   <button
                     type="button"
                     onClick={() => fileInputRef.current?.click()}
                     title="Attach Photo or Document"
-                    style={{ width: '52px', height: '52px', borderRadius: '50%', border: '1px solid #E5E7EB', background: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', fontSize: '20px', flexShrink: 0 }}
+                    style={{ width: '56px', height: '56px', borderRadius: '50%', border: '1.5px solid #E5E7EB', background: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', fontSize: '22px', flexShrink: 0, boxShadow: '0 2px 6px rgba(0,0,0,0.04)' }}
                   >
                     📎
                   </button>
                   <input
                     value={input}
                     onChange={e => setInput(e.target.value)}
-                    placeholder="Ask doubt, request notes, or ask about attached file..."
-                    style={{ flex: 1, padding: '16px 22px', borderRadius: '30px', border: '1px solid #E5E7EB', outlineColor: '#EA580C', fontSize: '15px' }}
+                    placeholder="Ask for notes, doubts, or attach photos/files..."
+                    style={{ flex: 1, padding: '16px 24px', borderRadius: '30px', border: '1.5px solid #E5E7EB', outlineColor: '#EA580C', fontSize: '15px' }}
                   />
                   <button
                     type="submit"
-                    style={{ padding: '0 32px', height: '52px', background: 'linear-gradient(to right, #F97316, #F59E0B)', color: 'white', border: 'none', borderRadius: '30px', fontWeight: 'bold', cursor: 'pointer', flexShrink: 0 }}
+                    style={{ padding: '0 32px', height: '56px', background: 'linear-gradient(to right, #F97316, #F59E0B)', color: 'white', border: 'none', borderRadius: '30px', fontWeight: 'bold', cursor: 'pointer', flexShrink: 0, fontSize: '15px', boxShadow: '0 4px 12px rgba(249, 115, 22, 0.2)' }}
                   >
                     Send 🚀
                   </button>
                 </form>
+              </div>
               </div>
             </div>
           )}

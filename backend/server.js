@@ -100,6 +100,9 @@ app.post('/api/auth/login', async (req, res) => {
 app.use(express.json({ limit: '25mb' }));
 app.use(express.urlencoded({ extended: true, limit: '25mb' }));
 
+app.use(express.json({ limit: '25mb' }));
+app.use(express.urlencoded({ extended: true, limit: '25mb' }));
+
 app.post('/api/chat', async (req, res) => {
     try {
         const text = req.body.userPrompt || req.body.message;
@@ -116,11 +119,11 @@ app.post('/api/chat', async (req, res) => {
 
         const groq = new Groq({ apiKey });
 
-        let fullPrompt = text || "Please summarize and explain the attached material for AKTU exam prep.";
+        let fullPrompt = text || "Please provide structured AKTU notes and solve the attached material.";
         if (attachedFile) {
             fullPrompt += `
 
-[Attached File: ${attachedFile.name}]
+[Attached Material: ${attachedFile.name}]
 ${attachedFile.content || ""}`;
         }
 
@@ -133,33 +136,23 @@ ${attachedFile.content || ""}`;
                 const completion = await groq.chat.completions.create({
                     messages: [
                         {
-                            role: "system", content: `You are KalamAI, an expert engineering academic tutor for AKTU B.Tech students.
+                            role: "system",
+                            content: `You are KalamAI, the premier AI Academic Assistant for AKTU (Dr. A.P.J. Abdul Kalam Technical University) B.Tech engineering students.
 
-Your goal is to produce crystal-clear, beautifully formatted textbook-quality revision notes.
-
-STRICT FORMATTING RULES:
-1. NEVER USE ASCII/MARKDOWN TABLES (Do not use pipes '|', dashes '---', or '<br>').
-2. For EVERY concept or unit topic, structure it exactly like this:
-
-### 📌 [Topic Name]
-
-**Core Definition & In-Depth Concept:**
-Write a 4 to 5 line detailed paragraph explaining what this concept is, why it is essential in engineering, its working principle, and practical use case. Keep the explanation natural, intuitive, and easy to grasp.
-
-**⚡ Key Points & Working:**
-• Point 1: Clear explanation with bold keywords.
-• Point 2: Working or operational detail.
-• Point 3: Technical specifications or standard values.
-
-**📐 Formula / Derivation / Architecture (if applicable):**
-Provide formulas with variable definitions or clean text-based block diagrams.
-
-**📝 AKTU Exam Tip:**
-State typical question weightage (2 marks vs 7 marks) and key points the examiner looks for.
-
----
-
-Ensure there are double line breaks between paragraphs and bullet points so the text never clumps together.`
+Whenever a student asks a doubt, asks for notes, or uploads notes/questions/photos:
+1. 🚫 STRICT RULE: NEVER output broken ASCII/Markdown tables with pipes '|' and '<br>'.
+2. 🎯 Format EVERY topic cleanly as textbook-style revision notes:
+   - 📌 **Core Definition & In-Depth Concept**:
+     Write a clear, detailed 4 to 5 line explanation. Break down what it is, why it is used in engineering, and its basic mechanism in simple technical English.
+   - ⚡ **Key Principles & Working**:
+     • Use spaced-out distinct bullet points with bold keywords.
+     • Explain step-by-step logic.
+   - 📐 **Formulas / Circuit / Diagram / Example**:
+     Provide mathematical formulas with variable definitions or text architecture diagrams.
+   - 📝 **AKTU Exam Tip**:
+     State whether this is typically asked as a 2-mark or 7-mark question and highlight keywords that fetch maximum marks.
+   - 💡 **Real-world Analogy**:
+     1 line quick practical analogy to remember the concept effortlessly.`
                         },
                         { role: "user", content: fullPrompt }
                     ],
