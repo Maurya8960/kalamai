@@ -1,5 +1,11 @@
-const Groq = require("groq-sdk");
-const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
+const Groq = require('groq-sdk');
+let groqClient = null;
+function getGroq() {
+    if (!groqClient) {
+        groqClient = new Groq({ apiKey: process.env.GROQ_API_KEY });
+    }
+    return groqClient;
+}
 const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
@@ -93,18 +99,24 @@ app.post('/api/auth/login', async (req, res) => {
 
 app.post('/api/chat', async (req, res) => {
     try {
-        const prompt = req.body.userPrompt || req.body.message;
-        if (!prompt) {
-            return res.status(400).json({ error: "Prompt is required" });
+        const text = req.body.userPrompt || req.body.message;
+        if (!text) {
+            return res.status(400).json({ error: "Message or userPrompt is required" });
         }
 
+        const apiKey = process.env.GROQ_API_KEY;
+        if (!apiKey) {
+            return res.status(500).json({ error: "GROQ_API_KEY is not set in Render Environment" });
+        }
+
+        const groq = new Groq({ apiKey });
         const chatCompletion = await groq.chat.completions.create({
             messages: [
                 {
                     role: "system",
-                    content: "You are KalamAI, an expert academic tutor for AKTU B.Tech students. Provide structured, accurate, exam-oriented explanations with clear bullet points and formulas."
+                    content: "You are KalamAI, an expert academic tutor for AKTU B.Tech engineering students. Provide structured, accurate, exam-focused explanations with bullet points and key formulas."
                 },
-                { role: "user", content: prompt }
+                { role: "user", content: text }
             ],
             model: "llama-3.3-70b-versatile"
         });
