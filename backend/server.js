@@ -12,7 +12,6 @@ app.use(cors({
 }));
 app.use(express.json());
 
-const genAI = new GoogleGenerativeAI("AIzaSyCuET9SefbBA5F7ekjvcCVgMiGE6kUCSDE");
 
 // MongoDB connection with fallback to local in-memory storage if credentials are pending
 const usersDB = [];
@@ -92,15 +91,23 @@ app.post('/api/auth/login', async (req, res) => {
 });
 
 app.post('/api/chat', async (req, res) => {
-    const { userPrompt } = req.body;
     try {
-        const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
-        const systemPrompt = `You are a specialized AKTU Professor. A student asked: "${userPrompt}". Give structured notes with Headings, Bullet Points, and Real-Life Examples.`;
-        const result = await model.generateContent(systemPrompt);
-        res.json({ reply: (await result.response).text() });
+        const { message } = req.body;
+        if (!message) return res.status(400).json({ error: 'Message is required' });
+
+        const chatCompletion = await groq.chat.completions.create({
+            messages: [
+                { role: 'system', content: 'You are KalamAI, an expert academic tutor for AKTU B.Tech engineering students. Provide structured, exam-oriented explanations with key concepts and formulas.' },
+                { role: 'user', content: message }
+            ],
+            model: 'llama-3.3-70b-versatile'
+        });
+
+        const reply = chatCompletion.choices[0]?.message?.content || 'No response generated.';
+        res.json({ reply });
     } catch (error) {
-        console.error("Gemini AI Error:", error);
-        res.status(500).json({ reply: "❌ Server Error: AI response limit reached or invalid API key." });
+        console.error('Groq Chat Error:', error);
+        res.status(500).json({ error: error.message });
     }
 });
 
