@@ -110,21 +110,18 @@ app.post('/api/chat', async (req, res) => {
         }
 
         const groq = new Groq({ apiKey });
-
-        // Account ke active models check karke valid model select karega
-        let targetModel = "llama3-8b-8192";
+        
+        let chosenModel = "llama-3.1-8b-instant";
         try {
-            const modelList = await groq.models.list();
-            const available = modelList.data.map(m => m.id);
-            const preferred = ["llama-3.3-70b-versatile", "llama-3.1-8b-instant", "llama3-8b-8192", "llama3-70b-8192", "gemma2-9b-it", "mixtral-8x7b-32768"];
-            for (const p of preferred) {
-                if (available.includes(p)) {
-                    targetModel = p;
-                    break;
-                }
+            const list = await groq.models.list();
+            const valid = list.data
+                .map(m => m.id)
+                .filter(id => !id.includes("whisper") && !id.includes("guard") && !id.includes("vision"));
+            if (valid.length > 0) {
+                chosenModel = valid[0];
             }
-        } catch (e) {
-            targetModel = "llama3-8b-8192";
+        } catch (err) {
+            console.warn("Using fallback model:", chosenModel);
         }
 
         const chatCompletion = await groq.chat.completions.create({
@@ -135,11 +132,11 @@ app.post('/api/chat', async (req, res) => {
                 },
                 { role: "user", content: text }
             ],
-            model: targetModel
+            model: chosenModel
         });
 
         const reply = chatCompletion.choices[0]?.message?.content || "No response generated.";
-        res.json({ reply, modelUsed: targetModel });
+        res.json({ reply, model: chosenModel });
     } catch (error) {
         console.error("Groq Chat Error:", error);
         res.status(500).json({ error: error.message });
