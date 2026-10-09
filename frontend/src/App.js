@@ -1,3 +1,4 @@
+import remarkGfm from 'remark-gfm';
 import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import ReactMarkdown from 'react-markdown';
@@ -204,6 +205,53 @@ function App() {
       <div style={{ position: 'relative', overflow: 'hidden', minHeight: '100vh', fontFamily: 'Segoe UI, Tahoma, sans-serif', color: '#111827', display: 'flex', flexDirection: 'column' }}>
         
         <style>{`
+          
+          .notes-markdown h1, .notes-markdown h2, .notes-markdown h3 {
+            color: #C2410C;
+            margin-top: 20px;
+            margin-bottom: 10px;
+            font-weight: 800;
+          }
+          .notes-markdown p {
+            line-height: 1.8;
+            margin-bottom: 16px;
+            font-size: 15px;
+            color: #1F2937;
+          }
+          .notes-markdown ul, .notes-markdown ol {
+            padding-left: 22px;
+            margin-bottom: 16px;
+          }
+          .notes-markdown li {
+            margin-bottom: 8px;
+            line-height: 1.7;
+            color: #374151;
+          }
+          .notes-markdown strong {
+            color: #111827;
+          }
+          .notes-markdown hr {
+            border: 0;
+            height: 1px;
+            background: #FED7AA;
+            margin: 24px 0;
+          }
+          .notes-markdown table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 16px 0;
+          }
+          .notes-markdown th, .notes-markdown td {
+            border: 1px solid #E5E7EB;
+            padding: 10px 14px;
+            text-align: left;
+          }
+          .notes-markdown th {
+            background-color: #FFEDD5;
+            color: #9A3412;
+            font-weight: bold;
+          }
+
           .bg-animation { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: linear-gradient(135deg, #fffcf9 0%, #fff4ec 50%, #ffedd5 100%); z-index: -2; }
           .glass-box { background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.9); }
           .contact-card { display: flex; align-items: center; gap: 15px; padding: 15px 20px; background: white; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.02); border: 1px solid #F3F4F6; margin-bottom: 10px; width: 100%; max-width: 250px;}
@@ -371,7 +419,9 @@ function App() {
               <div className="glass-box" style={{ flex: 1, borderRadius: '20px', padding: '30px', overflowY: 'auto', marginBottom: '20px', display: 'flex', flexDirection: 'column', gap: '20px' }}>
                 {messages.map((msg, index) => (
                   <div key={index} style={{ alignSelf: msg.role === 'user' ? 'flex-end' : 'flex-start', maxWidth: '85%', backgroundColor: msg.role === 'user' ? '#EA580C' : 'white', color: msg.role === 'user' ? 'white' : '#111827', padding: '20px', borderRadius: '15px', borderLeft: msg.role === 'ai' ? '5px solid #F59E0B' : 'none' }}>
-                    <ReactMarkdown>{msg.text}</ReactMarkdown>
+                    <div className="notes-markdown">
+              <ReactMarkdown remarkPlugins={[remarkGfm]}>{msg.text}</ReactMarkdown>
+            </div>
                   </div>
                 ))}
                 {loading && <div style={{ alignSelf: 'flex-start', color: '#EA580C', fontStyle: 'italic' }}>AI is typing...</div>}
