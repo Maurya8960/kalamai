@@ -43,6 +43,8 @@ function App() {
   const [name, setName] = useState('');
   const [activeTestimonial, setActiveTestimonial] = useState(1);
   const aboutUsRef = useRef(null);
+  const featuresRef = useRef(null);
+  const syllabusRef = useRef(null);
   const scrollContainerRef = useRef(null);
   
   const [messages, setMessages] = useState([
@@ -182,6 +184,27 @@ function App() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
+  
+  const scrollToFeatures = (e) => {
+    e.preventDefault();
+    if (currentView !== 'home') {
+      setCurrentView('home');
+      setTimeout(() => featuresRef.current?.scrollIntoView({ behavior: 'smooth' }), 100);
+    } else if (featuresRef.current) {
+      featuresRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
+  const scrollToSyllabus = (e) => {
+    e.preventDefault();
+    if (currentView !== 'home') {
+      setCurrentView('home');
+      setTimeout(() => aboutUsRef.current?.scrollIntoView({ behavior: 'smooth' }), 100);
+    } else if (syllabusRef.current) {
+      syllabusRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   const scrollToAboutUs = (e) => {
     e.preventDefault();
     if(currentView !== 'home') {
@@ -272,7 +295,7 @@ function App() {
           .icon-linkedin:hover { color: #0A66C2; border-color: #0A66C2; }
           .scroll-container { display: flex; overflow-x: auto; gap: 30px; padding: 20px 10px; scrollbar-width: none; }
           .scroll-container::-webkit-scrollbar { display: none; }
-          .scroll-card { flex: 0 0 350px; background: white; padding: 40px; border-radius: 24px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); border-top: 6px solid; transition: transform 0.3s ease; }
+          .scroll-card{ flex: 0 0 290px; background: white; padding: 22px 25px; border-radius: 24px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); border-top: 6px solid; transition: transform 0.3s ease; }
           .scroll-card:hover { transform: translateY(-5px); }
           .carousel-container { position: relative; height: 350px; display: flex; align-items: center; justify-content: center; width: 100%; max-width: 1000px; margin: 0 auto; }
           .testimonial-card { position: absolute; width: 400px; background: white; padding: 40px; border-radius: 24px; box-shadow: 0 20px 50px rgba(0,0,0,0.1); transition: all 0.5s ease-in-out; border: 1px solid #F3F4F6; }
@@ -292,8 +315,8 @@ function App() {
           </div>
           <nav style={{ display: 'flex', gap: '30px', fontWeight: 'bold', alignItems: 'center' }}>
              <span onClick={() => navigateTo('home')} style={{ cursor: 'pointer', color: currentView === 'home' ? '#EA580C' : '#4B5563', borderBottom: currentView === 'home' ? '3px solid #EA580C' : 'none', paddingBottom: '5px' }}>Home</span>
-             <span style={{ cursor: 'pointer', color: '#4B5563' }}>Features</span>
-             <span style={{ cursor: 'pointer', color: '#4B5563' }}>Syllabus</span>
+             <span onClick={scrollToFeatures} style={{ cursor: "pointer", color: "#4B5563" }}>Features</span>
+             <span onClick={scrollToSyllabus} style={{ cursor: "pointer", color: "#4B5563" }}>Syllabus</span>
              <span onClick={scrollToAboutUs} style={{ cursor: 'pointer', color: '#4B5563' }}>About Us</span>
           </nav>
           <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
@@ -357,7 +380,7 @@ function App() {
                 </div>
               </div>
 
-               <div style={{ width: '100%', maxWidth: '1000px', marginBottom: '100px' }}>
+               <div ref={featuresRef} style={{ width: "100%", maxWidth: "1000px", marginBottom: "100px" }}>
                   <div style={{ textAlign: 'center', marginBottom: '40px' }}>
                      <span style={{ backgroundColor: '#FFEDD5', color: '#EA580C', padding: '6px 16px', borderRadius: '20px', fontSize: '12px', fontWeight: 'bold', textTransform: 'uppercase', letterSpacing: '1px' }}>WHAT WE GIVE</span>
                      <h2 style={{ fontSize: '36px', fontWeight: '900', marginTop: '15px', color: '#111827' }}>One subscription to <span style={{ color: '#EA580C' }}>learn</span>, <span style={{ color: '#F59E0B' }}>grow</span>, and <span style={{ color: '#EF4444' }}>lead</span>.</h2>
@@ -381,11 +404,11 @@ function App() {
                      <h2 style={{ fontSize: '42px', fontWeight: '900', color: '#111827' }}>Behind <span style={{ color: '#EA580C' }}>KalamAI</span></h2>
                   </div>
                   
-                  <div className="scroll-container" ref={scrollContainerRef}>
+                  <div className="scroll-container" id="syllabus-scroll" ref={scrollContainerRef}>
                       {aboutCards.map((card, index) => (
                            <div key={index} className="scroll-card" style={{ borderColor: card.accent }}>
                                 <h3 style={{ fontSize: '24px', fontWeight: '900', color: '#111827', marginBottom: '20px' }}>{card.title}</h3>
-                                <p style={{ color: '#4B5563', lineHeight: '1.7', fontSize: '16px' }}>{card.content}</p>
+                                <p style={{ color: '#4B5563', lineHeight: '1.6', fontSize: '14px' }}>{card.content}</p>
                            </div>
                       ))}
                   </div>
