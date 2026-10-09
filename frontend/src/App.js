@@ -3,7 +3,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import ReactMarkdown from 'react-markdown';
 import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
-import { Star, Mail, Phone, MessageCircle, BookOpen, Brain, Zap, Target, LayoutDashboard, Rocket, ChevronLeft, ChevronRight, Quote } , Github, Twitter, Youtube, Linkedin } from "lucide-react";
+import { Mail, MessageCircle, Phone, Quote, ChevronLeft, ChevronRight, Star, BookOpen, Layers, Award, Sparkles, CheckCircle2, Shield, Github, Twitter, Youtube, Linkedin } from 'lucide-react';
 
 
 const BACKEND_URL = 'https://kalamai-iy45.onrender.com';
