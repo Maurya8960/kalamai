@@ -1,9 +1,9 @@
-import remarkGfm from 'remark-gfm';
-import React, { useState, useEffect, useRef } from 'react';
-import axios from 'axios';
-import ReactMarkdown from 'react-markdown';
-import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
-import { Mail, MessageCircle, Phone, Quote, ChevronLeft, ChevronRight, Star, BookOpen, Layers, Award, Sparkles, CheckCircle2, Shield } from 'lucide-react';
+import React, { useState, useEffect, useRef } from "react";
+import axios from "axios";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
+import { Mail, MessageCircle, Phone, Quote, ChevronLeft, ChevronRight, Star, BookOpen, Layers, Award, Sparkles, CheckCircle2, Shield } from "lucide-react";
+
 
 
 const BACKEND_URL = 'https://kalamai-iy45.onrender.com';
