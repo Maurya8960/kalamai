@@ -1,7 +1,8 @@
+const Groq = require("groq-sdk");
+const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
 const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
-const Groq = require("groq-sdk");
 require('dotenv').config();
 
 const app = express();
@@ -92,21 +93,26 @@ app.post('/api/auth/login', async (req, res) => {
 
 app.post('/api/chat', async (req, res) => {
     try {
-        const { message } = req.body;
-        if (!message) return res.status(400).json({ error: 'Message is required' });
+        const prompt = req.body.userPrompt || req.body.message;
+        if (!prompt) {
+            return res.status(400).json({ error: "Prompt is required" });
+        }
 
         const chatCompletion = await groq.chat.completions.create({
             messages: [
-                { role: 'system', content: 'You are KalamAI, an expert academic tutor for AKTU B.Tech engineering students. Provide structured, exam-oriented explanations with key concepts and formulas.' },
-                { role: 'user', content: message }
+                {
+                    role: "system",
+                    content: "You are KalamAI, an expert academic tutor for AKTU B.Tech students. Provide structured, accurate, exam-oriented explanations with clear bullet points and formulas."
+                },
+                { role: "user", content: prompt }
             ],
-            model: 'llama-3.3-70b-versatile'
+            model: "llama-3.3-70b-versatile"
         });
 
-        const reply = chatCompletion.choices[0]?.message?.content || 'No response generated.';
+        const reply = chatCompletion.choices[0]?.message?.content || "No response generated.";
         res.json({ reply });
     } catch (error) {
-        console.error('Groq Chat Error:', error);
+        console.error("Groq Chat Error:", error);
         res.status(500).json({ error: error.message });
     }
 });
