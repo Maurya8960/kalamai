@@ -106,10 +106,27 @@ app.post('/api/chat', async (req, res) => {
 
         const apiKey = process.env.GROQ_API_KEY;
         if (!apiKey) {
-            return res.status(500).json({ error: "GROQ_API_KEY is not set in Render Environment" });
+            return res.status(500).json({ error: "GROQ_API_KEY is not configured" });
         }
 
         const groq = new Groq({ apiKey });
+
+        // Account ke active models check karke valid model select karega
+        let targetModel = "llama3-8b-8192";
+        try {
+            const modelList = await groq.models.list();
+            const available = modelList.data.map(m => m.id);
+            const preferred = ["llama-3.3-70b-versatile", "llama-3.1-8b-instant", "llama3-8b-8192", "llama3-70b-8192", "gemma2-9b-it", "mixtral-8x7b-32768"];
+            for (const p of preferred) {
+                if (available.includes(p)) {
+                    targetModel = p;
+                    break;
+                }
+            }
+        } catch (e) {
+            targetModel = "llama3-8b-8192";
+        }
+
         const chatCompletion = await groq.chat.completions.create({
             messages: [
                 {
@@ -118,11 +135,11 @@ app.post('/api/chat', async (req, res) => {
                 },
                 { role: "user", content: text }
             ],
-            model: "llama-3.1-8b-instant"
+            model: targetModel
         });
 
         const reply = chatCompletion.choices[0]?.message?.content || "No response generated.";
-        res.json({ reply });
+        res.json({ reply, modelUsed: targetModel });
     } catch (error) {
         console.error("Groq Chat Error:", error);
         res.status(500).json({ error: error.message });
