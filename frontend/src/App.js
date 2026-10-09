@@ -286,7 +286,10 @@ function App() {
         <div className="bg-animation"></div>
 
         <header className="glass-box" style={{ display: 'flex', justifyContent: 'space-between', padding: '15px 50px', position: 'sticky', top: 0, zIndex: 50, boxShadow: '0 4px 20px rgba(0,0,0,0.04)' }}>
-          <h1 onClick={() => navigateTo('home')} style={{ margin: 0, fontSize: '26px', fontWeight: '900', color: '#EA580C', cursor: 'pointer' }}>KalamAI</h1>
+          <div onClick={() => navigateTo('home')} style={{ display: 'flex', alignItems: 'center', gap: '10px', cursor: 'pointer' }}>
+            <img src="/kalamai-logo.png" alt="KalamAI Logo" style={{ width: '36px', height: '36px', objectFit: 'contain' }} />
+            <h1 style={{ margin: 0, fontSize: '26px', fontWeight: '900', color: '#EA580C' }}>KalamAI</h1>
+          </div>
           <nav style={{ display: 'flex', gap: '30px', fontWeight: 'bold', alignItems: 'center' }}>
              <span onClick={() => navigateTo('home')} style={{ cursor: 'pointer', color: currentView === 'home' ? '#EA580C' : '#4B5563', borderBottom: currentView === 'home' ? '3px solid #EA580C' : 'none', paddingBottom: '5px' }}>Home</span>
              <span style={{ cursor: 'pointer', color: '#4B5563' }}>Features</span>
