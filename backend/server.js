@@ -118,7 +118,7 @@ app.post('/api/chat', async (req, res) => {
                 },
                 { role: "user", content: text }
             ],
-            model: "llama-3.3-70b-versatile"
+            model: "llama-3.1-8b-instant"
         });
 
         const reply = chatCompletion.choices[0]?.message?.content || "No response generated.";
