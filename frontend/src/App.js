@@ -1,3 +1,8 @@
+import React, { useState, useEffect, useRef } from 'react';
+import axios from 'axios';
+import ReactMarkdown from 'react-markdown';
+import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
+import { Star, Mail, Phone, MessageCircle, BookOpen, Brain, Zap, Target, LayoutDashboard, Rocket, ChevronLeft, ChevronRight, Quote } from 'lucide-react';
 
 const syllabusData = {
   1: { title: "1st Year", semesters: [ { sem: 1, name: "Semester 1", subjects: ["Engineering Math I", "Engineering Physics", "Basics of Electrical", "PPS (C Programming)"] }, { sem: 2, name: "Semester 2", subjects: ["Engineering Math II", "Engineering Chemistry", "Basic Electronics", "Engineering Graphics"] } ] },
@@ -5,11 +10,6 @@ const syllabusData = {
   3: { title: "3rd Year", semesters: [ { sem: 5, name: "Semester 5", subjects: ["DBMS", "DAA (Algorithms)", "Compiler Design", "Web Technology"] }, { sem: 6, name: "Semester 6", subjects: ["Computer Networks", "Software Engineering", "Cloud Computing", "Department Elective"] } ] },
   4: { title: "4th Year", semesters: [ { sem: 7, name: "Semester 7", subjects: ["Artificial Intelligence", "Information Security", "Open Elective I", "Project Phase 1"] }, { sem: 8, name: "Semester 8", subjects: ["Deep Learning / NLP", "Open Elective II", "Major Project Phase 2", "Comprehensive Viva"] } ] }
 };
-import React, { useState, useEffect, useRef } from 'react';
-import axios from 'axios';
-import ReactMarkdown from 'react-markdown';
-import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
-import { Star, Mail, Phone, MessageCircle, BookOpen, Brain, Zap, Target, LayoutDashboard, Rocket, ChevronLeft, ChevronRight, Quote } from 'lucide-react';
 
 const BACKEND_URL = 'https://kalamai-iy45.onrender.com';
 
