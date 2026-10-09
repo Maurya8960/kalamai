@@ -110,33 +110,37 @@ app.post('/api/chat', async (req, res) => {
         }
 
         const groq = new Groq({ apiKey });
-        
-        let chosenModel = "llama-3.1-8b-instant";
-        try {
-            const list = await groq.models.list();
-            const valid = list.data
-                .map(m => m.id)
-                .filter(id => !id.includes("whisper") && !id.includes("guard") && !id.includes("vision"));
-            if (valid.length > 0) {
-                chosenModel = valid[0];
+
+        // Stable Groq models without terms/agreements requirement
+        const candidateModels = ["gemma2-9b-it", "llama-3.1-8b-instant", "mixtral-8x7b-32768"];
+        let reply = null;
+        let lastError = null;
+
+        for (const model of candidateModels) {
+            try {
+                const completion = await groq.chat.completions.create({
+                    messages: [
+                        {
+                            role: "system",
+                            content: "You are KalamAI, an expert academic tutor for AKTU B.Tech engineering students. Provide structured, accurate, exam-focused explanations with bullet points and key formulas."
+                        },
+                        { role: "user", content: text }
+                    ],
+                    model: model
+                });
+                reply = completion.choices[0]?.message?.content || "No response generated.";
+                break;
+            } catch (err) {
+                lastError = err;
+                console.warn(`Model ${model} failed, trying next candidate...`);
             }
-        } catch (err) {
-            console.warn("Using fallback model:", chosenModel);
         }
 
-        const chatCompletion = await groq.chat.completions.create({
-            messages: [
-                {
-                    role: "system",
-                    content: "You are KalamAI, an expert academic tutor for AKTU B.Tech engineering students. Provide structured, accurate, exam-focused explanations with bullet points and key formulas."
-                },
-                { role: "user", content: text }
-            ],
-            model: chosenModel
-        });
-
-        const reply = chatCompletion.choices[0]?.message?.content || "No response generated.";
-        res.json({ reply, model: chosenModel });
+        if (reply) {
+            return res.json({ reply });
+        } else {
+            throw lastError;
+        }
     } catch (error) {
         console.error("Groq Chat Error:", error);
         res.status(500).json({ error: error.message });
