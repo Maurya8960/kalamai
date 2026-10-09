@@ -111,12 +111,12 @@ app.post('/api/chat', async (req, res) => {
 
         const groq = new Groq({ apiKey });
 
-        // Stable Groq models without terms/agreements requirement
-        const candidateModels = ["gemma2-9b-it", "llama-3.1-8b-instant", "mixtral-8x7b-32768"];
+        // Exactly active models in your Groq account
+        const modelsToTry = ["openai/gpt-oss-20b", "openai/gpt-oss-120b", "qwen/qwen3.8-27b"];
         let reply = null;
         let lastError = null;
 
-        for (const model of candidateModels) {
+        for (const model of modelsToTry) {
             try {
                 const completion = await groq.chat.completions.create({
                     messages: [
