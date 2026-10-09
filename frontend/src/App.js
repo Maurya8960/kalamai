@@ -3,7 +3,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import ReactMarkdown from 'react-markdown';
 import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
-import { Star, Mail, Phone, MessageCircle, BookOpen, Brain, Zap, Target, LayoutDashboard, Rocket, ChevronLeft, ChevronRight, Quote } from 'lucide-react';
+import { Star, Mail, Phone, MessageCircle, BookOpen, Brain, Zap, Target, LayoutDashboard, Rocket, ChevronLeft, ChevronRight, Quote } , Github, Twitter, Youtube, Linkedin } from "lucide-react";
 
 
 const BACKEND_URL = 'https://kalamai-iy45.onrender.com';
@@ -524,11 +524,11 @@ function App() {
                 Empowering the next generation of innovators through interactive STEM education and AI-driven personalized learning.
               </p>
               <div style={{ fontWeight: '800', color: '#EA580C', fontSize: '13px', letterSpacing: '1px', marginBottom: '15px', textTransform: 'uppercase' }}>GET IN TOUCH</div>
-              <div style={{ display: 'flex' }}>
-                 <a href="https://github.com/Maurya8960" target="_blank" rel="noreferrer" className="social-icon-btn icon-github" title="GitHub">🐙</a>
-                 <a href="https://x.com/maurya1_ansh" target="_blank" rel="noreferrer" className="social-icon-btn icon-twitter" title="Twitter">𝕏</a>
-                 <a href="https://www.youtube.com/@AnshMaurya-o6j" target="_blank" rel="noreferrer" className="social-icon-btn icon-instagram" title="YouTube">▶</a>
-                 <a href="https://www.linkedin.com/in/anshmaurya89/" target="_blank" rel="noreferrer" className="social-icon-btn icon-linkedin" title="LinkedIn">in</a>
+              <div style={{ display: 'flex', gap: '12px' }}>
+                <a href="https://github.com/Maurya8960" target="_blank" rel="noreferrer" className="social-icon-btn icon-github" title="GitHub" style={{ textDecoration: 'none' }}><Github size={20} /></a>
+                <a href="https://x.com/maurya1_ansh" target="_blank" rel="noreferrer" className="social-icon-btn icon-twitter" title="Twitter" style={{ textDecoration: 'none' }}><Twitter size={20} /></a>
+                <a href="https://www.youtube.com/@AnshMaurya-o6j" target="_blank" rel="noreferrer" className="social-icon-btn icon-youtube" title="YouTube" style={{ textDecoration: 'none' }}><Youtube size={20} /></a>
+                <a href="https://www.linkedin.com/in/anshmaurya89/" target="_blank" rel="noreferrer" className="social-icon-btn icon-linkedin" title="LinkedIn" style={{ textDecoration: 'none' }}><Linkedin size={20} /></a>
               </div>
             </div>
 
