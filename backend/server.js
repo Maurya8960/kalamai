@@ -12,7 +12,7 @@ app.use(cors({
 }));
 app.use(express.json());
 
-const genAI = new GoogleGenerativeAI("AQ.Ab8RN6JnHgN6LGOI6PGJFVoa3LI_0lp51J0Jnaa4VkAJaWrdgQ");
+const genAI = new GoogleGenerativeAI("AIzaSyCuET9SefbBA5F7ekjvcCVgMiGE6kUCSDE");
 
 // MongoDB connection with fallback to local in-memory storage if credentials are pending
 const usersDB = [];
