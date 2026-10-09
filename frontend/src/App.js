@@ -4,12 +4,6 @@ import ReactMarkdown from 'react-markdown';
 import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
 import { Star, Mail, Phone, MessageCircle, BookOpen, Brain, Zap, Target, LayoutDashboard, Rocket, ChevronLeft, ChevronRight, Quote } from 'lucide-react';
 
-const syllabusData = {
-  1: { title: "1st Year", semesters: [ { sem: 1, name: "Semester 1", subjects: ["Engineering Math I", "Engineering Physics", "Basics of Electrical", "PPS (C Programming)"] }, { sem: 2, name: "Semester 2", subjects: ["Engineering Math II", "Engineering Chemistry", "Basic Electronics", "Engineering Graphics"] } ] },
-  2: { title: "2nd Year", semesters: [ { sem: 3, name: "Semester 3", subjects: ["Data Structures", "COA", "Discrete Mathematics", "Technical Communication"] }, { sem: 4, name: "Semester 4", subjects: ["Operating Systems", "TAFL", "OOPs (Java/C++)", "Universal Human Values"] } ] },
-  3: { title: "3rd Year", semesters: [ { sem: 5, name: "Semester 5", subjects: ["DBMS", "DAA (Algorithms)", "Compiler Design", "Web Technology"] }, { sem: 6, name: "Semester 6", subjects: ["Computer Networks", "Software Engineering", "Cloud Computing", "Department Elective"] } ] },
-  4: { title: "4th Year", semesters: [ { sem: 7, name: "Semester 7", subjects: ["Artificial Intelligence", "Information Security", "Open Elective I", "Project Phase 1"] }, { sem: 8, name: "Semester 8", subjects: ["Deep Learning / NLP", "Open Elective II", "Major Project Phase 2", "Comprehensive Viva"] } ] }
-};
 
 const BACKEND_URL = 'https://kalamai-iy45.onrender.com';
 
@@ -39,8 +33,6 @@ const aboutCards = [
 ];
 
 function App() {
-  const [currentTab, setCurrentTab] = React.useState("Home");
-  const [selectedYear, setSelectedYear] = React.useState(null);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [currentView, setCurrentView] = useState('home'); 
   const [authMode, setAuthMode] = useState('login'); 
