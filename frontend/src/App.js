@@ -79,6 +79,7 @@ function App() {
   const [searchChatQuery, setSearchChatQuery] = useState('');
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+  const [isPricingOpen, setIsPricingOpen] = useState(false);
   const [userBranch, setUserBranch] = useState(() => localStorage.getItem('kalamai_user_branch') || 'Computer Science (CSE)');
 
     const [messages, setMessages] = useState(() => {
@@ -234,6 +235,36 @@ function App() {
         localStorage.setItem('kalamai_active_session_id', id);
       }
     } catch(e) {}
+  };
+
+    // Razorpay Checkout Handler
+  const handlePayPlan = (plan) => {
+    if (!window.Razorpay) {
+      alert("Razorpay SDK load nahi hua. Internet connection check karein.");
+      return;
+    }
+    const options = {
+      key: "rzp_live_Tm8XuaoXRGccl2",
+      amount: plan.price * 100, // paise me
+      currency: "INR",
+      name: "KalamAI Pro",
+      description: plan.name + " Plan Subscription",
+      image: "https://kalamai-ansh.vercel.app/favicon.ico",
+      handler: function (response) {
+        alert("Payment Successful! Payment ID: " + response.razorpay_payment_id);
+        setIsPricingOpen(false);
+      },
+      prefill: {
+        name: "Ansh Maurya",
+        email: "maurya1.ansh@gmail.com",
+        contact: "919999999999"
+      },
+      theme: {
+        color: "#EA580C"
+      }
+    };
+    const rzp = new window.Razorpay(options);
+    rzp.open();
   };
 
   const handleNewChat = () => {
@@ -478,7 +509,28 @@ function App() {
             <h1 style={{ margin: 0, fontSize: '26px', fontWeight: '900', color: '#EA580C' }}>KalamAI</h1>
           </div>
           <nav style={{ display: 'flex', gap: '30px', fontWeight: 'bold', alignItems: 'center' }}>
-             <span onClick={() => navigateTo('home')} style={{ cursor: 'pointer', color: currentView === 'home' ? '#EA580C' : '#4B5563', borderBottom: currentView === 'home' ? '3px solid #EA580C' : 'none', paddingBottom: '5px' }}>Home</span>
+             $1
+              <span onClick={() => { if(!isLoggedIn) setIsLoggedIn(true); navigateTo('home'); }} style={{ cursor: 'pointer', color: '#4B5563', fontWeight: '700' }}>KalamAI Chat</span>
+              <button
+                type="button"
+                onClick={() => setIsPricingOpen(true)}
+                style={{
+                  background: 'linear-gradient(135deg, #FF6B00, #EA580C, #9333EA)',
+                  border: 'none',
+                  color: '#FFFFFF',
+                  padding: '7px 16px',
+                  borderRadius: '20px',
+                  fontWeight: '800',
+                  fontSize: '13px',
+                  cursor: 'pointer',
+                  boxShadow: '0 4px 15px rgba(234, 88, 12, 0.35)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '6px'
+                }}
+              >
+                <span>⚡</span> Upgrade Pro
+              </button>
              <span onClick={scrollToFeatures} style={{ cursor: "pointer", color: "#4B5563" }}>Features</span>
              <span onClick={scrollToSyllabus} style={{ cursor: "pointer", color: "#4B5563" }}>Syllabus</span>
              <span onClick={scrollToAboutUs} style={{ cursor: 'pointer', color: '#4B5563' }}>About Us</span>
