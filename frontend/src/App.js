@@ -285,6 +285,27 @@ function App() {
             font-weight: bold;
           }
 
+          
+          .social-fav-btn {
+            width: 34px;
+            height: 34px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: #F3F4F6;
+            border-radius: 10px;
+            padding: 6px;
+            opacity: 0.82;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            text-decoration: none;
+          }
+          .social-fav-btn:hover {
+            opacity: 1;
+            transform: translateY(-3px) scale(1.1);
+            box-shadow: 0 6px 14px rgba(0, 0, 0, 0.12);
+            background: #FFFFFF;
+          }
+
           .bg-animation { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: linear-gradient(135deg, #fffcf9 0%, #fff4ec 50%, #ffedd5 100%); z-index: -2; }
           .glass-box { background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.9); }
           .contact-card { display: flex; align-items: center; gap: 15px; padding: 15px 20px; background: white; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.02); border: 1px solid #F3F4F6; margin-bottom: 10px; width: 100%; max-width: 250px;}
@@ -531,29 +552,29 @@ function App() {
               </p>
               <div style={{ fontWeight: '800', color: '#EA580C', fontSize: '13px', letterSpacing: '1px', marginBottom: '15px', textTransform: 'uppercase' }}>GET IN TOUCH</div>
               <div style={{ display: "flex", gap: "10px", alignItems: "center", flexWrap: "wrap" }}>
-                <a href="https://ansh-maurya.vercel.app" target="_blank" rel="noreferrer" title="Website" style={{ width: "36px", height: "36px", display: "inline-flex", alignItems: "center", justifyContent: "center", background: "#F3F4F6", borderRadius: "10px", padding: "6px", transition: "0.2s" }}>
-                  <img src="/icons/globe.png" alt="Portfolio" style={{ width: "100%", height: "100%", objectFit: "contain" }} onError={(e)=>{e.target.style.display="none"}} />
+                <a href="https://ansh-maurya.vercel.app" target="_blank" rel="noreferrer" title="Website" className="social-fav-btn">
+                  <img src="/icons/globe.png" alt="Portfolio" style={{ width: "20px", height: "20px", objectFit: "contain" }} />
                 </a>
-                <a href="https://github.com/Maurya8960" target="_blank" rel="noreferrer" title="GitHub" style={{ width: "36px", height: "36px", display: "inline-flex", alignItems: "center", justifyContent: "center", background: "#F3F4F6", borderRadius: "10px", padding: "6px", transition: "0.2s" }}>
-                  <img src="/icons/github.png" alt="GitHub" style={{ width: "100%", height: "100%", objectFit: "contain" }} onError={(e)=>{e.target.style.display="none"}} />
+                <a href="https://github.com/Maurya8960" target="_blank" rel="noreferrer" title="GitHub" className="social-fav-btn">
+                  <img src="/icons/github.png" alt="GitHub" style={{ width: "20px", height: "20px", objectFit: "contain" }} />
                 </a>
-                <a href="https://wa.me/qr/4M4PQCGRM6LXL1" target="_blank" rel="noreferrer" title="WhatsApp" style={{ width: "36px", height: "36px", display: "inline-flex", alignItems: "center", justifyContent: "center", background: "#F3F4F6", borderRadius: "10px", padding: "6px", transition: "0.2s" }}>
-                  <img src="/icons/whatsapp.png" alt="WhatsApp" style={{ width: "100%", height: "100%", objectFit: "contain" }} onError={(e)=>{e.target.style.display="none"}} />
+                <a href="https://wa.me/qr/4M4PQCGRM6LXL1" target="_blank" rel="noreferrer" title="WhatsApp" className="social-fav-btn">
+                  <img src="/icons/whatsapp.png" alt="WhatsApp" style={{ width: "20px", height: "20px", objectFit: "contain" }} />
                 </a>
-                <a href="https://x.com/maurya1_ansh" target="_blank" rel="noreferrer" title="Twitter / X" style={{ width: "36px", height: "36px", display: "inline-flex", alignItems: "center", justifyContent: "center", background: "#F3F4F6", borderRadius: "10px", padding: "6px", transition: "0.2s" }}>
-                  <img src="/icons/twitter.png" alt="Twitter" style={{ width: "100%", height: "100%", objectFit: "contain" }} onError={(e)=>{e.target.style.display="none"}} />
+                <a href="https://x.com/maurya1_ansh" target="_blank" rel="noreferrer" title="Twitter / X" className="social-fav-btn">
+                  <img src="/icons/twitter.png" alt="Twitter" style={{ width: "20px", height: "20px", objectFit: "contain" }} />
                 </a>
-                <a href="https://www.youtube.com/@AnshMaurya-o6j" target="_blank" rel="noreferrer" title="YouTube" style={{ width: "36px", height: "36px", display: "inline-flex", alignItems: "center", justifyContent: "center", background: "#F3F4F6", borderRadius: "10px", padding: "6px", transition: "0.2s" }}>
-                  <img src="/icons/youtube.png" alt="YouTube" style={{ width: "100%", height: "100%", objectFit: "contain" }} onError={(e)=>{e.target.style.display="none"}} />
+                <a href="https://www.youtube.com/@AnshMaurya-o6j" target="_blank" rel="noreferrer" title="YouTube" className="social-fav-btn">
+                  <img src="/icons/youtube.png" alt="YouTube" style={{ width: "20px", height: "20px", objectFit: "contain" }} />
                 </a>
-                <a href="https://www.instagram.com/ansh_maurya_700/" target="_blank" rel="noreferrer" title="Instagram" style={{ width: "36px", height: "36px", display: "inline-flex", alignItems: "center", justifyContent: "center", background: "#F3F4F6", borderRadius: "10px", padding: "6px", transition: "0.2s" }}>
-                  <img src="/icons/instagram.png" alt="Instagram" style={{ width: "100%", height: "100%", objectFit: "contain" }} onError={(e)=>{e.target.style.display="none"}} />
+                <a href="https://www.instagram.com/ansh_maurya_700/" target="_blank" rel="noreferrer" title="Instagram" className="social-fav-btn">
+                  <img src="/icons/instagram.png" alt="Instagram" style={{ width: "20px", height: "20px", objectFit: "contain" }} />
                 </a>
-                <a href="https://www.linkedin.com/in/anshmaurya89/" target="_blank" rel="noreferrer" title="LinkedIn" style={{ width: "36px", height: "36px", display: "inline-flex", alignItems: "center", justifyContent: "center", background: "#F3F4F6", borderRadius: "10px", padding: "6px", transition: "0.2s" }}>
-                  <img src="/icons/linkedin.png" alt="LinkedIn" style={{ width: "100%", height: "100%", objectFit: "contain" }} onError={(e)=>{e.target.style.display="none"}} />
+                <a href="https://www.linkedin.com/in/anshmaurya89/" target="_blank" rel="noreferrer" title="LinkedIn" className="social-fav-btn">
+                  <img src="/icons/linkedin.png" alt="LinkedIn" style={{ width: "20px", height: "20px", objectFit: "contain" }} />
                 </a>
-                <a href="https://t.me/Vishwas013" target="_blank" rel="noreferrer" title="Telegram" style={{ width: "36px", height: "36px", display: "inline-flex", alignItems: "center", justifyContent: "center", background: "#F3F4F6", borderRadius: "10px", padding: "6px", transition: "0.2s" }}>
-                  <img src="/icons/telegram.png" alt="Telegram" style={{ width: "100%", height: "100%", objectFit: "contain" }} onError={(e)=>{e.target.style.display="none"}} />
+                <a href="https://t.me/Vishwas013" target="_blank" rel="noreferrer" title="Telegram" className="social-fav-btn">
+                  <img src="/icons/telegram.png" alt="Telegram" style={{ width: "20px", height: "20px", objectFit: "contain" }} />
                 </a>
               </div>
             </div>
