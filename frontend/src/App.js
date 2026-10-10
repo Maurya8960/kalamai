@@ -417,33 +417,25 @@ function App() {
   };
 
   
-  const handleNavClick = (viewName, elementId) => {
-    if (viewName === "chat") {
-      if (!isLoggedIn) {
-      alert("KalamAI Chat use karne ke liye kripya pehle Sign In karein!");
-      navigateTo("home");
-      window.scrollTo({ top: 350, behavior: "smooth" });
-      return;
-    }
-      if (typeof email !== "undefined" && email) {
-        localStorage.setItem("kalamai_user_email", email);
-        const namePart = email.split("@")[0];
-        const formattedName = namePart.split(".")[0].split("_")[0];
-        const studentName = formattedName.charAt(0).toUpperCase() + formattedName.slice(1);
-        localStorage.setItem("kalamai_user_name", studentName);
-        setStudentName(studentName);
-      }
-      navigateTo("home");
-      return;
-    }
-    navigateTo(viewName);
-    if (elementId) {
+  const handleNavClick = (tab) => {
+    if (tab === "home") {
+      setCurrentView("home");
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    } else if (tab === "chat") {
+      setCurrentView("chat");
+    } else if (tab === "features") {
+      setCurrentView("home");
       setTimeout(() => {
-        const el = document.getElementById(elementId);
-        if (el) {
-          el.scrollIntoView({ behavior: "smooth" });
-        }
-      }, 100);
+        const el = document.getElementById("features") || document.querySelector("[id*="feature"]");
+        if (el) el.scrollIntoView({ behavior: "smooth" });
+      }, 150);
+    } else if (tab === "syllabus") {
+      setCurrentView("syllabus");
+    } else if (tab === "about") {
+      setCurrentView("home");
+      setTimeout(() => {
+        window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
+      }, 150);
     }
   };
 
@@ -802,28 +794,28 @@ function App() {
             <h1 style={{ margin: 0, fontSize: '26px', fontWeight: '900', color: '#EA580C' }}>KalamAI</h1>
           </div>
           <nav style={{ display: 'flex', gap: '30px', fontWeight: 'bold', alignItems: 'center' }}>
-             {/* Home Link */}
+             {/* Home */}
               <span
-                onClick={goToHomeLanding}
+                onClick={() => handleNavClick("home")}
                 style={{
                   cursor: "pointer",
-                  color: (currentView === "landing" || currentView === "home") ? "#EA580C" : "#4B5563",
-                  borderBottom: (currentView === "landing" || currentView === "home") ? "3px solid #EA580C" : "none",
+                  color: currentView === "home" ? "#EA580C" : "#4B5563",
+                  borderBottom: currentView === "home" ? "3px solid "#EA580C" : "none",
                   paddingBottom: "5px",
-                  fontWeight: (currentView === "landing" || currentView === "home") ? "800" : "600",
+                  fontWeight: currentView === "home" ? "800" : "600",
                   transition: "all 0.2s ease"
                 }}
               >
                 Home
               </span>
 
-              {/* KalamAI Chat Link */}
+              {/* KalamAI Chat */}
               <span
-                onClick={goToChatWorkspace}
+                onClick={() => handleNavClick("chat")}
                 style={{
                   cursor: "pointer",
                   color: currentView === "chat" ? "#EA580C" : "#4B5563",
-                  borderBottom: currentView === "chat" ? "3px solid #EA580C" : "none",
+                  borderBottom: currentView === "chat" ? "3px solid "#EA580C" : "none",
                   paddingBottom: "5px",
                   fontWeight: currentView === "chat" ? "800" : "600",
                   transition: "all 0.2s ease"
@@ -831,50 +823,49 @@ function App() {
               >
                 KalamAI Chat
               </span>
-              {isProActive ? (
-                <div
-                  title={"Valid till: " + (proExpiry ? new Date(proExpiry).toLocaleDateString() : "")}
-                  onClick={handleProBadgeClick}
-                  style={{
-                    background: "linear-gradient(135deg, #10B981, #059669)",
-                    color: "#FFFFFF",
-                    padding: "6px 14px",
-                    borderRadius: "20px",
-                    fontWeight: "800",
-                    fontSize: "12px",
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "6px",
-                    boxShadow: "0 2px 10px rgba(16, 185, 129, 0.35)",
-                    cursor: "pointer"
-                  }}>
-                  <span>👑</span> Pro Active ({getRemainingDays()})
-                </div>
-              ) : (
-                <button
-                  type="button"
-                  onClick={handleUpgradeClick}
-                  style={{
-                    background: "linear-gradient(135deg, #FF6B00, #EA580C, #9333EA)",
-                    border: "none",
-                    color: "#FFFFFF",
-                    padding: "7px 16px",
-                    borderRadius: "20px",
-                    fontWeight: "800",
-                    fontSize: "13px",
-                    cursor: "pointer",
-                    boxShadow: "0 4px 15px rgba(234, 88, 12, 0.35)",
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "6px"
-                  }}
-                >
-                  <span>⚡</span> Upgrade Pro
-                </button>
-              )}
-             <span onClick={scrollToFeatures} style={{ cursor: "pointer", color: "#4B5563" }}>Features</span>
-             <span onClick={scrollToSyllabus} style={{ cursor: "pointer", color: "#4B5563" }}>Syllabus</span>
-             <span onClick={scrollToAboutUs} style={{ cursor: 'pointer', color: '#4B5563' }}>About Us</span>
+
+              {/* Features */}
+              <span
+                onClick={() => handleNavClick("features")}
+                style={{
+                  cursor: "pointer",
+                  color: "#4B5563",
+                  paddingBottom: "5px",
+                  fontWeight: "600",
+                  transition: "all 0.2s ease"
+                }}
+              >
+                Features
+              </span>
+
+              {/* Syllabus */}
+              <span
+                onClick={() => handleNavClick("syllabus")}
+                style={{
+                  cursor: "pointer",
+                  color: currentView === "syllabus" ? "#EA580C" : "#4B5563",
+                  borderBottom: currentView === "syllabus" ? "3px solid "#EA580C" : "none",
+                  paddingBottom: "5px",
+                  fontWeight: currentView === "syllabus" ? "800" : "600",
+                  transition: "all 0.2s ease"
+                }}
+              >
+                Syllabus
+              </span>
+
+              {/* About Us */}
+              <span
+                onClick={() => handleNavClick("about")}
+                style={{
+                  cursor: "pointer",
+                  color: "#4B5563",
+                  paddingBottom: "5px",
+                  fontWeight: "600",
+                  transition: "all 0.2s ease"
+                }}
+              >
+                About Us
+              </span>
           </nav>
           <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
             {!isLoggedIn ? (
