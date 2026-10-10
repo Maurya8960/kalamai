@@ -78,6 +78,8 @@ function App() {
 
   const [searchChatQuery, setSearchChatQuery] = useState('');
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+  const [userBranch, setUserBranch] = useState(() => localStorage.getItem('kalamai_user_branch') || 'Computer Science (CSE)');
 
   const [messages, setMessages] = useState([
     { role: 'ai', text: "Hello! I am your KalamAI Smart Assistant. Which subject or unit do you want to study today?" }
@@ -210,6 +212,19 @@ function App() {
     });
   }, [messages, currentSessionId]);
 
+    const handleSelectSession = (id) => {
+    try {
+      const saved = localStorage.getItem('kalamai_chat_sessions');
+      const allSessions = saved ? JSON.parse(saved) : sessions;
+      const target = allSessions.find(s => s.id === id);
+      if (target) {
+        setCurrentSessionId(id);
+        setMessages(target.messages || []);
+        localStorage.setItem('kalamai_active_session_id', id);
+      }
+    } catch(e) {}
+  };
+
   const handleNewChat = () => {
     const newId = 'chat_' + Date.now();
     const newSession = {
@@ -225,13 +240,29 @@ function App() {
     localStorage.setItem('kalamai_active_session_id', newId);
   };
 
-  const handleSelectSession = (id) => {
-    const target = sessions.find(s => s.id === id);
-    if (target) {
-      setCurrentSessionId(id);
-      setMessages(target.messages || []);
-      localStorage.setItem('kalamai_active_session_id', id);
+  const handleClearAllChats = () => {
+    if (window.confirm("Are you sure you want to delete all chat history?")) {
+      const initId = 'chat_' + Date.now();
+      const initial = [{
+        id: initId,
+        title: 'AKTU Syllabus & Exam Doubts',
+        messages: [{ role: 'ai', text: 'Hello! I am your KalamAI Smart Assistant. Which subject or unit do you want to study today?' }]
+      }];
+      setSessions(initial);
+      setCurrentSessionId(initId);
+      setMessages(initial[0].messages);
+      localStorage.setItem('kalamai_chat_sessions', JSON.stringify(initial));
+      localStorage.setItem('kalamai_active_session_id', initId);
+      setIsSettingsOpen(false);
     }
+  };
+
+  const handleExportChats = () => {
+    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(sessions, null, 2));
+    const dl = document.createElement('a');
+    dl.setAttribute("href", dataStr);
+    dl.setAttribute("download", `kalamai_chat_history_${Date.now()}.json`);
+    dl.click();
   };
 
   const handleDeleteSession = (e, id) => {
@@ -920,7 +951,7 @@ function App() {
                       {"Ansh Maurya"}
                     </div>
                   </div>
-                  <span style={{ fontSize: "13px", color: "#71717A" }}>⚙️</span>
+                  <button type="button" onClick={() => setIsSettingsOpen(true)} title="Settings" style={{ background: "none", border: "none", fontSize: "15px", color: "#A1A1AA", cursor: "pointer", padding: "4px", display: "flex", alignItems: "center", justifyContent: "center", borderRadius: "6px" }}>⚙️</button>
                 </div>
               </>
             )}
@@ -999,6 +1030,129 @@ function App() {
         )}
 
         </main>
+
+      {/* Gemini Settings Modal */}
+      {isSettingsOpen && (
+        <div style={{
+          position: "fixed",
+          inset: 0,
+          backgroundColor: "rgba(0, 0, 0, 0.7)",
+          backdropFilter: "blur(6px)",
+          zIndex: 9999,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          padding: "20px"
+        }}>
+          <div style={{
+            background: "#18181B",
+            borderRadius: "24px",
+            border: "1px solid #27272A",
+            width: "100%",
+            maxWidth: "480px",
+            padding: "24px",
+            color: "#F4F4F5",
+            boxShadow: "0 20px 40px rgba(0,0,0,0.5)"
+          }}>
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "20px", borderBottom: "1px solid #27272A", paddingBottom: "12px" }}>
+              <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                <span style={{ fontSize: "18px", color: "#F97316" }}>⚙️</span>
+                <span style={{ fontSize: "18px", fontWeight: "800" }}>KalamAI Settings</span>
+              </div>
+              <button
+                type="button"
+                onClick={() => setIsSettingsOpen(false)}
+                style={{ background: "#27272A", border: "none", color: "#A1A1AA", width: "30px", height: "30px", borderRadius: "50%", cursor: "pointer", fontSize: "14px" }}
+              >✕</button>
+            </div>
+
+            <div style={{ background: "#09090B", borderRadius: "16px", padding: "12px 16px", display: "flex", alignItems: "center", gap: "12px", marginBottom: "20px", border: "1px solid #27272A" }}>
+              <div style={{ width: "40px", height: "40px", borderRadius: "50%", background: "linear-gradient(135deg, #F97316, #EA580C)", color: "#FFF", display: "flex", alignItems: "center", justifyContent: "center", fontWeight: "800", fontSize: "16px" }}>
+                A
+              </div>
+              <div>
+                <div style={{ fontWeight: "700", fontSize: "14px", color: "#FAFAFA" }}>Ansh Maurya</div>
+                <div style={{ fontSize: "12px", color: "#71717A" }}>maurya1.ansh@gmail.com</div>
+              </div>
+            </div>
+
+            <div style={{ marginBottom: "18px" }}>
+              <label style={{ fontSize: "12px", fontWeight: "700", color: "#A1A1AA", display: "block", marginBottom: "8px", textTransform: "uppercase" }}>Academic Branch</label>
+              <select
+                value={userBranch}
+                onChange={(e) => {
+                  setUserBranch(e.target.value);
+                  localStorage.setItem("kalamai_user_branch", e.target.value);
+                }}
+                style={{
+                  width: "100%",
+                  padding: "10px 14px",
+                  borderRadius: "12px",
+                  background: "#09090B",
+                  border: "1px solid #27272A",
+                  color: "#FAFAFA",
+                  fontSize: "13px",
+                  outline: "none"
+                }}
+              >
+                <option value="Computer Science (CSE)">Computer Science & Engineering (CSE)</option>
+                <option value="Information Technology (IT)">Information Technology (IT)</option>
+                <option value="Electronics & Communication (ECE)">Electronics & Communication (ECE)</option>
+                <option value="Mechanical Engineering (ME)">Mechanical Engineering (ME)</option>
+                <option value="Civil Engineering (CE)">Civil Engineering (CE)</option>
+              </select>
+            </div>
+
+            <div style={{ display: "flex", flexDirection: "column", gap: "10px", marginTop: "20px", borderTop: "1px solid #27272A", paddingTop: "16px" }}>
+              <button
+                type="button"
+                onClick={handleExportChats}
+                style={{
+                  width: "100%",
+                  padding: "11px",
+                  borderRadius: "12px",
+                  background: "#27272A",
+                  border: "1px solid #3F3F46",
+                  color: "#FAFAFA",
+                  fontWeight: "600",
+                  fontSize: "13px",
+                  cursor: "pointer",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  gap: "8px"
+                }}
+              >
+                <span>📥</span> Export Chat History (.json)
+              </button>
+
+              <button
+                type="button"
+                onClick={handleClearAllChats}
+                style={{
+                  width: "100%",
+                  padding: "11px",
+                  borderRadius: "12px",
+                  background: "rgba(239, 68, 68, 0.12)",
+                  border: "1px solid rgba(239, 68, 68, 0.3)",
+                  color: "#F87171",
+                  fontWeight: "700",
+                  fontSize: "13px",
+                  cursor: "pointer",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  gap: "8px"
+                }}
+              >
+                <span>🗑️</span> Delete All Conversations
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+
 
         <footer style={{ backgroundColor: 'white', padding: '60px 80px', borderTop: '1px solid #F3F4F6', zIndex: 10 }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap', maxWidth: '1200px', margin: '0 auto', gap: '40px' }}>
