@@ -42,28 +42,28 @@ const aboutCards = [
 function App() {
   
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const user = { name: 'Ansh Maurya', email: 'maurya1.ansh@gmail.com' };
+  const user = null;
   
   // Logged-in user dynamic info extraction
   const getLoggedInUserName = () => {
     try {
       const storedName = localStorage.getItem("kalamai_user_name");
-      if (storedName) return storedName;
-      const storedEmail = localStorage.getItem("kalamai_user_email") || (user && user.email);
-      if (storedEmail) {
+      if (storedName && storedName.trim()) return storedName;
+      const storedEmail = localStorage.getItem("kalamai_user_email");
+      if (storedEmail && storedEmail.trim()) {
         const prefix = storedEmail.split("@")[0];
         return prefix.charAt(0).toUpperCase() + prefix.slice(1);
       }
     } catch(e) {}
-    return "AKTU Scholar";
+    return "Guest Student";
   };
 
   const getLoggedInUserEmail = () => {
     try {
-      const storedEmail = localStorage.getItem("kalamai_user_email") || (user && user.email);
-      if (storedEmail) return storedEmail;
+      const storedEmail = localStorage.getItem("kalamai_user_email");
+      if (storedEmail && storedEmail.trim()) return storedEmail;
     } catch(e) {}
-    return "student@aktu.ac.in";
+    return "";
   };
 
   const currentUserName = getLoggedInUserName();
@@ -358,7 +358,12 @@ function App() {
   
   const handleNavClick = (viewName, elementId) => {
     if (viewName === "chat") {
-      if (!isLoggedIn) setIsLoggedIn(true);
+      if (!isLoggedIn) {
+      alert("KalamAI Chat use karne ke liye kripya pehle Sign In karein!");
+      navigateTo("home");
+      window.scrollTo({ top: 350, behavior: "smooth" });
+      return;
+    }
       if (typeof email !== "undefined" && email) {
         localStorage.setItem("kalamai_user_email", email);
         const namePart = email.split("@")[0];
@@ -467,7 +472,7 @@ function App() {
       },
       prefill: {
         name: "Ansh Maurya",
-        email: "maurya1.ansh@gmail.com",
+        email: "",
         contact: "919999999999"
       },
       theme: { color: "#EA580C" }
@@ -1813,7 +1818,7 @@ function App() {
                 <div className="icon-circle"><Mail size={20} /></div>
                 <div>
                   <div style={{ fontSize: '10px', fontWeight: '800', color: '#EA580C', letterSpacing: '1px' }}>EMAIL US</div>
-                  <div style={{ fontSize: '14px', fontWeight: 'bold', color: '#111827' }}>maurya1.ansh@gmail.com</div>
+                  <div style={{ fontSize: '14px', fontWeight: 'bold', color: '#111827' }}></div>
                 </div>
               </div>
 
