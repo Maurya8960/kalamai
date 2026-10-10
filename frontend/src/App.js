@@ -43,6 +43,33 @@ function App() {
   
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const user = { name: 'Ansh Maurya', email: 'maurya1.ansh@gmail.com' };
+  
+  // Logged-in user dynamic info extraction
+  const getLoggedInUserName = () => {
+    try {
+      const storedName = localStorage.getItem("kalamai_user_name");
+      if (storedName) return storedName;
+      const storedEmail = localStorage.getItem("kalamai_user_email") || (user && user.email);
+      if (storedEmail) {
+        const prefix = storedEmail.split("@")[0];
+        return prefix.charAt(0).toUpperCase() + prefix.slice(1);
+      }
+    } catch(e) {}
+    return "AKTU Scholar";
+  };
+
+  const getLoggedInUserEmail = () => {
+    try {
+      const storedEmail = localStorage.getItem("kalamai_user_email") || (user && user.email);
+      if (storedEmail) return storedEmail;
+    } catch(e) {}
+    return "student@aktu.ac.in";
+  };
+
+  const currentUserName = getLoggedInUserName();
+  const currentUserEmail = getLoggedInUserEmail();
+  const userInitial = currentUserName.charAt(0).toUpperCase();
+
   const [currentView, setCurrentView] = useState('home');
   const [selectedYear, setSelectedYear] = useState(1); 
   const [authMode, setAuthMode] = useState('login'); 
@@ -175,6 +202,11 @@ function App() {
 
   useEffect(() => {
     if (localStorage.getItem('kalam_session') === 'active') setIsLoggedIn(true);
+      if (typeof email !== "undefined" && email) {
+        localStorage.setItem("kalamai_user_email", email);
+        const namePart = email.split("@")[0];
+        localStorage.setItem("kalamai_user_name", namePart.charAt(0).toUpperCase() + namePart.slice(1));
+      }
   }, []);
 
   const handleAuthSubmit = async (e) => {
@@ -187,12 +219,22 @@ function App() {
         if(res.data.success) {
           localStorage.setItem('kalam_session', 'active');
           setIsLoggedIn(true);
+      if (typeof email !== "undefined" && email) {
+        localStorage.setItem("kalamai_user_email", email);
+        const namePart = email.split("@")[0];
+        localStorage.setItem("kalamai_user_name", namePart.charAt(0).toUpperCase() + namePart.slice(1));
+      }
         }
       } else {
         const res = await axios.post(`${BACKEND_URL}/api/auth/login`, { email, password });
         if(res.data.success) {
           localStorage.setItem('kalam_session', 'active');
           setIsLoggedIn(true);
+      if (typeof email !== "undefined" && email) {
+        localStorage.setItem("kalamai_user_email", email);
+        const namePart = email.split("@")[0];
+        localStorage.setItem("kalamai_user_name", namePart.charAt(0).toUpperCase() + namePart.slice(1));
+      }
         }
       }
     } catch (err) {
@@ -203,11 +245,18 @@ function App() {
   const handleGoogleSuccess = (credentialResponse) => {
     localStorage.setItem('kalam_session', 'active');
     setIsLoggedIn(true);
+      if (typeof email !== "undefined" && email) {
+        localStorage.setItem("kalamai_user_email", email);
+        const namePart = email.split("@")[0];
+        localStorage.setItem("kalamai_user_name", namePart.charAt(0).toUpperCase() + namePart.slice(1));
+      }
   };
 
   const handleLogout = () => {
     localStorage.removeItem('kalam_session');
     setIsLoggedIn(false);
+      localStorage.removeItem("kalamai_user_email");
+      localStorage.removeItem("kalamai_user_name");
     setEmail(''); setPassword(''); setName('');
     setCurrentView('home');
   };
@@ -300,6 +349,11 @@ function App() {
   const handleNavClick = (viewName, elementId) => {
     if (viewName === "chat") {
       if (!isLoggedIn) setIsLoggedIn(true);
+      if (typeof email !== "undefined" && email) {
+        localStorage.setItem("kalamai_user_email", email);
+        const namePart = email.split("@")[0];
+        localStorage.setItem("kalamai_user_name", namePart.charAt(0).toUpperCase() + namePart.slice(1));
+      }
       navigateTo("home");
       return;
     }
@@ -1174,11 +1228,9 @@ function App() {
                 {/* Profile Section */}
                 <div style={{ borderTop: '1.5px solid rgba(234, 88, 12, 0.2)', paddingTop: '12px', marginTop: '12px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                    <div style={{ width: '34px', height: '34px', borderRadius: '50%', background: 'linear-gradient(135deg, #FF6B00, #EA580C)', color: '#FFF', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: '900', fontSize: '14px', boxShadow: '0 3px 8px rgba(234, 88, 12, 0.3)' }}>
-                      A
-                    </div>
+                    <div style={{ width: '34px', height: '34px', borderRadius: '50%', background: 'linear-gradient(135deg, #FF6B00, #EA580C)', color: '#FFF', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: '900', fontSize: '14px', boxShadow: '0 3px 8px rgba(234, 88, 12, 0.3)' }}>{userInitial}</div>
                     <div>
-                      <div style={{ fontSize: '13px', fontWeight: '800', color: '#7C2D12' }}>Ansh Maurya</div>
+                      <div style={{ fontSize: "13px", fontWeight: "800", color: "#7C2D12" }}>{currentUserName}</div>
                       <div style={{ fontSize: '11px', color: '#EA580C', fontWeight: '700' }}>Student Scholar</div>
                     </div>
                   </div>
@@ -1401,12 +1453,10 @@ function App() {
             </div>
 
             <div style={{ background: "#09090B", borderRadius: "16px", padding: "12px 16px", display: "flex", alignItems: "center", gap: "12px", marginBottom: "20px", border: "1px solid #27272A" }}>
-              <div style={{ width: "40px", height: "40px", borderRadius: "50%", background: "linear-gradient(135deg, #F97316, #EA580C)", color: "#FFF", display: "flex", alignItems: "center", justifyContent: "center", fontWeight: "800", fontSize: "16px" }}>
-                A
-              </div>
+              <div style={{ width: "40px", height: "40px", borderRadius: "50%", background: "linear-gradient(135deg, #F97316, #EA580C)", color: "#FFF", display: "flex", alignItems: "center", justifyContent: "center", fontWeight: "800", fontSize: "16px" }}>{userInitial}</div>
               <div>
-                <div style={{ fontWeight: "700", fontSize: "14px", color: "#FAFAFA" }}>Ansh Maurya</div>
-                <div style={{ fontSize: "12px", color: "#71717A" }}>maurya1.ansh@gmail.com</div>
+                <div style={{ fontWeight: "700", fontSize: "14px", color: "#FAFAFA" }}>{currentUserName}</div>
+                <div style={{ fontSize: "12px", color: "#71717A" }}>{currentUserEmail}</div>
               </div>
             </div>
 
