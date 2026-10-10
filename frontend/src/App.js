@@ -1494,7 +1494,21 @@ function App() {
               </div>
 
               <div className="contact-card">
-                <div className="icon-circle" style={{background: '#FEF3C7', color: '#F59E0B'}}><MessageCircle size={20} /></div>
+                <div className="icon-circle" style={{background: '#FEF3C7', color: '#F59E0B', transition: "all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)", cursor: "pointer"}}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.transform = "translateY(-8px) scale(1.02)";
+                e.currentTarget.style.boxShadow = "0 20px 35px rgba(234, 88, 12, 0.18), 0 4px 12px rgba(0,0,0,0.06)";
+                e.currentTarget.style.borderColor = "#EA580C";
+                const icon = e.currentTarget.querySelector("div");
+                if (icon) icon.style.transform = "scale(1.15) rotate(8deg)";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.transform = "translateY(0px) scale(1)";
+                e.currentTarget.style.boxShadow = "0 4px 18px rgba(0,0,0,0.04)";
+                e.currentTarget.style.borderColor = "#E2E8F0";
+                const icon = e.currentTarget.querySelector("div");
+                if (icon) icon.style.transform = "scale(1) rotate(0deg)";
+              }}><MessageCircle size={20} /></div>
                 <div>
                   <div style={{ fontSize: '10px', fontWeight: '800', color: '#F59E0B', letterSpacing: '1px' }}>WHATSAPP</div>
                   <div style={{ fontSize: '14px', fontWeight: 'bold', color: '#111827' }}>+91 94542 47006</div>
@@ -1502,7 +1516,21 @@ function App() {
               </div>
 
               <div className="contact-card">
-                <div className="icon-circle" style={{background: '#F3F4F6', color: '#6B7280'}}><Phone size={20} /></div>
+                <div className="icon-circle" style={{background: '#F3F4F6', color: '#6B7280', transition: "all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)", cursor: "pointer"}}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.transform = "translateY(-8px) scale(1.02)";
+                e.currentTarget.style.boxShadow = "0 20px 35px rgba(234, 88, 12, 0.18), 0 4px 12px rgba(0,0,0,0.06)";
+                e.currentTarget.style.borderColor = "#EA580C";
+                const icon = e.currentTarget.querySelector("div");
+                if (icon) icon.style.transform = "scale(1.15) rotate(8deg)";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.transform = "translateY(0px) scale(1)";
+                e.currentTarget.style.boxShadow = "0 4px 18px rgba(0,0,0,0.04)";
+                e.currentTarget.style.borderColor = "#E2E8F0";
+                const icon = e.currentTarget.querySelector("div");
+                if (icon) icon.style.transform = "scale(1) rotate(0deg)";
+              }}><Phone size={20} /></div>
                 <div>
                   <div style={{ fontSize: '10px', fontWeight: '800', color: '#EA580C', letterSpacing: '1px' }}>PHONE</div>
                   <div style={{ fontSize: '14px', fontWeight: 'bold', color: '#111827' }}>+91 94542 47006</div>
