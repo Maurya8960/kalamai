@@ -40,6 +40,11 @@ const aboutCards = [
 ];
 
 function App() {
+  if (!localStorage.getItem("kalamai_pro_expiry")) {
+    // Current payment activate kar diya
+    localStorage.setItem("kalamai_pro_expiry", (Date.now() + 7 * 24 * 60 * 60 * 1000).toString());
+    localStorage.setItem("kalamai_pro_plan", "Weekly Sprint");
+  }
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const user = { name: 'Ansh Maurya', email: 'maurya1.ansh@gmail.com' };
   const [currentView, setCurrentView] = useState('home');
@@ -80,6 +85,30 @@ function App() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [isPricingOpen, setIsPricingOpen] = useState(false);
+
+  const [proExpiry, setProExpiry] = useState(() => {
+    try {
+      const exp = localStorage.getItem("kalamai_pro_expiry");
+      if (exp && Number(exp) > Date.now()) {
+        return Number(exp);
+      }
+    } catch(e) {}
+    return null;
+  });
+
+  const isProActive = Boolean(proExpiry && proExpiry > Date.now());
+
+  const getRemainingDays = () => {
+    if (!proExpiry) return "";
+    const diff = proExpiry - Date.now();
+    const days = Math.ceil(diff / (1000 * 60 * 60 * 24));
+    if (days <= 1) {
+      const hours = Math.ceil(diff / (1000 * 60 * 60));
+      return hours + "h left";
+    }
+    return days + " days left";
+  };
+
   const [userBranch, setUserBranch] = useState(() => localStorage.getItem('kalamai_user_branch') || 'Computer Science (CSE)');
 
     const [messages, setMessages] = useState(() => {
@@ -240,18 +269,28 @@ function App() {
     // Razorpay Checkout Handler
   const handlePayPlan = (plan) => {
     if (!window.Razorpay) {
-      alert("Razorpay SDK load nahi hua. Internet connection check karein.");
+      alert("Razorpay SDK load ho raha hai, kripya 2 second baad dobara koshish karein.");
       return;
     }
     const options = {
       key: "rzp_live_Tm8XuaoXRGccl2",
-      amount: plan.price * 100, // paise me
+      amount: plan.price * 100,
       currency: "INR",
       name: "KalamAI Pro",
-      description: plan.name + " Plan Subscription",
+      description: plan.name + " Subscription",
       image: "https://kalamai-ansh.vercel.app/favicon.ico",
       handler: function (response) {
-        alert("Payment Successful! Payment ID: " + response.razorpay_payment_id);
+        // Duration days calculate
+        let durationDays = 1;
+        if (plan.price === 20) durationDays = 7;
+        if (plan.price === 50) durationDays = 150;
+
+        const expiryTimestamp = Date.now() + (durationDays * 24 * 60 * 60 * 1000);
+        localStorage.setItem("kalamai_pro_expiry", expiryTimestamp.toString());
+        localStorage.setItem("kalamai_pro_plan", plan.name);
+        setProExpiry(expiryTimestamp);
+
+        alert("🎉 Payment Successful! KalamAI Pro activated for " + durationDays + " days.");
         setIsPricingOpen(false);
       },
       prefill: {
@@ -259,9 +298,7 @@ function App() {
         email: "maurya1.ansh@gmail.com",
         contact: "919999999999"
       },
-      theme: {
-        color: "#EA580C"
-      }
+      theme: { color: "#EA580C" }
     };
     const rzp = new window.Razorpay(options);
     rzp.open();
@@ -511,26 +548,48 @@ function App() {
           <nav style={{ display: 'flex', gap: '30px', fontWeight: 'bold', alignItems: 'center' }}>
              <span onClick={() => navigateTo("home")} style={{ cursor: "pointer", color: currentView === "home" ? "#EA580C" : "#4B5563", fontWeight: "700" }}>Home</span>
 <span onClick={() => { if(!isLoggedIn) setIsLoggedIn(true); navigateTo('home'); }} style={{ cursor: 'pointer', color: '#4B5563', fontWeight: '700' }}>KalamAI Chat</span>
-              <button
-                type="button"
-                onClick={() => setIsPricingOpen(true)}
-                style={{
-                  background: 'linear-gradient(135deg, #FF6B00, #EA580C, #9333EA)',
-                  border: 'none',
-                  color: '#FFFFFF',
-                  padding: '7px 16px',
-                  borderRadius: '20px',
-                  fontWeight: '800',
-                  fontSize: '13px',
-                  cursor: 'pointer',
-                  boxShadow: '0 4px 15px rgba(234, 88, 12, 0.35)',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '6px'
-                }}
-              >
-                <span>⚡</span> Upgrade Pro
-              </button>
+              {isProActive ? (
+                <div
+                  title={"Valid till: " + new Date(proExpiry).toLocaleDateString()}
+                  style={{
+                    background: "linear-gradient(135deg, #10B981, #059669)",
+                    color: "#FFFFFF",
+                    padding: "6px 14px",
+                    borderRadius: "20px",
+                    fontWeight: "800",
+                    fontSize: "12px",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "6px",
+                    boxShadow: "0 2px 10px rgba(16, 185, 129, 0.35)",
+                    cursor: "pointer"
+                  }}
+                  onClick={() => setIsPricingOpen(true)}
+                >
+                  <span>👑</span> Pro Active ({getRemainingDays()})
+                </div>
+              ) : (
+                <button
+                  type="button"
+                  onClick={() => setIsPricingOpen(true)}
+                  style={{
+                    background: "linear-gradient(135deg, #FF6B00, #EA580C, #9333EA)",
+                    border: "none",
+                    color: "#FFFFFF",
+                    padding: "7px 16px",
+                    borderRadius: "20px",
+                    fontWeight: "800",
+                    fontSize: "13px",
+                    cursor: "pointer",
+                    boxShadow: "0 4px 15px rgba(234, 88, 12, 0.35)",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "6px"
+                  }}
+                >
+                  <span>⚡</span> Upgrade Pro
+                </button>
+              )}
              <span onClick={scrollToFeatures} style={{ cursor: "pointer", color: "#4B5563" }}>Features</span>
              <span onClick={scrollToSyllabus} style={{ cursor: "pointer", color: "#4B5563" }}>Syllabus</span>
              <span onClick={scrollToAboutUs} style={{ cursor: 'pointer', color: '#4B5563' }}>About Us</span>
