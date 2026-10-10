@@ -378,7 +378,142 @@ function App() {
              </div>
           )}
 
-          {currentView === 'home' && !isLoggedIn && (
+          
+        {currentView === "syllabus" && (
+          <div style={{ maxWidth: "1150px", margin: "40px auto 80px", padding: "0 24px", minHeight: "70vh" }}>
+            {/* Header */}
+            <div style={{ textAlign: "center", marginBottom: "40px" }}>
+              <span style={{ fontSize: "12px", fontWeight: "800", letterSpacing: "1.5px", color: "#0284C7", textTransform: "uppercase" }}>
+                ACADEMIC CURRICULUM
+              </span>
+              <h2 style={{ fontSize: "36px", fontWeight: "900", color: "#0F172A", marginTop: "10px", marginBottom: "12px" }}>
+                Official AKTU B.Tech Syllabus
+              </h2>
+              <p style={{ color: "#64748B", fontSize: "16px", maxWidth: "700px", margin: "0 auto" }}>
+                Download verified branch-wise syllabus schemes, credit distributions, and subject codes for all 4 years.
+              </p>
+            </div>
+
+            {/* 4 Year Cards Grid */}
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: "20px", marginBottom: "44px" }}>
+              <div style={{ background: "#FFFFFF", borderRadius: "24px", padding: "32px 24px", textAlign: "center", border: "1px solid #E2E8F0", boxShadow: "0 4px 20px rgba(0,0,0,0.03)" }}>
+                <div style={{ width: "56px", height: "56px", background: "#E0F2FE", borderRadius: "16px", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 20px", fontSize: "24px" }}>📖</div>
+                <h3 style={{ fontSize: "19px", fontWeight: "800", color: "#0F172A", marginBottom: "6px" }}>1st Year Syllabus</h3>
+                <p style={{ fontSize: "13px", color: "#64748B", marginBottom: "20px" }}>All Group A & B Streams</p>
+                <button style={{ padding: "8px 20px", borderRadius: "20px", background: "#F0F9FF", color: "#0369A1", border: "none", fontWeight: "700", fontSize: "13px", cursor: "pointer" }}>View Syllabus →</button>
+              </div>
+
+              <div style={{ background: "#FFFFFF", borderRadius: "24px", padding: "32px 24px", textAlign: "center", border: "1px solid #E2E8F0", boxShadow: "0 4px 20px rgba(0,0,0,0.03)" }}>
+                <div style={{ width: "56px", height: "56px", background: "#DCFCE7", borderRadius: "16px", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 20px", fontSize: "24px" }}>📊</div>
+                <h3 style={{ fontSize: "19px", fontWeight: "800", color: "#0F172A", marginBottom: "6px" }}>2nd Year Syllabus</h3>
+                <p style={{ fontSize: "13px", color: "#64748B", marginBottom: "20px" }}>CSE, ECE, ME, CE, EE Core</p>
+                <button style={{ padding: "8px 20px", borderRadius: "20px", background: "#F0FDF4", color: "#15803D", border: "none", fontWeight: "700", fontSize: "13px", cursor: "pointer" }}>View Syllabus →</button>
+              </div>
+
+              <div style={{ background: "#FFFFFF", borderRadius: "24px", padding: "32px 24px", textAlign: "center", border: "1px solid #E2E8F0", boxShadow: "0 4px 20px rgba(0,0,0,0.03)" }}>
+                <div style={{ width: "56px", height: "56px", background: "#FEF3C7", borderRadius: "16px", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 20px", fontSize: "24px" }}>📁</div>
+                <h3 style={{ fontSize: "19px", fontWeight: "800", color: "#0F172A", marginBottom: "6px" }}>3rd Year Syllabus</h3>
+                <p style={{ fontSize: "13px", color: "#64748B", marginBottom: "20px" }}>Advanced Branch & OE-1</p>
+                <button style={{ padding: "8px 20px", borderRadius: "20px", background: "#FFFBEB", color: "#B45309", border: "none", fontWeight: "700", fontSize: "13px", cursor: "pointer" }}>View Syllabus →</button>
+              </div>
+
+              <div style={{ background: "#FFFFFF", borderRadius: "24px", padding: "32px 24px", textAlign: "center", border: "1px solid #E2E8F0", boxShadow: "0 4px 20px rgba(0,0,0,0.03)" }}>
+                <div style={{ width: "56px", height: "56px", background: "#F3E8FF", borderRadius: "16px", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 20px", fontSize: "24px" }}>💼</div>
+                <h3 style={{ fontSize: "19px", fontWeight: "800", color: "#0F172A", marginBottom: "6px" }}>4th Year Syllabus</h3>
+                <p style={{ fontSize: "13px", color: "#64748B", marginBottom: "20px" }}>Electives II, III, IV & Project</p>
+                <button style={{ padding: "8px 20px", borderRadius: "20px", background: "#FAF5FF", color: "#7E22CE", border: "none", fontWeight: "700", fontSize: "13px", cursor: "pointer" }}>View Syllabus →</button>
+              </div>
+            </div>
+
+            {/* B.Tech Subject Notes & Quantum Series Table */}
+            <div style={{ background: "#FFFFFF", borderRadius: "24px", border: "1px solid #E2E8F0", overflow: "hidden", marginBottom: "40px", boxShadow: "0 6px 24px rgba(0,0,0,0.04)" }}>
+              <div style={{ padding: "24px 28px", borderBottom: "1px solid #E2E8F0" }}>
+                <h3 style={{ margin: 0, fontSize: "22px", fontWeight: "900", color: "#0F172A" }}>B.Tech Subject Notes & Quantum Series</h3>
+              </div>
+              <div style={{ overflowX: "auto" }}>
+                <table style={{ width: "100%", borderCollapse: "collapse", textAlign: "left" }}>
+                  <thead>
+                    <tr style={{ background: "#0F172A", color: "white" }}>
+                      <th style={{ padding: "16px 20px", fontSize: "13px", fontWeight: "700" }}>Subject Code</th>
+                      <th style={{ padding: "16px 20px", fontSize: "13px", fontWeight: "700" }}>Subject Name</th>
+                      <th style={{ padding: "16px 20px", fontSize: "13px", fontWeight: "700" }}>Semester</th>
+                      <th style={{ padding: "16px 20px", fontSize: "13px", fontWeight: "700" }}>Units Covered</th>
+                      <th style={{ padding: "16px 20px", fontSize: "13px", fontWeight: "700" }}>Download</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {[
+                      { code: "BAS-103", name: "Engineering Mathematics - I", sem: "Sem 1 • 1st Year", units: "Matrices, Differential, Vector Calculus", tagColor: "#0284C7", tagBg: "#E0F2FE" },
+                      { code: "BAS-203", name: "Engineering Mathematics - II", sem: "Sem 2 • 1st Year", units: "Fourier Series, ODE, Laplace, Complex Variables", tagColor: "#0284C7", tagBg: "#E0F2FE" },
+                      { code: "BKT-101", name: "Engineering Physics", sem: "Sem 1 • 1st Year", units: "Quantum Mechanics, Lasers, Optics, Superconductivity", tagColor: "#0284C7", tagBg: "#E0F2FE" },
+                      { code: "KCS-301", name: "Data Structures & Algorithms (DSA)", sem: "Sem 3 • 2nd Year", units: "Stacks, Queues, Binary Trees, Graphs, Sorting", tagColor: "#16A34A", tagBg: "#DCFCE7" },
+                      { code: "KCS-401", name: "Operating Systems (OS)", sem: "Sem 4 • 2nd Year", units: "Processes, Deadlocks, Paging, Virtual Memory", tagColor: "#16A34A", tagBg: "#DCFCE7" },
+                      { code: "KCS-351", name: "Computer Organisation & Architecture (COA)", sem: "Sem 3 • 2nd Year", units: "CPU design, Pipelining, Cache, I/O Systems", tagColor: "#16A34A", tagBg: "#DCFCE7" },
+                      { code: "KCS-501", name: "Database Management Systems (DBMS)", sem: "Sem 5 • 3rd Year", units: "Relational Algebra, SQL, Normalization, ACID", tagColor: "#D97706", tagBg: "#FEF3C7" },
+                      { code: "KCS-551", name: "Computer Networks", sem: "Sem 5 • 3rd Year", units: "TCP/IP, OSI, Routing, DNS, HTTP", tagColor: "#D97706", tagBg: "#FEF3C7" },
+                      { code: "KCS-602", name: "Design and Analysis of Algorithms (DAA)", sem: "Sem 6 • 3rd Year", units: "Greedy, DP, NP-Complete, Divide & Conquer", tagColor: "#D97706", tagBg: "#FEF3C7" },
+                      { code: "KCS-701", name: "Artificial Intelligence (AI)", sem: "Sem 7 • 4th Year", units: "Search Algorithms, ML Basics, NLP, Expert Systems", tagColor: "#9333EA", tagBg: "#F3E8FF" },
+                      { code: "KCS-801", name: "Cloud Computing & Big Data", sem: "Sem 8 • 4th Year", units: "AWS, Hadoop, MapReduce, Virtualization", tagColor: "#9333EA", tagBg: "#F3E8FF" },
+                    ].map((row, idx) => (
+                      <tr key={idx} style={{ borderBottom: "1px solid #F1F5F9", background: idx % 2 === 0 ? "#FFFFFF" : "#F8FAFC" }}>
+                        <td style={{ padding: "14px 20px" }}>
+                          <span style={{ background: row.tagBg, color: row.tagColor, fontWeight: "700", fontSize: "12px", padding: "4px 10px", borderRadius: "8px" }}>{row.code}</span>
+                        </td>
+                        <td style={{ padding: "14px 20px", fontWeight: "700", color: "#1E293B", fontSize: "14px" }}>{row.name}</td>
+                        <td style={{ padding: "14px 20px", color: "#64748B", fontSize: "13px" }}>{row.sem}</td>
+                        <td style={{ padding: "14px 20px", color: "#475569", fontSize: "13px" }}>{row.units}</td>
+                        <td style={{ padding: "14px 20px" }}>
+                          <button style={{ background: "#E0F2FE", color: "#0369A1", border: "none", padding: "6px 14px", borderRadius: "12px", fontSize: "12px", fontWeight: "700", cursor: "pointer" }}>View Notes →</button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            {/* 1st Year Branch-wise Official AKTU PDF Syllabus Table */}
+            <div style={{ background: "#FFFFFF", borderRadius: "24px", border: "1px solid #E2E8F0", overflow: "hidden", boxShadow: "0 6px 24px rgba(0,0,0,0.04)" }}>
+              <div style={{ padding: "24px 28px", borderBottom: "1px solid #E2E8F0" }}>
+                <h3 style={{ margin: 0, fontSize: "20px", fontWeight: "900", color: "#0F172A" }}>Download AKTU B.Tech First Year Syllabus PDF</h3>
+                <p style={{ margin: "8px 0 0", fontSize: "13px", color: "#64748B" }}>Stream-wise classification for branches under AKTU curriculum.</p>
+              </div>
+              <div style={{ overflowX: "auto" }}>
+                <table style={{ width: "100%", borderCollapse: "collapse", textAlign: "left" }}>
+                  <thead>
+                    <tr style={{ background: "#0F172A", color: "white" }}>
+                      <th style={{ padding: "14px 24px", fontSize: "13px", fontWeight: "700" }}>Branch / Stream</th>
+                      <th style={{ padding: "14px 24px", fontSize: "13px", fontWeight: "700", textAlign: "right" }}>Syllabus PDF</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {[
+                      "Computer Science & Engineering (CSE)",
+                      "Electronics & Communication Engineering (ECE)",
+                      "Electrical Engineering (EE)",
+                      "Mechanical Engineering (ME)",
+                      "Civil Engineering (CE)",
+                      "Information Technology (IT)",
+                      "Biotechnology",
+                      "Agricultural Engineering",
+                      "Chemical Engineering",
+                      "Course Structure & Evaluation Scheme"
+                    ].map((branch, idx) => (
+                      <tr key={idx} style={{ borderBottom: "1px solid #F1F5F9", background: idx % 2 === 0 ? "#FFFFFF" : "#F8FAFC" }}>
+                        <td style={{ padding: "14px 24px", fontWeight: "600", color: "#1E293B", fontSize: "14px" }}>{branch}</td>
+                        <td style={{ padding: "14px 24px", textAlign: "right" }}>
+                          <button style={{ background: "#2563EB", color: "white", border: "none", padding: "6px 16px", borderRadius: "12px", fontSize: "12px", fontWeight: "700", cursor: "pointer" }}>Download PDF</button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {currentView === 'home' && !isLoggedIn && (
             <>
               <div style={{ textAlign: 'center', marginBottom: '30px' }}>
                 <h1 style={{ fontSize: '48px', fontWeight: '900', margin: '0 0 10px 0' }}>The Future of Learning <span style={{ color: '#EA580C' }}>Starts with You</span></h1>
