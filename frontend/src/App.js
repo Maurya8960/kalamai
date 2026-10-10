@@ -296,6 +296,24 @@ function App() {
     alert("👑 " + planName + " Active!\n\nValid Till: " + expDate + "\n\nAapka Pro plan already active hai. Expire hone ke baad hi naya plan upgrade kar sakte hain.");
   };
 
+  
+  const handleNavClick = (viewName, elementId) => {
+    if (viewName === "chat") {
+      if (!isLoggedIn) setIsLoggedIn(true);
+      navigateTo("home");
+      return;
+    }
+    navigateTo(viewName);
+    if (elementId) {
+      setTimeout(() => {
+        const el = document.getElementById(elementId);
+        if (el) {
+          el.scrollIntoView({ behavior: "smooth" });
+        }
+      }, 100);
+    }
+  };
+
   const handleUpgradeClick = () => {
     if (!isLoggedIn) {
       alert("Kripya Pro upgrade karne ke liye pehle apni student ID se Login karein!");
@@ -586,8 +604,43 @@ function App() {
             <h1 style={{ margin: 0, fontSize: '26px', fontWeight: '900', color: '#EA580C' }}>KalamAI</h1>
           </div>
           <nav style={{ display: 'flex', gap: '30px', fontWeight: 'bold', alignItems: 'center' }}>
-             <span onClick={() => navigateTo("home")} style={{ cursor: "pointer", color: currentView === "home" ? "#EA580C" : "#4B5563", fontWeight: "700" }}>Home</span>
-<span onClick={() => { if(!isLoggedIn) setIsLoggedIn(true); navigateTo('home'); }} style={{ cursor: 'pointer', color: '#4B5563', fontWeight: '700' }}>KalamAI Chat</span>
+             {/* Home */}
+              <span
+                onClick={() => {
+                  if (isLoggedIn) {
+                    // Agar logged in hai aur Home par click kare toh landing page scroll ya switch
+                    navigateTo("home");
+                    window.scrollTo({ top: 0, behavior: "smooth" });
+                  } else {
+                    navigateTo("home");
+                  }
+                }}
+                style={{
+                  cursor: "pointer",
+                  color: (!isLoggedIn && currentView === "home") ? "#EA580C" : "#4B5563",
+                  borderBottom: (!isLoggedIn && currentView === "home") ? "3px solid #EA580C" : "none",
+                  paddingBottom: "5px",
+                  fontWeight: (!isLoggedIn && currentView === "home") ? "800" : "600",
+                  transition: "all 0.2s ease"
+                }}
+              >
+                Home
+              </span>
+
+              {/* KalamAI Chat (Highlights when chatting) */}
+              <span
+                onClick={() => handleNavClick("chat")}
+                style={{
+                  cursor: "pointer",
+                  color: (isLoggedIn && currentView === "home") ? "#EA580C" : "#4B5563",
+                  borderBottom: (isLoggedIn && currentView === "home") ? "3px solid #EA580C" : "none",
+                  paddingBottom: "5px",
+                  fontWeight: (isLoggedIn && currentView === "home") ? "800" : "600",
+                  transition: "all 0.2s ease"
+                }}
+              >
+                KalamAI Chat
+              </span>
               {isProActive ? (
                 <div
                   title={"Valid till: " + (proExpiry ? new Date(proExpiry).toLocaleDateString() : "")}
