@@ -41,6 +41,20 @@ const aboutCards = [
 
 function App() {
 
+  const resolvedDisplayName = (() => {
+    try {
+      const explicitName = localStorage.getItem("kalamai_user_name");
+      if (explicitName && explicitName.trim() && explicitName !== "Guest Student") return explicitName;
+      const explicitEmail = localStorage.getItem("kalamai_user_email");
+      if (explicitEmail && explicitEmail.includes("@")) {
+        const p = explicitEmail.split("@")[0].replace(/[^a-zA-Z0-9]/g, " ").trim();
+        return p.split(" ").map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(" ") || "Student Scholar";
+      }
+    } catch(e) {}
+    return "Student Scholar";
+  })();
+
+
   const decodeGoogleTokenSafe = (token) => {
     try {
       const base64Url = token.split(".")[1];
@@ -89,7 +103,7 @@ function App() {
         return prefix.charAt(0).toUpperCase() + prefix.slice(1);
       }
     } catch(e) {}
-    return "Guest Student";
+    return "Student Scholar";
   };
 
   const getLoggedInUserEmail = () => {
@@ -1479,9 +1493,9 @@ function App() {
                 {/* Profile Section */}
                 <div style={{ borderTop: '1.5px solid rgba(234, 88, 12, 0.2)', paddingTop: '12px', marginTop: '12px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                    <div style={{ width: '34px', height: '34px', borderRadius: '50%', background: 'linear-gradient(135deg, #FF6B00, #EA580C)', color: '#FFF', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: '900', fontSize: '14px', boxShadow: '0 3px 8px rgba(234, 88, 12, 0.3)' }}>{(studentName || currentUserName || "S").charAt(0).toUpperCase()}</div>
+                    <div style={{ width: '34px', height: '34px', borderRadius: '50%', background: 'linear-gradient(135deg, #FF6B00, #EA580C)', color: '#FFF', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: '900', fontSize: '14px', boxShadow: '0 3px 8px rgba(234, 88, 12, 0.3)' }}>{resolvedDisplayName.charAt(0).toUpperCase()}</div>
                     <div>
-                      <div style={{ fontSize: "13px", fontWeight: "800", color: "#7C2D12" }}>{studentName || currentUserName || "Student"}</div>
+                      <div style={{ fontSize: "13px", fontWeight: "800", color: "#7C2D12" }}>{resolvedDisplayName}</div>
                       <div style={{ fontSize: '11px', color: '#EA580C', fontWeight: '700' }}>Student Scholar</div>
                     </div>
                   </div>
