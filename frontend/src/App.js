@@ -241,7 +241,7 @@ function App() {
 
   return (
     <GoogleOAuthProvider clientId="589438554910-r9p9np9ujfka7dm3elfjm3m7kobiv650.apps.googleusercontent.com">
-      <div style={{ position: 'relative', overflow: 'hidden', minHeight: '100vh', fontFamily: 'Segoe UI, Tahoma, sans-serif', color: '#111827', display: 'flex', flexDirection: 'column' }}>
+      <div style={{ position: 'relative', overflow: 'hidden', minHeight: '100vh', position: 'relative', zIndex: 1, background: 'transparent' }}>
         
         <style>{`
           
@@ -474,7 +474,45 @@ function App() {
                   return (
                     <div
                       key={item.year}
-                      onClick={() => setSelectedYear(item.year)}
+                      onClick={() =>
+
+      {/* Portfolio Aesthetic Engineering Grid + Floating Ambient Glow */}
+      <div style={{
+        position: "fixed",
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        width: "100vw",
+        height: "100vh",
+        zIndex: 0,
+        pointerEvents: "none",
+        backgroundColor: "#FAF8F5",
+        backgroundImage: "linear-gradient(to right, rgba(234, 88, 12, 0.06) 1px, transparent 1px), linear-gradient(to bottom, rgba(234, 88, 12, 0.06) 1px, transparent 1px)",
+        backgroundSize: "36px 36px"
+      }}>
+        <div style={{
+          position: "absolute",
+          top: "-80px",
+          right: "-80px",
+          width: "520px",
+          height: "520px",
+          borderRadius: "50%",
+          background: "radial-gradient(circle, rgba(249, 115, 22, 0.22) 0%, rgba(245, 158, 11, 0.08) 70%, transparent 100%)",
+          filter: "blur(80px)"
+        }} />
+        <div style={{
+          position: "absolute",
+          bottom: "-80px",
+          left: "-80px",
+          width: "560px",
+          height: "560px",
+          borderRadius: "50%",
+          background: "radial-gradient(circle, rgba(37, 99, 235, 0.18) 0%, rgba(99, 102, 241, 0.06) 70%, transparent 100%)",
+          filter: "blur(85px)"
+        }} />
+      </div>
+ setSelectedYear(item.year)}
                       style={{
                         borderRadius: "24px",
                         overflow: "hidden",
