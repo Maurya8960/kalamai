@@ -431,7 +431,7 @@ function App() {
     } else if (tab === "features") {
       setCurrentView("home");
       setTimeout(() => {
-        const el = document.getElementById("features") || document.querySelector("[id*="feature"]");
+        const el = document.getElementById("features") || document.querySelector("[id*=feature]");
         if (el) el.scrollIntoView({ behavior: "smooth" });
       }, 150);
     } else if (tab === "syllabus") {
