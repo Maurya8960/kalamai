@@ -125,3 +125,24 @@ body::after {
   50% { transform: translateY(-24px) rotate(8deg) scale(1.06); }
   100% { transform: translateY(16px) rotate(-6deg) scale(0.95); }
 }
+
+/* Contact Info Cards Interactive Hover Effects */
+.contact-hover-card {
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
+  cursor: pointer;
+}
+
+.contact-hover-card:hover {
+  transform: translateY(-6px) scale(1.02) !important;
+  box-shadow: 0 16px 32px rgba(234, 88, 12, 0.14), 0 4px 12px rgba(0, 0, 0, 0.05) !important;
+  border-color: rgba(234, 88, 12, 0.4) !important;
+}
+
+.contact-hover-card:hover .contact-icon-bubble {
+  transform: scale(1.12) rotate(6deg) !important;
+  box-shadow: 0 8px 18px rgba(234, 88, 12, 0.25) !important;
+}
+
+.contact-icon-bubble {
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
+}
