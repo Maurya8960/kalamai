@@ -45,6 +45,21 @@ function App() {
   const user = null;
   
   // Logged-in user dynamic info extraction
+  const decodeGoogleCredential = (token) => {
+    try {
+      const base64Url = token.split(".")[1];
+      const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
+      const jsonPayload = decodeURIComponent(
+        window.atob(base64)
+          .split("")
+          .map((c) => "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2))
+          .join("")
+      );
+      return JSON.parse(jsonPayload);
+    } catch (e) {
+      return null;
+    }
+  };
   const getLoggedInUserName = () => {
     try {
       const storedName = localStorage.getItem("kalamai_user_name");
@@ -215,7 +230,9 @@ function App() {
       if (typeof email !== "undefined" && email) {
         localStorage.setItem("kalamai_user_email", email);
         const namePart = email.split("@")[0];
-        localStorage.setItem("kalamai_user_name", namePart.charAt(0).toUpperCase() + namePart.slice(1));
+        const formattedName = namePart.split(".")[0].split("_")[0];
+        const studentName = formattedName.charAt(0).toUpperCase() + formattedName.slice(1);
+        localStorage.setItem("kalamai_user_name", studentName);
       }
   }, []);
 
@@ -232,7 +249,9 @@ function App() {
       if (typeof email !== "undefined" && email) {
         localStorage.setItem("kalamai_user_email", email);
         const namePart = email.split("@")[0];
-        localStorage.setItem("kalamai_user_name", namePart.charAt(0).toUpperCase() + namePart.slice(1));
+        const formattedName = namePart.split(".")[0].split("_")[0];
+        const studentName = formattedName.charAt(0).toUpperCase() + formattedName.slice(1);
+        localStorage.setItem("kalamai_user_name", studentName);
       }
         }
       } else {
@@ -243,7 +262,9 @@ function App() {
       if (typeof email !== "undefined" && email) {
         localStorage.setItem("kalamai_user_email", email);
         const namePart = email.split("@")[0];
-        localStorage.setItem("kalamai_user_name", namePart.charAt(0).toUpperCase() + namePart.slice(1));
+        const formattedName = namePart.split(".")[0].split("_")[0];
+        const studentName = formattedName.charAt(0).toUpperCase() + formattedName.slice(1);
+        localStorage.setItem("kalamai_user_name", studentName);
       }
         }
       }
@@ -258,7 +279,9 @@ function App() {
       if (typeof email !== "undefined" && email) {
         localStorage.setItem("kalamai_user_email", email);
         const namePart = email.split("@")[0];
-        localStorage.setItem("kalamai_user_name", namePart.charAt(0).toUpperCase() + namePart.slice(1));
+        const formattedName = namePart.split(".")[0].split("_")[0];
+        const studentName = formattedName.charAt(0).toUpperCase() + formattedName.slice(1);
+        localStorage.setItem("kalamai_user_name", studentName);
       }
   };
 
@@ -367,7 +390,9 @@ function App() {
       if (typeof email !== "undefined" && email) {
         localStorage.setItem("kalamai_user_email", email);
         const namePart = email.split("@")[0];
-        localStorage.setItem("kalamai_user_name", namePart.charAt(0).toUpperCase() + namePart.slice(1));
+        const formattedName = namePart.split(".")[0].split("_")[0];
+        const studentName = formattedName.charAt(0).toUpperCase() + formattedName.slice(1);
+        localStorage.setItem("kalamai_user_name", studentName);
       }
       navigateTo("home");
       return;
