@@ -40,11 +40,7 @@ const aboutCards = [
 ];
 
 function App() {
-  if (!localStorage.getItem("kalamai_pro_expiry")) {
-    // Current payment activate kar diya
-    localStorage.setItem("kalamai_pro_expiry", (Date.now() + 7 * 24 * 60 * 60 * 1000).toString());
-    localStorage.setItem("kalamai_pro_plan", "Weekly Sprint");
-  }
+  
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const user = { name: 'Ansh Maurya', email: 'maurya1.ansh@gmail.com' };
   const [currentView, setCurrentView] = useState('home');
@@ -86,9 +82,15 @@ function App() {
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [isPricingOpen, setIsPricingOpen] = useState(false);
 
+  const getProStorageKey = () => {
+    const email = user?.email || localStorage.getItem("kalamai_user_email") || "guest";
+    return "kalamai_pro_expiry_" + email;
+  };
+
   const [proExpiry, setProExpiry] = useState(() => {
     try {
-      const exp = localStorage.getItem("kalamai_pro_expiry");
+      const email = localStorage.getItem("kalamai_user_email") || "guest";
+      const exp = localStorage.getItem("kalamai_pro_expiry_" + email);
       if (exp && Number(exp) > Date.now()) {
         return Number(exp);
       }
@@ -96,7 +98,26 @@ function App() {
     return null;
   });
 
-  const isProActive = Boolean(proExpiry && proExpiry > Date.now());
+  // User ya login change hone par expiry check sync karein
+  useEffect(() => {
+    if (!isLoggedIn) {
+      setProExpiry(null);
+      return;
+    }
+    try {
+      const key = getProStorageKey();
+      const exp = localStorage.getItem(key);
+      if (exp && Number(exp) > Date.now()) {
+        setProExpiry(Number(exp));
+      } else {
+        setProExpiry(null);
+      }
+    } catch(e) {
+      setProExpiry(null);
+    }
+  }, [isLoggedIn, user]);
+
+  const isProActive = Boolean(isLoggedIn && proExpiry && proExpiry > Date.now());
 
   const getRemainingDays = () => {
     if (!proExpiry) return "";
@@ -297,8 +318,9 @@ function App() {
         if (plan.price === 50) durationDays = 150;
 
         const expiryTimestamp = Date.now() + (durationDays * 24 * 60 * 60 * 1000);
-        localStorage.setItem("kalamai_pro_expiry", expiryTimestamp.toString());
-        localStorage.setItem("kalamai_pro_plan", plan.name);
+        const key = getProStorageKey();
+        localStorage.setItem(key, expiryTimestamp.toString());
+        localStorage.setItem("kalamai_pro_plan_" + (user?.email || "guest"), plan.name);
         setProExpiry(expiryTimestamp);
 
         alert("🎉 Payment Successful! KalamAI Pro activated for " + durationDays + " days.");
