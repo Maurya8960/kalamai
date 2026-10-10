@@ -794,14 +794,14 @@ function App() {
             <h1 style={{ margin: 0, fontSize: '26px', fontWeight: '900', color: '#EA580C' }}>KalamAI</h1>
           </div>
           <nav style={{ display: 'flex', gap: '30px', fontWeight: 'bold', alignItems: 'center' }}>
-             {/* Home */}
+              {/* Home */}
               <span
-                onClick={() => handleNavClick("home")}
+                onClick={() => { setCurrentView("home"); window.scrollTo({ top: 0, behavior: "smooth" }); }}
                 style={{
                   cursor: "pointer",
                   color: currentView === "home" ? "#EA580C" : "#4B5563",
-                  borderBottom: currentView === 'home' ? '3px solid #EA580C' : 'none',
-                  paddingBottom: "5px",
+                  borderBottom: currentView === "home" ? "3px solid #EA580C" : "3px solid transparent",
+                  paddingBottom: "6px",
                   fontWeight: currentView === "home" ? "800" : "600",
                   transition: "all 0.2s ease"
                 }}
@@ -811,12 +811,19 @@ function App() {
 
               {/* KalamAI Chat */}
               <span
-                onClick={() => handleNavClick("chat")}
+                onClick={() => {
+                  if (!isLoggedIn) {
+                    alert("KalamAI Chat ke liye kripya sign in karein.");
+                    setCurrentView("home");
+                    return;
+                  }
+                  setCurrentView("chat");
+                }}
                 style={{
                   cursor: "pointer",
                   color: currentView === "chat" ? "#EA580C" : "#4B5563",
-                  borderBottom: currentView === 'home' ? '3px solid #EA580C' : 'none',
-                  paddingBottom: "5px",
+                  borderBottom: currentView === "chat" ? "3px solid #EA580C" : "3px solid transparent",
+                  paddingBottom: "6px",
                   fontWeight: currentView === "chat" ? "800" : "600",
                   transition: "all 0.2s ease"
                 }}
@@ -826,11 +833,18 @@ function App() {
 
               {/* Features */}
               <span
-                onClick={() => handleNavClick("features")}
+                onClick={() => {
+                  setCurrentView("home");
+                  setTimeout(() => {
+                    const el = document.getElementById("features");
+                    if (el) el.scrollIntoView({ behavior: "smooth" });
+                  }, 120);
+                }}
                 style={{
                   cursor: "pointer",
                   color: "#4B5563",
-                  paddingBottom: "5px",
+                  borderBottom: "3px solid transparent",
+                  paddingBottom: "6px",
                   fontWeight: "600",
                   transition: "all 0.2s ease"
                 }}
@@ -840,12 +854,12 @@ function App() {
 
               {/* Syllabus */}
               <span
-                onClick={() => handleNavClick("syllabus")}
+                onClick={() => setCurrentView("syllabus")}
                 style={{
                   cursor: "pointer",
                   color: currentView === "syllabus" ? "#EA580C" : "#4B5563",
-                  borderBottom: currentView === 'home' ? '3px solid #EA580C' : 'none',
-                  paddingBottom: "5px",
+                  borderBottom: currentView === "syllabus" ? "3px solid #EA580C" : "3px solid transparent",
+                  paddingBottom: "6px",
                   fontWeight: currentView === "syllabus" ? "800" : "600",
                   transition: "all 0.2s ease"
                 }}
@@ -855,18 +869,25 @@ function App() {
 
               {/* About Us */}
               <span
-                onClick={() => handleNavClick("about")}
+                onClick={() => {
+                  setCurrentView("home");
+                  setTimeout(() => {
+                    window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
+                  }, 120);
+                }}
                 style={{
                   cursor: "pointer",
                   color: "#4B5563",
-                  paddingBottom: "5px",
+                  borderBottom: "3px solid transparent",
+                  paddingBottom: "6px",
                   fontWeight: "600",
                   transition: "all 0.2s ease"
                 }}
               >
                 About Us
               </span>
-          </nav>
+    
+            </nav>
           <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
             {!isLoggedIn ? (
               <>
