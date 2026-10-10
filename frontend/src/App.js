@@ -1685,6 +1685,30 @@ function App() {
             </div>
 
             <div style={{ display: "flex", flexDirection: "column", gap: "10px", marginTop: "20px", borderTop: "1px solid #27272A", paddingTop: "16px" }}>
+              
+              <button
+                type="button"
+                onClick={() => { setIsSettingsOpen(false); navigateTo("admin"); }}
+                style={{
+                  width: "100%",
+                  padding: "11px",
+                  borderRadius: "12px",
+                  background: "linear-gradient(135deg, #FF6B00, #EA580C)",
+                  border: "none",
+                  color: "#FFFFFF",
+                  fontWeight: "800",
+                  fontSize: "13px",
+                  cursor: "pointer",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  gap: "8px",
+                  boxShadow: "0 4px 14px rgba(234, 88, 12, 0.3)"
+                }}
+              >
+                <span>🔒</span> Open Notes Admin Portal
+              </button>
+
               <button
                 type="button"
                 onClick={handleExportChats}
@@ -1841,7 +1865,7 @@ function App() {
           </div>
           <div style={{ textAlign: 'center', marginTop: '60px', color: '#4B5563', fontSize: '14px', fontWeight: '600' }}>
             © 2026 KalamAI. Developed by Ansh Maurya. All rights reserved.
-          </div>
+           · <span onClick={() => navigateTo("admin")} style={{ cursor: "pointer", color: "#EA580C", fontWeight: "700" }}>Admin Portal</span></div>
         </footer>
       </div>
     </GoogleOAuthProvider>
