@@ -422,20 +422,25 @@ function App() {
       setCurrentView("home");
       window.scrollTo({ top: 0, behavior: "smooth" });
     } else if (tab === "chat") {
+      if (!isLoggedIn) {
+        alert("KalamAI Chat use karne ke liye kripya pehle Sign In karein.");
+        setCurrentView("home");
+        return;
+      }
       setCurrentView("chat");
     } else if (tab === "features") {
-      setCurrentView("home");
+      setCurrentView("features");
       setTimeout(() => {
-        const el = document.getElementById("features") || document.querySelector("[id*=feature]");
+        const el = document.getElementById("features") || document.querySelector("[id*=feature]") || document.querySelector("section");
         if (el) el.scrollIntoView({ behavior: "smooth" });
-      }, 150);
+      }, 100);
     } else if (tab === "syllabus") {
       setCurrentView("syllabus");
     } else if (tab === "about") {
       setCurrentView("home");
       setTimeout(() => {
         window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
-      }, 150);
+      }, 100);
     }
   };
 
@@ -811,6 +816,43 @@ function App() {
                   KalamAI Chat
                 </span>
 
+{/* ⚡ Upgrade Pro Button (Restored) */}
+                <button
+                  type="button"
+                  onClick={() => {
+                    if (typeof handleUpgradeClick === "function") {
+                      handleUpgradeClick();
+                    } else if (typeof setIsPricingOpen === "function") {
+                      setIsPricingOpen(true);
+                    }
+                  }}
+                  style={{
+                    background: "linear-gradient(135deg, #FF6B00 0%, #EA580C 50%, #9333EA 100%)",
+                    color: "#FFFFFF",
+                    border: "none",
+                    padding: "7px 18px",
+                    borderRadius: "20px",
+                    fontSize: "13px",
+                    fontWeight: "800",
+                    display: "inline-flex",
+                    alignItems: "center",
+                    gap: "6px",
+                    cursor: "pointer",
+                    boxShadow: "0 4px 15px rgba(234, 88, 12, 0.35)",
+                    transition: "all 0.2s ease"
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.transform = "translateY(-2px) scale(1.03)";
+                    e.currentTarget.style.boxShadow = "0 6px 20px rgba(147, 51, 234, 0.4)";
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.transform = "translateY(0) scale(1)";
+                    e.currentTarget.style.boxShadow = "0 4px 15px rgba(234, 88, 12, 0.35)";
+                  }}
+                >
+                  <span>⚡</span> Upgrade Pro
+                </button>
+
                 {/* Syllabus */}
                 <span
                   onClick={() => handleNavClick("syllabus")}
@@ -858,15 +900,52 @@ function App() {
                   KalamAI Chat
                 </span>
 
+{/* ⚡ Upgrade Pro Button (Restored) */}
+                <button
+                  type="button"
+                  onClick={() => {
+                    if (typeof handleUpgradeClick === "function") {
+                      handleUpgradeClick();
+                    } else if (typeof setIsPricingOpen === "function") {
+                      setIsPricingOpen(true);
+                    }
+                  }}
+                  style={{
+                    background: "linear-gradient(135deg, #FF6B00 0%, #EA580C 50%, #9333EA 100%)",
+                    color: "#FFFFFF",
+                    border: "none",
+                    padding: "7px 18px",
+                    borderRadius: "20px",
+                    fontSize: "13px",
+                    fontWeight: "800",
+                    display: "inline-flex",
+                    alignItems: "center",
+                    gap: "6px",
+                    cursor: "pointer",
+                    boxShadow: "0 4px 15px rgba(234, 88, 12, 0.35)",
+                    transition: "all 0.2s ease"
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.transform = "translateY(-2px) scale(1.03)";
+                    e.currentTarget.style.boxShadow = "0 6px 20px rgba(147, 51, 234, 0.4)";
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.transform = "translateY(0) scale(1)";
+                    e.currentTarget.style.boxShadow = "0 4px 15px rgba(234, 88, 12, 0.35)";
+                  }}
+                >
+                  <span>⚡</span> Upgrade Pro
+                </button>
+
                 {/* Features */}
                 <span
                   onClick={() => handleNavClick("features")}
                   style={{
                     cursor: "pointer",
-                    color: "#4B5563",
-                    borderBottom: "3px solid transparent",
+                    color: currentView === "features" ? "#EA580C" : "#4B5563",
+                    borderBottom: currentView === "features" ? "3px solid #EA580C" : "3px solid transparent",
                     paddingBottom: "6px",
-                    fontWeight: "600",
+                    fontWeight: currentView === "features" ? "800" : "600",
                     transition: "all 0.2s ease"
                   }}
                 >
@@ -1076,7 +1155,7 @@ function App() {
         <SyllabusDirectory onBackToChat={() => navigateTo("home")} />
       )}
 
-{currentView === 'home' && !isLoggedIn && (
+{(currentView === "home" || currentView === "features") && !isLoggedIn && (
             <>
               <div style={{ textAlign: 'center', marginBottom: '30px' }}>
                 <h1 style={{ fontSize: '48px', fontWeight: '900', margin: '0 0 10px 0' }}>The Future of Learning <span style={{ color: '#EA580C' }}>Starts with You</span></h1>
@@ -1174,7 +1253,7 @@ function App() {
             </>
           )}
 
-          {currentView === 'home' && isLoggedIn && (
+          {(currentView === "home" || currentView === "features") && isLoggedIn && (
         <div style={{ display: "flex", maxWidth: "1260px", margin: "30px auto 80px", gap: "20px", padding: "0 16px", alignItems: "stretch" }}>
 
           {/* KalamAI Warm Aesthetic Sidebar */}
