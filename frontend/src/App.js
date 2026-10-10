@@ -551,7 +551,8 @@ function App() {
                 Empowering the next generation of innovators through interactive STEM education and AI-driven personalized learning.
               </p>
               <div style={{ fontWeight: '800', color: '#EA580C', fontSize: '13px', letterSpacing: '1px', marginBottom: '15px', textTransform: 'uppercase' }}>GET IN TOUCH</div>
-              <div style={{ display: "flex", gap: "10px", alignItems: "center", flexWrap: "wrap" }}>
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 38px)", gap: "10px", alignItems: "center" }}>
+                {/* Row 1: Globe, GitHub, WhatsApp, X */}
                 <a href="https://ansh-maurya.vercel.app" target="_blank" rel="noreferrer" title="Website" className="social-fav-btn">
                   <img src="/icons/globe.png" alt="Portfolio" style={{ width: "20px", height: "20px", objectFit: "contain" }} />
                 </a>
@@ -564,9 +565,8 @@ function App() {
                 <a href="https://x.com/maurya1_ansh" target="_blank" rel="noreferrer" title="Twitter / X" className="social-fav-btn">
                   <img src="/icons/twitter.png" alt="Twitter" style={{ width: "20px", height: "20px", objectFit: "contain" }} />
                 </a>
-                <a href="https://www.youtube.com/@AnshMaurya-o6j" target="_blank" rel="noreferrer" title="YouTube" className="social-fav-btn">
-                  <img src="/icons/youtube.png" alt="YouTube" style={{ width: "20px", height: "20px", objectFit: "contain" }} />
-                </a>
+
+                {/* Row 2: Instagram, LinkedIn, Telegram, YouTube (Right below X) */}
                 <a href="https://www.instagram.com/ansh_maurya_700/" target="_blank" rel="noreferrer" title="Instagram" className="social-fav-btn">
                   <img src="/icons/instagram.png" alt="Instagram" style={{ width: "20px", height: "20px", objectFit: "contain" }} />
                 </a>
@@ -575,6 +575,9 @@ function App() {
                 </a>
                 <a href="https://t.me/Vishwas013" target="_blank" rel="noreferrer" title="Telegram" className="social-fav-btn">
                   <img src="/icons/telegram.png" alt="Telegram" style={{ width: "20px", height: "20px", objectFit: "contain" }} />
+                </a>
+                <a href="https://www.youtube.com/@AnshMaurya-o6j" target="_blank" rel="noreferrer" title="YouTube" className="social-fav-btn">
+                  <img src="/icons/youtube.png" alt="YouTube" style={{ width: "20px", height: "20px", objectFit: "contain" }} />
                 </a>
               </div>
             </div>
