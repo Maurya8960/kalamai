@@ -381,6 +381,7 @@ function App() {
 
           
         
+        
         {currentView === "syllabus" && (
           <div style={{ maxWidth: "1150px", margin: "40px auto 90px", padding: "0 24px", minHeight: "75vh" }}>
             
