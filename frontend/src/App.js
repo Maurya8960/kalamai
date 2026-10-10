@@ -423,24 +423,24 @@ function App() {
       window.scrollTo({ top: 0, behavior: "smooth" });
     } else if (tab === "chat") {
       if (!isLoggedIn) {
-        alert("KalamAI Chat use karne ke liye kripya pehle Sign In karein.");
+        alert("KalamAI Chat access karne ke liye pehle Sign In karein.");
         setCurrentView("home");
         return;
       }
       setCurrentView("chat");
     } else if (tab === "features") {
-      setCurrentView("features");
+      setCurrentView("home");
       setTimeout(() => {
-        const el = document.getElementById("features") || document.querySelector("[id*=feature]") || document.querySelector("section");
+        const el = document.getElementById("features") || document.querySelector("[id*="feature"]");
         if (el) el.scrollIntoView({ behavior: "smooth" });
-      }, 100);
+      }, 150);
     } else if (tab === "syllabus") {
       setCurrentView("syllabus");
     } else if (tab === "about") {
       setCurrentView("home");
       setTimeout(() => {
         window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
-      }, 100);
+      }, 150);
     }
   };
 
@@ -876,7 +876,7 @@ function App() {
                   style={{
                     cursor: "pointer",
                     color: currentView === "home" ? "#EA580C" : "#4B5563",
-                    borderBottom: currentView === "home" ? "3px solid #EA580C" : "3px solid transparent",
+                  borderBottom: currentView === 'home' ? '3px solid #EA580C' : '3px solid transparent',
                     paddingBottom: "6px",
                     fontWeight: currentView === "home" ? "800" : "600",
                     transition: "all 0.2s ease"
@@ -891,7 +891,7 @@ function App() {
                   style={{
                     cursor: "pointer",
                     color: currentView === "chat" ? "#EA580C" : "#4B5563",
-                    borderBottom: currentView === "chat" ? "3px solid #EA580C" : "3px solid transparent",
+                  borderBottom: currentView === 'chat' ? '3px solid #EA580C' : '3px solid transparent',
                     paddingBottom: "6px",
                     fontWeight: currentView === "chat" ? "800" : "600",
                     transition: "all 0.2s ease"
@@ -943,7 +943,7 @@ function App() {
                   style={{
                     cursor: "pointer",
                     color: currentView === "features" ? "#EA580C" : "#4B5563",
-                    borderBottom: currentView === "features" ? "3px solid #EA580C" : "3px solid transparent",
+                  borderBottom: currentView === 'features' ? '3px solid #EA580C' : '3px solid transparent',
                     paddingBottom: "6px",
                     fontWeight: currentView === "features" ? "800" : "600",
                     transition: "all 0.2s ease"
@@ -958,7 +958,7 @@ function App() {
                   style={{
                     cursor: "pointer",
                     color: currentView === "syllabus" ? "#EA580C" : "#4B5563",
-                    borderBottom: currentView === "syllabus" ? "3px solid #EA580C" : "3px solid transparent",
+                  borderBottom: currentView === 'syllabus' ? '3px solid #EA580C' : '3px solid transparent',
                     paddingBottom: "6px",
                     fontWeight: currentView === "syllabus" ? "800" : "600",
                     transition: "all 0.2s ease"
