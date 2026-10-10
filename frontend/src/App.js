@@ -1643,7 +1643,8 @@ function App() {
 
 
 
-        <footer style={{ backgroundColor: 'white', padding: '60px 80px', borderTop: '1px solid #F3F4F6', zIndex: 10 }}>
+        {currentView !== "chat" && (
+      <footer style={{ backgroundColor: 'white', padding: '60px 80px', borderTop: '1px solid #F3F4F6', zIndex: 10 }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap', maxWidth: '1200px', margin: '0 auto', gap: '40px' }}>
             
             <div style={{ maxWidth: '300px' }}>
@@ -1751,6 +1752,7 @@ function App() {
             © 2026 KalamAI. Developed by Ansh Maurya. All rights reserved.
            · <span onClick={() => navigateTo("admin")} style={{ cursor: "pointer", color: "#EA580C", fontWeight: "700" }}>Admin Portal</span></div>
         </footer>
+    )}
       </div>
     </GoogleOAuthProvider>
   );
