@@ -42,6 +42,11 @@ const aboutCards = [
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [currentView, setCurrentView] = useState('home');
+  const [darkMode, setDarkMode] = useState(false);
+  const [chatSessions, setChatSessions] = useState([]);
+  const [activeSessionId, setActiveSessionId] = useState(null);
+  const [sidebarOpen, setSidebarOpen] = useState(true);
+
   const [selectedYear, setSelectedYear] = useState(1); 
   const [authMode, setAuthMode] = useState('login'); 
   const [loginError, setLoginError] = useState('');
@@ -156,6 +161,76 @@ function App() {
   const removeSelectedFile = () => {
     setSelectedFile(null);
     if (fileInputRef.current) fileInputRef.current.value = "";
+  };
+
+  
+  // Load chat history for current user
+  useEffect(() => {
+    const userEmail = user?.email || 'guest_user';
+    const saved = localStorage.getItem(`kalamai_chats_${userEmail}`);
+    if (saved) {
+      try {
+        const parsed = JSON.parse(saved);
+        setChatSessions(parsed);
+        if (parsed.length > 0 && !activeSessionId) {
+          setActiveSessionId(parsed[0].id);
+          setMessages(parsed[0].messages || []);
+        }
+      } catch (e) {}
+    } else {
+      const initId = Date.now().toString();
+      const initial = [{
+        id: initId,
+        title: "AKTU Exam Doubt Discussion",
+        messages: [
+          { role: 'ai', text: "Hello! I am your KalamAI Smart Assistant. Which subject or unit do you want to study today?" }
+        ]
+      }];
+      setChatSessions(initial);
+      setActiveSessionId(initId);
+      setMessages(initial[0].messages);
+    }
+  }, [user]);
+
+  // Sync active messages to session and localStorage
+  useEffect(() => {
+    if (!activeSessionId || messages.length === 0) return;
+    const userEmail = user?.email || 'guest_user';
+    setChatSessions(prev => {
+      const updated = prev.map(s => {
+        if (s.id === activeSessionId) {
+          const firstUserMsg = messages.find(m => m.role === 'user');
+          const title = firstUserMsg ? (firstUserMsg.text.slice(0, 30) + '...') : s.title;
+          return { ...s, title, messages };
+        }
+        return s;
+      });
+      localStorage.setItem(`kalamai_chats_${userEmail}`, JSON.stringify(updated));
+      return updated;
+    });
+  }, [messages, activeSessionId, user]);
+
+  const startNewChat = () => {
+    const newId = Date.now().toString();
+    const newSession = {
+      id: newId,
+      title: "New Study Discussion",
+      messages: [{ role: 'ai', text: "Hello! Ready for a new AKTU study session. What would you like to prepare?" }]
+    };
+    const userEmail = user?.email || 'guest_user';
+    const updated = [newSession, ...chatSessions];
+    setChatSessions(updated);
+    setActiveSessionId(newId);
+    setMessages(newSession.messages);
+    localStorage.setItem(`kalamai_chats_${userEmail}`, JSON.stringify(updated));
+  };
+
+  const switchChatSession = (id) => {
+    const target = chatSessions.find(s => s.id === id);
+    if (target) {
+      setActiveSessionId(id);
+      setMessages(target.messages || []);
+    }
   };
 
   const sendMessage = async (e) => {
@@ -476,76 +551,49 @@ function App() {
                       key={item.year}
                       onClick={() =>
 
-      {/* Portfolio Aesthetic Engineering Grid + Floating Ambient Glow */}
+      {/* Teachly & Portfolio STEM Aesthetic Background */}
       <div style={{
-        position: "fixed",
-        top: 0,
-        left: 0,
-        right: 0,
-        bottom: 0,
-        width: "100vw",
-        height: "100vh",
+        position: 'fixed',
+        inset: 0,
         zIndex: 0,
-        pointerEvents: "none",
-        backgroundColor: "#FAF8F5",
-        backgroundImage: "linear-gradient(to right, rgba(234, 88, 12, 0.06) 1px, transparent 1px), linear-gradient(to bottom, rgba(234, 88, 12, 0.06) 1px, transparent 1px)",
-        backgroundSize: "36px 36px"
+        pointerEvents: 'none',
+        overflow: 'hidden',
+        backgroundColor: darkMode ? '#0F172A' : '#FAF8F5',
+        backgroundImage: darkMode
+          ? 'linear-gradient(to right, rgba(255, 255, 255, 0.04) 1px, transparent 1px), linear-gradient(to bottom, rgba(255, 255, 255, 0.04) 1px, transparent 1px)'
+          : 'linear-gradient(to right, rgba(234, 88, 12, 0.05) 1px, transparent 1px), linear-gradient(to bottom, rgba(234, 88, 12, 0.05) 1px, transparent 1px)',
+        backgroundSize: '36px 36px',
+        transition: 'all 0.3s ease'
       }}>
-        <div style={{
-          position: "absolute",
-          top: "-80px",
-          right: "-80px",
-          width: "520px",
-          height: "520px",
-          borderRadius: "50%",
-          background: "radial-gradient(circle, rgba(249, 115, 22, 0.22) 0%, rgba(245, 158, 11, 0.08) 70%, transparent 100%)",
-          filter: "blur(80px)"
-        }} />
-        <div style={{
-          position: "absolute",
-          bottom: "-80px",
-          left: "-80px",
-          width: "560px",
-          height: "560px",
-          borderRadius: "50%",
-          background: "radial-gradient(circle, rgba(37, 99, 235, 0.18) 0%, rgba(99, 102, 241, 0.06) 70%, transparent 100%)",
-          filter: "blur(85px)"
-        }} />
+        {/* Soft Ambient Aurora Glows */}
+        <div style={{ position: 'absolute', top: '-10%', right: '-10%', width: '560px', height: '560px', borderRadius: '50%', background: 'radial-gradient(circle, rgba(249, 115, 22, 0.16) 0%, transparent 70%)', filter: 'blur(80px)' }} />
+        <div style={{ position: 'absolute', bottom: '-10%', left: '-10%', width: '600px', height: '600px', borderRadius: '50%', background: 'radial-gradient(circle, rgba(37, 99, 235, 0.14) 0%, transparent 70%)', filter: 'blur(90px)' }} />
+
+        {/* Floating Science & STEM Icons (Teachly inspired) */}
+        {[
+          { icon: '⚛️', top: '12%', left: '8%', size: '28px', delay: '0s' },
+          { icon: '🧪', top: '22%', right: '10%', size: '26px', delay: '2s' },
+          { icon: '📐', top: '78%', left: '6%', size: '24px', delay: '4s' },
+          { icon: '⚙️', top: '65%', right: '8%', size: '30px', delay: '1s' },
+          { icon: '💡', top: '45%', left: '4%', size: '26px', delay: '3s' },
+          { icon: '🚀', top: '85%', right: '14%', size: '28px', delay: '5s' },
+          { icon: '💻', top: '38%', right: '4%', size: '26px', delay: '2.5s' },
+          { icon: '📚', top: '8%', right: '28%', size: '24px', delay: '3.5s' }
+        ].map((item, idx) => (
+          <div key={idx} style={{
+            position: 'absolute',
+            top: item.top,
+            left: item.left,
+            right: item.right,
+            fontSize: item.size,
+            opacity: darkMode ? 0.28 : 0.22,
+            filter: 'grayscale(20%)',
+            animation: `driftStem 16s ease-in-out infinite alternate ${item.delay}`
+          }}>
+            {item.icon}
+          </div>
+        ))}
       </div>
- setSelectedYear(item.year)}
-                      style={{
-                        borderRadius: "24px",
-                        overflow: "hidden",
-                        background: "#FFFFFF",
-                        border: isActive ? `3px solid ${item.accent}` : "1.5px solid #E2E8F0",
-                        boxShadow: isActive ? `0 12px 30px rgba(37,99,235,0.18)` : "0 4px 18px rgba(0,0,0,0.04)",
-                        cursor: "pointer",
-                        transform: isActive ? "translateY(-4px)" : "none",
-                        transition: "all 0.25s cubic-bezier(0.4, 0, 0.2, 1)"
-                      }}
-                    >
-                      {/* Artistic Year Banner */}
-                      <div style={{
-                        background: item.gradient,
-                        padding: "28px 20px",
-                        color: "white",
-                        position: "relative",
-                        minHeight: "140px",
-                        display: "flex",
-                        flexDirection: "column",
-                        justifyContent: "space-between"
-                      }}>
-                        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                          <span style={{ fontSize: "11px", fontWeight: "800", background: "rgba(255,255,255,0.25)", padding: "4px 10px", borderRadius: "10px", backdropFilter: "blur(4px)" }}>
-                            AKTU B.TECH
-                          </span>
-                          <span style={{ fontSize: "18px" }}>🎓</span>
-                        </div>
-                        <div>
-                          <span style={{ fontSize: "12px", color: "rgba(255,255,255,0.85)", fontWeight: "600" }}>{item.badge}</span>
-                          <h3 style={{ margin: "4px 0 0", fontSize: "22px", fontWeight: "900", color: "#FFFFFF" }}>{item.title}</h3>
-                        </div>
-                      </div>
 
                       {/* Card Content & Features List */}
                       <div style={{ padding: "20px 22px" }}>
@@ -868,7 +916,7 @@ function App() {
                 <div className="icon-circle"><Mail size={20} /></div>
                 <div>
                   <div style={{ fontSize: '10px', fontWeight: '800', color: '#EA580C', letterSpacing: '1px' }}>EMAIL US</div>
-                  <div style={{ fontSize: '14px', fontWeight: 'bold', color: '#111827' }}>mauryal.ansh@gmail.com</div>
+                  <div style={{ fontSize: '14px', fontWeight: 'bold', color: '#111827' }}>maurya1.ansh@gmail.com</div>
                 </div>
               </div>
 
