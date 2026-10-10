@@ -40,7 +40,26 @@ const aboutCards = [
 ];
 
 function App() {
+
+  const decodeGoogleTokenSafe = (token) => {
+    try {
+      const base64Url = token.split(".")[1];
+      const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
+      const jsonPayload = decodeURIComponent(
+        window.atob(base64)
+          .split("")
+          .map((c) => "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2))
+          .join("")
+      );
+      return JSON.parse(jsonPayload);
+    } catch (e) {
+      return null;
+    }
+  };
+
   
+  const [studentName, setStudentName] = useState(() => localStorage.getItem("kalamai_user_name") || "");
+  const [studentEmail, setStudentEmail] = useState(() => localStorage.getItem("kalamai_user_email") || "");
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const user = null;
   
@@ -233,6 +252,7 @@ function App() {
         const formattedName = namePart.split(".")[0].split("_")[0];
         const studentName = formattedName.charAt(0).toUpperCase() + formattedName.slice(1);
         localStorage.setItem("kalamai_user_name", studentName);
+        setStudentName(studentName);
       }
   }, []);
 
@@ -252,6 +272,7 @@ function App() {
         const formattedName = namePart.split(".")[0].split("_")[0];
         const studentName = formattedName.charAt(0).toUpperCase() + formattedName.slice(1);
         localStorage.setItem("kalamai_user_name", studentName);
+        setStudentName(studentName);
       }
         }
       } else {
@@ -265,6 +286,7 @@ function App() {
         const formattedName = namePart.split(".")[0].split("_")[0];
         const studentName = formattedName.charAt(0).toUpperCase() + formattedName.slice(1);
         localStorage.setItem("kalamai_user_name", studentName);
+        setStudentName(studentName);
       }
         }
       }
@@ -282,6 +304,7 @@ function App() {
         const formattedName = namePart.split(".")[0].split("_")[0];
         const studentName = formattedName.charAt(0).toUpperCase() + formattedName.slice(1);
         localStorage.setItem("kalamai_user_name", studentName);
+        setStudentName(studentName);
       }
   };
 
@@ -393,6 +416,7 @@ function App() {
         const formattedName = namePart.split(".")[0].split("_")[0];
         const studentName = formattedName.charAt(0).toUpperCase() + formattedName.slice(1);
         localStorage.setItem("kalamai_user_name", studentName);
+        setStudentName(studentName);
       }
       navigateTo("home");
       return;
@@ -1455,9 +1479,9 @@ function App() {
                 {/* Profile Section */}
                 <div style={{ borderTop: '1.5px solid rgba(234, 88, 12, 0.2)', paddingTop: '12px', marginTop: '12px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                    <div style={{ width: '34px', height: '34px', borderRadius: '50%', background: 'linear-gradient(135deg, #FF6B00, #EA580C)', color: '#FFF', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: '900', fontSize: '14px', boxShadow: '0 3px 8px rgba(234, 88, 12, 0.3)' }}>{userInitial}</div>
+                    <div style={{ width: '34px', height: '34px', borderRadius: '50%', background: 'linear-gradient(135deg, #FF6B00, #EA580C)', color: '#FFF', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: '900', fontSize: '14px', boxShadow: '0 3px 8px rgba(234, 88, 12, 0.3)' }}>{(studentName || currentUserName || "S").charAt(0).toUpperCase()}</div>
                     <div>
-                      <div style={{ fontSize: "13px", fontWeight: "800", color: "#7C2D12" }}>{currentUserName}</div>
+                      <div style={{ fontSize: "13px", fontWeight: "800", color: "#7C2D12" }}>{studentName || currentUserName || "Student"}</div>
                       <div style={{ fontSize: '11px', color: '#EA580C', fontWeight: '700' }}>Student Scholar</div>
                     </div>
                   </div>
@@ -1680,9 +1704,9 @@ function App() {
             </div>
 
             <div style={{ background: "#09090B", borderRadius: "16px", padding: "12px 16px", display: "flex", alignItems: "center", gap: "12px", marginBottom: "20px", border: "1px solid #27272A" }}>
-              <div style={{ width: "40px", height: "40px", borderRadius: "50%", background: "linear-gradient(135deg, #F97316, #EA580C)", color: "#FFF", display: "flex", alignItems: "center", justifyContent: "center", fontWeight: "800", fontSize: "16px" }}>{userInitial}</div>
+              <div style={{ width: "40px", height: "40px", borderRadius: "50%", background: "linear-gradient(135deg, #F97316, #EA580C)", color: "#FFF", display: "flex", alignItems: "center", justifyContent: "center", fontWeight: "800", fontSize: "16px" }}>{(studentName || currentUserName || "S").charAt(0).toUpperCase()}</div>
               <div>
-                <div style={{ fontWeight: "700", fontSize: "14px", color: "#FAFAFA" }}>{currentUserName}</div>
+                <div style={{ fontWeight: "700", fontSize: "14px", color: "#FAFAFA" }}>{studentName || currentUserName || "Student"}</div>
                 <div style={{ fontSize: "12px", color: "#71717A" }}>{currentUserEmail}</div>
               </div>
             </div>
