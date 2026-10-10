@@ -267,6 +267,17 @@ function App() {
   };
 
     // Razorpay Checkout Handler
+  
+  const handleUpgradeClick = () => {
+    if (!isLoggedIn) {
+      alert("Kripya Pro upgrade karne ke liye pehle apni student ID se Login karein!");
+      navigateTo("home");
+      window.scrollTo({ top: 300, behavior: "smooth" });
+      return;
+    }
+    setIsPricingOpen(true);
+  };
+
   const handlePayPlan = (plan) => {
     if (!window.Razorpay) {
       alert("Razorpay SDK load ho raha hai, kripya 2 second baad dobara koshish karein.");
@@ -564,14 +575,14 @@ function App() {
                     boxShadow: "0 2px 10px rgba(16, 185, 129, 0.35)",
                     cursor: "pointer"
                   }}
-                  onClick={() => setIsPricingOpen(true)}
+                  onClick={handleUpgradeClick}
                 >
                   <span>👑</span> Pro Active ({getRemainingDays()})
                 </div>
               ) : (
                 <button
                   type="button"
-                  onClick={() => setIsPricingOpen(true)}
+                  onClick={handleUpgradeClick}
                   style={{
                     background: "linear-gradient(135deg, #FF6B00, #EA580C, #9333EA)",
                     border: "none",
