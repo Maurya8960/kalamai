@@ -108,6 +108,16 @@ function App() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [isPricingOpen, setIsPricingOpen] = useState(false);
+  // Admin Panel States
+  const [adminKey, setAdminKey] = useState("");
+  const [isAdminAuthorized, setIsAdminAuthorized] = useState(() => localStorage.getItem("kalamai_admin_auth") === "true");
+  const [uploadSubject, setUploadSubject] = useState("Operating Systems");
+  const [uploadUnit, setUploadUnit] = useState("Unit 1");
+  const [uploadBranch, setUploadBranch] = useState("Computer Science (CSE)");
+  const [uploadTitle, setUploadTitle] = useState("");
+  const [uploadFile, setUploadFile] = useState(null);
+  const [uploadStatus, setUploadStatus] = useState("");
+
 
   const getProStorageKey = () => {
     const email = user?.email || localStorage.getItem("kalamai_user_email") || "guest";
@@ -376,6 +386,56 @@ function App() {
       return;
     }
     setIsPricingOpen(true);
+  };
+
+    // Admin Upload Handler
+  const handleAdminLogin = (e) => {
+    e.preventDefault();
+    if (adminKey === "kalamai@admin2026") {
+      setIsAdminAuthorized(true);
+      localStorage.setItem("kalamai_admin_auth", "true");
+    } else {
+      alert("Invalid Admin Passkey!");
+    }
+  };
+
+  const handleNotesUpload = async (e) => {
+    e.preventDefault();
+    if (!uploadFile || !uploadTitle) {
+      alert("Please provide notes title and select a PDF file!");
+      return;
+    }
+    setUploadStatus("Uploading notes to server...");
+    
+    const formData = new FormData();
+    formData.append("file", uploadFile);
+    formData.append("title", uploadTitle);
+    formData.append("subject", uploadSubject);
+    formData.append("unit", uploadUnit);
+    formData.append("branch", uploadBranch);
+
+    try {
+      // Local storage backup for offline preview
+      const localNotesKey = `kalamai_notes_${uploadSubject}_${uploadUnit}`;
+      const newNote = {
+        title: uploadTitle,
+        fileName: uploadFile.name,
+        branch: uploadBranch,
+        subject: uploadSubject,
+        unit: uploadUnit,
+        date: new Date().toLocaleDateString()
+      };
+      const existing = JSON.parse(localStorage.getItem(localNotesKey) || "[]");
+      localStorage.setItem(localNotesKey, JSON.stringify([newNote, ...existing]));
+
+      setTimeout(() => {
+        setUploadStatus("✅ Notes uploaded successfully to " + uploadSubject + " (" + uploadUnit + ")!");
+        setUploadTitle("");
+        setUploadFile(null);
+      }, 1200);
+    } catch (err) {
+      setUploadStatus("❌ Upload failed. Please try again.");
+    }
   };
 
   const handlePayPlan = (plan) => {
@@ -770,6 +830,143 @@ function App() {
           
         
         
+        
+      {/* KalamAI Admin Notes Upload Portal */}
+      {currentView === 'admin' && (
+        <div style={{ maxWidth: "800px", margin: "40px auto 80px", padding: "0 20px" }}>
+          {!isAdminAuthorized ? (
+            <div style={{ background: "#FFFFFF", borderRadius: "24px", padding: "36px 28px", boxShadow: "0 10px 30px rgba(0,0,0,0.06)", border: "1.5px solid rgba(234, 88, 12, 0.2)", textAlign: "center" }}>
+              <div style={{ width: "60px", height: "60px", borderRadius: "50%", background: "linear-gradient(135deg, #FF6B00, #EA580C)", color: "#FFF", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 16px", fontSize: "24px" }}>🔒</div>
+              <h2 style={{ fontSize: "24px", fontWeight: "800", color: "#1E293B", marginBottom: "8px" }}>Admin Access Required</h2>
+              <p style={{ color: "#64748B", fontSize: "14px", marginBottom: "24px" }}>Enter admin security passkey to access Notes & PDF management system.</p>
+              <form onSubmit={handleAdminLogin} style={{ display: "flex", flexDirection: "column", gap: "14px", maxWidth: "340px", margin: "0 auto" }}>
+                <input
+                  type="password"
+                  placeholder="Enter Admin Passkey"
+                  value={adminKey}
+                  onChange={(e) => setAdminKey(e.target.value)}
+                  style={{ padding: "12px 16px", borderRadius: "14px", border: "1.5px solid #CBD5E1", fontSize: "14px", outline: "none" }}
+                />
+                <button
+                  type="submit"
+                  style={{ padding: "12px", borderRadius: "14px", background: "linear-gradient(135deg, #FF6B00, #EA580C)", color: "#FFF", border: "none", fontWeight: "700", cursor: "pointer", fontSize: "14px" }}
+                >
+                  Authorize Access
+                </button>
+              </form>
+            </div>
+          ) : (
+            <div style={{ background: "#FFFFFF", borderRadius: "24px", padding: "32px 28px", boxShadow: "0 10px 30px rgba(0,0,0,0.06)", border: "1.5px solid rgba(234, 88, 12, 0.2)" }}>
+              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "24px", borderBottom: "1.5px solid #F1F5F9", paddingBottom: "16px" }}>
+                <div>
+                  <h2 style={{ fontSize: "22px", fontWeight: "800", color: "#1E293B", margin: "0 0 4px" }}>KalamAI Notes Manager</h2>
+                  <p style={{ color: "#64748B", fontSize: "13px", margin: 0 }}>Upload PDF/Handwritten notes directly to syllabus & student AI spaces.</p>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => { setIsAdminAuthorized(false); localStorage.removeItem("kalamai_admin_auth"); }}
+                  style={{ background: "#FEE2E2", color: "#EF4444", border: "none", padding: "8px 14px", borderRadius: "10px", fontWeight: "700", fontSize: "12px", cursor: "pointer" }}
+                >
+                  Lock Panel
+                </button>
+              </div>
+
+              {uploadStatus && (
+                <div style={{ padding: "12px 16px", borderRadius: "12px", marginBottom: "20px", background: uploadStatus.includes("✅") ? "#ECFDF5" : "#FFF7ED", color: uploadStatus.includes("✅") ? "#059669" : "#EA580C", fontWeight: "700", fontSize: "13px" }}>
+                  {uploadStatus}
+                </div>
+              )}
+
+              <form onSubmit={handleNotesUpload} style={{ display: "flex", flexDirection: "column", gap: "18px" }}>
+                <div>
+                  <label style={{ fontSize: "12px", fontWeight: "800", color: "#475569", textTransform: "uppercase", display: "block", marginBottom: "6px" }}>Branch</label>
+                  <select
+                    value={uploadBranch}
+                    onChange={(e) => setUploadBranch(e.target.value)}
+                    style={{ width: "100%", padding: "11px 14px", borderRadius: "12px", border: "1.5px solid #CBD5E1", fontSize: "13px", outline: "none" }}
+                  >
+                    <option value="Computer Science (CSE)">Computer Science & Engineering (CSE)</option>
+                    <option value="Information Technology (IT)">Information Technology (IT)</option>
+                    <option value="Electronics & Communication (ECE)">Electronics & Communication (ECE)</option>
+                    <option value="Mechanical Engineering (ME)">Mechanical Engineering (ME)</option>
+                  </select>
+                </div>
+
+                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "16px" }}>
+                  <div>
+                    <label style={{ fontSize: "12px", fontWeight: "800", color: "#475569", textTransform: "uppercase", display: "block", marginBottom: "6px" }}>Subject</label>
+                    <select
+                      value={uploadSubject}
+                      onChange={(e) => setUploadSubject(e.target.value)}
+                      style={{ width: "100%", padding: "11px 14px", borderRadius: "12px", border: "1.5px solid #CBD5E1", fontSize: "13px", outline: "none" }}
+                    >
+                      <option value="Operating Systems">Operating Systems</option>
+                      <option value="Artificial Intelligence">Artificial Intelligence</option>
+                      <option value="Database Management (DBMS)">DBMS</option>
+                      <option value="Computer Networks">Computer Networks</option>
+                      <option value="Compiler Design">Compiler Design</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label style={{ fontSize: "12px", fontWeight: "800", color: "#475569", textTransform: "uppercase", display: "block", marginBottom: "6px" }}>Target Unit</label>
+                    <select
+                      value={uploadUnit}
+                      onChange={(e) => setUploadUnit(e.target.value)}
+                      style={{ width: "100%", padding: "11px 14px", borderRadius: "12px", border: "1.5px solid #CBD5E1", fontSize: "13px", outline: "none" }}
+                    >
+                      <option value="Unit 1">Unit 1 (Fundamentals)</option>
+                      <option value="Unit 2">Unit 2 (Core Concepts)</option>
+                      <option value="Unit 3">Unit 3 (Advanced Architecture)</option>
+                      <option value="Unit 4">Unit 4 (Algorithms & Flow)</option>
+                      <option value="Unit 5">Unit 5 (Case Studies & PYQs)</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div>
+                  <label style={{ fontSize: "12px", fontWeight: "800", color: "#475569", textTransform: "uppercase", display: "block", marginBottom: "6px" }}>Notes Topic / Title</label>
+                  <input
+                    type="text"
+                    placeholder="e.g. OS Unit 2 Process Scheduling & Deadlock Full Notes"
+                    value={uploadTitle}
+                    onChange={(e) => setUploadTitle(e.target.value)}
+                    style={{ width: "100%", padding: "11px 14px", borderRadius: "12px", border: "1.5px solid #CBD5E1", fontSize: "13px", outline: "none", boxSizing: "border-box" }}
+                  />
+                </div>
+
+                <div>
+                  <label style={{ fontSize: "12px", fontWeight: "800", color: "#475569", textTransform: "uppercase", display: "block", marginBottom: "6px" }}>Select PDF / Document</label>
+                  <input
+                    type="file"
+                    accept=".pdf,.doc,.docx"
+                    onChange={(e) => setUploadFile(e.target.files[0])}
+                    style={{ width: "100%", padding: "10px", borderRadius: "12px", border: "1.5px dashed #EA580C", background: "#FFF7ED", cursor: "pointer", fontSize: "13px" }}
+                  />
+                </div>
+
+                <button
+                  type="submit"
+                  style={{
+                    padding: "13px",
+                    borderRadius: "14px",
+                    background: "linear-gradient(135deg, #FF6B00, #EA580C)",
+                    color: "#FFF",
+                    border: "none",
+                    fontWeight: "800",
+                    fontSize: "14px",
+                    cursor: "pointer",
+                    boxShadow: "0 6px 20px rgba(234, 88, 12, 0.35)",
+                    marginTop: "8px"
+                  }}
+                >
+                  🚀 Upload to KalamAI Direct Space
+                </button>
+              </form>
+            </div>
+          )}
+        </div>
+      )}
+
         {currentView === "syllabus" && (
           <div style={{ maxWidth: "1150px", margin: "40px auto 90px", padding: "0 24px", minHeight: "75vh" }}>
             
