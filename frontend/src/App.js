@@ -509,8 +509,8 @@ function App() {
             <h1 style={{ margin: 0, fontSize: '26px', fontWeight: '900', color: '#EA580C' }}>KalamAI</h1>
           </div>
           <nav style={{ display: 'flex', gap: '30px', fontWeight: 'bold', alignItems: 'center' }}>
-             $1
-              <span onClick={() => { if(!isLoggedIn) setIsLoggedIn(true); navigateTo('home'); }} style={{ cursor: 'pointer', color: '#4B5563', fontWeight: '700' }}>KalamAI Chat</span>
+             <span onClick={() => navigateTo("home")} style={{ cursor: "pointer", color: currentView === "home" ? "#EA580C" : "#4B5563", fontWeight: "700" }}>Home</span>
+<span onClick={() => { if(!isLoggedIn) setIsLoggedIn(true); navigateTo('home'); }} style={{ cursor: 'pointer', color: '#4B5563', fontWeight: '700' }}>KalamAI Chat</span>
               <button
                 type="button"
                 onClick={() => setIsPricingOpen(true)}
@@ -1093,6 +1093,102 @@ function App() {
         )}
 
         </main>
+
+      
+      {/* KalamAI Pro Subscription Modal */}
+      {isPricingOpen && (
+        <div style={{
+          position: "fixed",
+          inset: 0,
+          backgroundColor: "rgba(0, 0, 0, 0.75)",
+          backdropFilter: "blur(8px)",
+          zIndex: 999999,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          padding: "16px"
+        }}>
+          <div style={{
+            background: "#121214",
+            borderRadius: "28px",
+            border: "1px solid #27272A",
+            width: "100%",
+            maxWidth: "920px",
+            padding: "28px 20px",
+            color: "#F4F4F5",
+            boxShadow: "0 25px 60px rgba(0,0,0,0.6)",
+            position: "relative"
+          }}>
+            <button
+              type="button"
+              onClick={() => setIsPricingOpen(false)}
+              style={{ position: "absolute", top: "18px", right: "18px", background: "#27272A", border: "none", color: "#A1A1AA", width: "32px", height: "32px", borderRadius: "50%", cursor: "pointer", fontSize: "15px" }}
+            >✕</button>
+
+            <div style={{ textAlign: "center", marginBottom: "24px" }}>
+              <div style={{ display: "inline-flex", alignItems: "center", gap: "6px", background: "rgba(234, 88, 12, 0.15)", padding: "5px 14px", borderRadius: "20px", color: "#FB923C", fontWeight: "800", fontSize: "12px", marginBottom: "8px" }}>
+                ✦ KALAMAI PRO PLANS
+              </div>
+              <h2 style={{ fontSize: "26px", fontWeight: "900", margin: "4px 0", color: "#FAFAFA" }}>Upgrade Your Learning</h2>
+              <p style={{ color: "#A1A1AA", fontSize: "13px", margin: 0 }}>Affordable AKTU Exam & Notes Subscription</p>
+            </div>
+
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))", gap: "16px" }}>
+              {/* Plan 1 */}
+              <div style={{ background: "#18181B", borderRadius: "20px", border: "1px solid #27272A", padding: "20px", display: "flex", flexDirection: "column" }}>
+                <div style={{ fontWeight: "800", color: "#A1A1AA", fontSize: "13px" }}>DAILY PASS</div>
+                <h3 style={{ fontSize: "18px", margin: "6px 0", color: "#FFF" }}>Exam Cram</h3>
+                <div style={{ fontSize: "28px", fontWeight: "900", color: "#FAFAFA", marginBottom: "14px" }}>₹10 <span style={{ fontSize: "12px", color: "#71717A" }}>/ 24 hrs</span></div>
+                <button
+                  type="button"
+                  onClick={() => handlePayPlan({ name: "Daily Cram", price: 10 })}
+                  style={{ width: "100%", padding: "10px", borderRadius: "12px", background: "#27272A", border: "1px solid #3F3F46", color: "#FFF", fontWeight: "700", cursor: "pointer", marginBottom: "16px" }}
+                >Pay ₹10</button>
+                <div style={{ display: "flex", flexDirection: "column", gap: "8px", fontSize: "12px", color: "#D4D4D8" }}>
+                  <div>✓ Unlimited chat for 24 hours</div>
+                  <div>✓ AKTU Quick Revision Notes</div>
+                  <div>✓ 2x Fast AI Responses</div>
+                </div>
+              </div>
+
+              {/* Plan 2 */}
+              <div style={{ background: "linear-gradient(180deg, #1C1917, #18181B)", borderRadius: "20px", border: "2px solid #EA580C", padding: "20px", display: "flex", flexDirection: "column", position: "relative" }}>
+                <span style={{ position: "absolute", top: "-10px", right: "16px", background: "#EA580C", color: "#FFF", fontSize: "10px", fontWeight: "900", padding: "3px 8px", borderRadius: "8px" }}>POPULAR</span>
+                <div style={{ fontWeight: "800", color: "#FB923C", fontSize: "13px" }}>WEEKLY PASS</div>
+                <h3 style={{ fontSize: "18px", margin: "6px 0", color: "#FFF" }}>Sessional Sprint</h3>
+                <div style={{ fontSize: "28px", fontWeight: "900", color: "#FAFAFA", marginBottom: "14px" }}>₹20 <span style={{ fontSize: "12px", color: "#71717A" }}>/ 7 days</span></div>
+                <button
+                  type="button"
+                  onClick={() => handlePayPlan({ name: "Weekly Sprint", price: 20 })}
+                  style={{ width: "100%", padding: "10px", borderRadius: "12px", background: "linear-gradient(135deg, #EA580C, #F97316)", border: "none", color: "#FFF", fontWeight: "800", cursor: "pointer", marginBottom: "16px", boxShadow: "0 4px 15px rgba(234, 88, 12, 0.4)" }}
+                >Pay ₹20</button>
+                <div style={{ display: "flex", flexDirection: "column", gap: "8px", fontSize: "12px", color: "#D4D4D8" }}>
+                  <div>✓ 7 Days Full All-Units Access</div>
+                  <div>✓ Complete 5-Unit Material</div>
+                  <div>✓ 10-Marks Predicted PYQs</div>
+                </div>
+              </div>
+
+              {/* Plan 3 */}
+              <div style={{ background: "#18181B", borderRadius: "20px", border: "1px solid #7C3AED", padding: "20px", display: "flex", flexDirection: "column" }}>
+                <div style={{ fontWeight: "800", color: "#C084FC", fontSize: "13px" }}>SEMESTER PASS</div>
+                <h3 style={{ fontSize: "18px", margin: "6px 0", color: "#FFF" }}>Semester Master</h3>
+                <div style={{ fontSize: "28px", fontWeight: "900", color: "#FAFAFA", marginBottom: "14px" }}>₹50 <span style={{ fontSize: "12px", color: "#71717A" }}>/ 1 sem</span></div>
+                <button
+                  type="button"
+                  onClick={() => handlePayPlan({ name: "Semester Master", price: 50 })}
+                  style={{ width: "100%", padding: "10px", borderRadius: "12px", background: "#7C3AED", border: "none", color: "#FFF", fontWeight: "800", cursor: "pointer", marginBottom: "16px" }}
+                >Pay ₹50</button>
+                <div style={{ display: "flex", flexDirection: "column", gap: "8px", fontSize: "12px", color: "#D4D4D8" }}>
+                  <div>✓ Whole Semester Unlimited Access</div>
+                  <div>✓ All Subjects Handwritten Notes</div>
+                  <div>✓ Code & Diagram Explanations</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Gemini Settings Modal */}
       {isSettingsOpen && (
