@@ -41,6 +41,7 @@ const aboutCards = [
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const user = { name: 'Ansh Maurya', email: 'maurya1.ansh@gmail.com' };
   const [currentView, setCurrentView] = useState('home');
   const [selectedYear, setSelectedYear] = useState(1); 
   const [authMode, setAuthMode] = useState('login'); 
@@ -54,6 +55,30 @@ function App() {
   const syllabusRef = useRef(null);
   const scrollContainerRef = useRef(null);
   
+    const [sessions, setSessions] = useState(() => {
+    try {
+      const saved = localStorage.getItem('kalamai_chat_sessions');
+      if (saved) return JSON.parse(saved);
+    } catch(e) {}
+    const defaultId = 'chat_' + Date.now();
+    return [{
+      id: defaultId,
+      title: 'AKTU Syllabus & Exam Doubts',
+      messages: [{ role: 'ai', text: 'Hello! I am your KalamAI Smart Assistant. Which subject or unit do you want to study today?' }]
+    }];
+  });
+
+  const [currentSessionId, setCurrentSessionId] = useState(() => {
+    try {
+      const saved = localStorage.getItem('kalamai_active_session_id');
+      if (saved) return saved;
+    } catch(e) {}
+    return null;
+  });
+
+  const [searchChatQuery, setSearchChatQuery] = useState('');
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+
   const [messages, setMessages] = useState([
     { role: 'ai', text: "Hello! I am your KalamAI Smart Assistant. Which subject or unit do you want to study today?" }
   ]);
@@ -156,6 +181,70 @@ function App() {
   const removeSelectedFile = () => {
     setSelectedFile(null);
     if (fileInputRef.current) fileInputRef.current.value = "";
+  };
+
+  
+  // Sync current active session
+  useEffect(() => {
+    if (!currentSessionId && sessions.length > 0) {
+      setCurrentSessionId(sessions[0].id);
+      setMessages(sessions[0].messages);
+      localStorage.setItem('kalamai_active_session_id', sessions[0].id);
+    }
+  }, [sessions, currentSessionId]);
+
+  // Save sessions to localStorage whenever messages change
+  useEffect(() => {
+    if (!currentSessionId || messages.length === 0) return;
+    setSessions(prev => {
+      const updated = prev.map(s => {
+        if (s.id === currentSessionId) {
+          const firstUser = messages.find(m => m.role === 'user');
+          const title = firstUser ? (firstUser.text.slice(0, 28) + (firstUser.text.length > 28 ? '...' : '')) : s.title;
+          return { ...s, title, messages };
+        }
+        return s;
+      });
+      localStorage.setItem('kalamai_chat_sessions', JSON.stringify(updated));
+      return updated;
+    });
+  }, [messages, currentSessionId]);
+
+  const handleNewChat = () => {
+    const newId = 'chat_' + Date.now();
+    const newSession = {
+      id: newId,
+      title: 'New Study Discussion',
+      messages: [{ role: 'ai', text: 'Hello! Ready for a fresh study session. Which topic or subject shall we begin?' }]
+    };
+    const updated = [newSession, ...sessions];
+    setSessions(updated);
+    setCurrentSessionId(newId);
+    setMessages(newSession.messages);
+    localStorage.setItem('kalamai_chat_sessions', JSON.stringify(updated));
+    localStorage.setItem('kalamai_active_session_id', newId);
+  };
+
+  const handleSelectSession = (id) => {
+    const target = sessions.find(s => s.id === id);
+    if (target) {
+      setCurrentSessionId(id);
+      setMessages(target.messages || []);
+      localStorage.setItem('kalamai_active_session_id', id);
+    }
+  };
+
+  const handleDeleteSession = (e, id) => {
+    e.stopPropagation();
+    if (sessions.length <= 1) return;
+    const filtered = sessions.filter(s => s.id !== id);
+    setSessions(filtered);
+    localStorage.setItem('kalamai_chat_sessions', JSON.stringify(filtered));
+    if (currentSessionId === id) {
+      setCurrentSessionId(filtered[0].id);
+      setMessages(filtered[0].messages);
+      localStorage.setItem('kalamai_active_session_id', filtered[0].id);
+    }
   };
 
   const sendMessage = async (e) => {
@@ -706,6 +795,138 @@ function App() {
           )}
 
           {currentView === 'home' && isLoggedIn && (
+        <div style={{ display: "flex", maxWidth: "1260px", margin: "30px auto 80px", gap: "20px", padding: "0 16px", alignItems: "stretch" }}>
+
+          {/* Gemini-Style Collapsible Sidebar */}
+          <div style={{
+            width: isSidebarOpen ? "270px" : "56px",
+            transition: "all 0.25s cubic-bezier(0.4, 0, 0.2, 1)",
+            background: "#18181B",
+            borderRadius: "24px",
+            padding: isSidebarOpen ? "16px 14px" : "16px 8px",
+            display: "flex",
+            flexDirection: "column",
+            boxShadow: "0 8px 30px rgba(0,0,0,0.14)",
+            flexShrink: 0,
+            boxSizing: "border-box",
+            color: "#FAFAFA"
+          }}>
+            <div style={{ display: "flex", alignItems: "center", justifyContent: isSidebarOpen ? "space-between" : "center", marginBottom: "12px", borderBottom: "1px solid #27272A", paddingBottom: "10px" }}>
+              {isSidebarOpen && (
+                <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                  <span style={{ fontSize: "16px", color: "#F97316" }}>✦</span>
+                  <span style={{ fontWeight: "800", fontSize: "14px" }}>KalamAI Chats</span>
+                </div>
+              )}
+              <button
+                type="button"
+                onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+                style={{ background: "#27272A", border: "none", color: "#A1A1AA", width: "28px", height: "28px", borderRadius: "8px", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "12px" }}
+              >
+                {isSidebarOpen ? "◀" : "▶"}
+              </button>
+            </div>
+
+            {isSidebarOpen && (
+              <>
+                <button
+                  type="button"
+                  onClick={handleNewChat}
+                  style={{
+                    padding: "10px 12px",
+                    borderRadius: "14px",
+                    background: "#27272A",
+                    color: "#FAFAFA",
+                    border: "1px solid #3F3F46",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "8px",
+                    fontWeight: "700",
+                    fontSize: "13px",
+                    cursor: "pointer",
+                    marginBottom: "12px"
+                  }}
+                >
+                  <span>✏️</span>
+                  <span>New chat</span>
+                </button>
+
+                <div style={{ position: "relative", marginBottom: "14px" }}>
+                  <input
+                    type="text"
+                    placeholder="Search chats..."
+                    value={searchChatQuery}
+                    onChange={(e) => setSearchChatQuery(e.target.value)}
+                    style={{
+                      width: "100%",
+                      padding: "7px 10px 7px 28px",
+                      borderRadius: "10px",
+                      background: "#09090B",
+                      border: "1px solid #27272A",
+                      color: "#E4E4E7",
+                      fontSize: "12px",
+                      outline: "none",
+                      boxSizing: "border-box"
+                    }}
+                  />
+                  <span style={{ position: "absolute", left: "8px", top: "7px", fontSize: "11px", color: "#71717A" }}>🔍</span>
+                </div>
+
+                <div style={{ flex: 1, overflowY: "auto", display: "flex", flexDirection: "column", gap: "4px", maxHeight: "320px" }}>
+                  <span style={{ fontSize: "11px", fontWeight: "800", color: "#71717A", padding: "0 6px", textTransform: "uppercase" }}>Recent</span>
+                  {sessions
+                    .filter(s => s.title.toLowerCase().includes(searchChatQuery.toLowerCase()))
+                    .map((s) => {
+                      const isActive = s.id === currentSessionId;
+                      return (
+                        <div
+                          key={s.id}
+                          onClick={() => handleSelectSession(s.id)}
+                          style={{
+                            padding: "8px 10px",
+                            borderRadius: "10px",
+                            cursor: "pointer",
+                            fontSize: "12px",
+                            fontWeight: isActive ? "700" : "500",
+                            background: isActive ? "#27272A" : "transparent",
+                            color: isActive ? "#FFFFFF" : "#A1A1AA",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "space-between",
+                            gap: "6px"
+                          }}
+                        >
+                          <span style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", flex: 1 }}>{s.title}</span>
+                          {sessions.length > 1 && (
+                            <button
+                              type="button"
+                              onClick={(e) => handleDeleteSession(e, s.id)}
+                              style={{ background: "none", border: "none", color: "#71717A", cursor: "pointer", fontSize: "11px" }}
+                            >
+                              ✕
+                            </button>
+                          )}
+                        </div>
+                      );
+                    })}
+                </div>
+
+                <div style={{ borderTop: "1px solid #27272A", paddingTop: "10px", marginTop: "10px", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                    <div style={{ width: "28px", height: "28px", borderRadius: "50%", background: "#F97316", color: "#FFF", display: "flex", alignItems: "center", justifyContent: "center", fontWeight: "bold", fontSize: "12px" }}>
+                      {"Ansh Maurya" ? user.name[0].toUpperCase() : "A"}
+                    </div>
+                    <div style={{ fontSize: "12px", fontWeight: "700", color: "#FAFAFA", overflow: "hidden", textOverflow: "ellipsis", maxWidth: "140px", whiteSpace: "nowrap" }}>
+                      {"Ansh Maurya"}
+                    </div>
+                  </div>
+                  <span style={{ fontSize: "13px", color: "#71717A" }}>⚙️</span>
+                </div>
+              </>
+            )}
+          </div>
+  
+          <div style={{ flex: 1, minWidth: 0 }}>
             <div style={{ width: '100%', maxWidth: '900px', display: 'flex', flexDirection: 'column', height: '75vh' }}>
               <div className="glass-box" style={{ flex: 1, borderRadius: '20px', padding: '30px', overflowY: 'auto', marginBottom: '20px', display: 'flex', flexDirection: 'column', gap: '20px' }}>
                 {messages.map((msg, index) => (
@@ -770,10 +991,13 @@ function App() {
                     Send 🚀
                   </button>
                 </form>
-              </div>
-              </div>
             </div>
-          )}
+          </div>
+          </div>
+          </div>
+          </div>
+        )}
+
         </main>
 
         <footer style={{ backgroundColor: 'white', padding: '60px 80px', borderTop: '1px solid #F3F4F6', zIndex: 10 }}>
