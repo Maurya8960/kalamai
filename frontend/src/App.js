@@ -81,9 +81,20 @@ function App() {
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [userBranch, setUserBranch] = useState(() => localStorage.getItem('kalamai_user_branch') || 'Computer Science (CSE)');
 
-  const [messages, setMessages] = useState([
-    { role: 'ai', text: "Hello! I am your KalamAI Smart Assistant. Which subject or unit do you want to study today?" }
-  ]);
+    const [messages, setMessages] = useState(() => {
+    try {
+      const activeId = localStorage.getItem('kalamai_active_session_id');
+      const saved = localStorage.getItem('kalamai_chat_sessions');
+      if (saved && activeId) {
+        const parsed = JSON.parse(saved);
+        const current = parsed.find(s => s.id === activeId);
+        if (current && current.messages && current.messages.length > 0) {
+          return current.messages;
+        }
+      }
+    } catch(e) {}
+    return [{ role: 'ai', text: 'Hello! I am your KalamAI Smart Assistant. Which subject or unit do you want to study today?' }];
+  });
   const [input, setInput] = useState('');
   const [selectedFile, setSelectedFile] = useState(null);
   const fileInputRef = useRef(null);
