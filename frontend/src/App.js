@@ -447,6 +447,21 @@ function App() {
     }
   };
 
+  
+  const goToHomeLanding = () => {
+    setCurrentView("landing");
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  const goToChatWorkspace = () => {
+    if (!isLoggedIn) {
+      alert("KalamAI Chat use karne ke liye pehle Sign In karein!");
+      setCurrentView("landing");
+      return;
+    }
+    setCurrentView("chat");
+  };
+
   const handleUpgradeClick = () => {
     if (!isLoggedIn) {
       alert("Kripya Pro upgrade karne ke liye pehle apni student ID se Login karein!");
@@ -782,43 +797,35 @@ function App() {
         <div className="bg-animation"></div>
 
         <header className="glass-box" style={{ display: 'flex', justifyContent: 'space-between', padding: '15px 50px', position: 'sticky', top: 0, zIndex: 50, boxShadow: '0 4px 20px rgba(0,0,0,0.04)' }}>
-          <div onClick={() => navigateTo('home')} style={{ display: 'flex', alignItems: 'center', gap: '10px', cursor: 'pointer' }}>
+          <div onClick={goToHomeLanding} style={{ display: 'flex', alignItems: 'center', gap: '10px', cursor: 'pointer' }}>
             <img src="/kalamai-logo.png" alt="KalamAI Logo" style={{ width: '56px', height: '56px', objectFit: 'contain' }} />
             <h1 style={{ margin: 0, fontSize: '26px', fontWeight: '900', color: '#EA580C' }}>KalamAI</h1>
           </div>
           <nav style={{ display: 'flex', gap: '30px', fontWeight: 'bold', alignItems: 'center' }}>
-             {/* Home */}
+             {/* Home Link */}
               <span
-                onClick={() => {
-                  if (isLoggedIn) {
-                    // Agar logged in hai aur Home par click kare toh landing page scroll ya switch
-                    navigateTo("home");
-                    window.scrollTo({ top: 0, behavior: "smooth" });
-                  } else {
-                    navigateTo("home");
-                  }
-                }}
+                onClick={goToHomeLanding}
                 style={{
                   cursor: "pointer",
-                  color: (!isLoggedIn && currentView === "home") ? "#EA580C" : "#4B5563",
-                  borderBottom: (!isLoggedIn && currentView === "home") ? "3px solid #EA580C" : "none",
+                  color: (currentView === "landing" || currentView === "home") ? "#EA580C" : "#4B5563",
+                  borderBottom: (currentView === "landing" || currentView === "home") ? "3px solid #EA580C" : "none",
                   paddingBottom: "5px",
-                  fontWeight: (!isLoggedIn && currentView === "home") ? "800" : "600",
+                  fontWeight: (currentView === "landing" || currentView === "home") ? "800" : "600",
                   transition: "all 0.2s ease"
                 }}
               >
                 Home
               </span>
 
-              {/* KalamAI Chat (Highlights when chatting) */}
+              {/* KalamAI Chat Link */}
               <span
-                onClick={() => handleNavClick("chat")}
+                onClick={goToChatWorkspace}
                 style={{
                   cursor: "pointer",
-                  color: (isLoggedIn && currentView === "home") ? "#EA580C" : "#4B5563",
-                  borderBottom: (isLoggedIn && currentView === "home") ? "3px solid #EA580C" : "none",
+                  color: currentView === "chat" ? "#EA580C" : "#4B5563",
+                  borderBottom: currentView === "chat" ? "3px solid #EA580C" : "none",
                   paddingBottom: "5px",
-                  fontWeight: (isLoggedIn && currentView === "home") ? "800" : "600",
+                  fontWeight: currentView === "chat" ? "800" : "600",
                   transition: "all 0.2s ease"
                 }}
               >
@@ -886,13 +893,13 @@ function App() {
           {currentView === 'privacy' && (
              <div className="glass-box policy-content" style={{ width: '100%', maxWidth: '900px', padding: '50px', borderRadius: '24px', boxShadow: '0 20px 40px rgba(0,0,0,0.05)', backgroundColor: 'rgba(255,255,255,0.9)' }}>
                 <div style={{ fontSize: '14px', color: '#6B7280', fontWeight: 'bold', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '20px' }}>
-                   <span style={{ cursor: 'pointer', color: '#EA580C' }} onClick={() => navigateTo('home')}>Home</span> / Privacy Policy
+                   <span style={{ cursor: 'pointer', color: '#EA580C' }} onClick={goToHomeLanding}>Home</span> / Privacy Policy
                 </div>
                 <h1 style={{ fontSize: '40px', fontWeight: '900', color: '#111827', margin: '0 0 10px 0' }}>Privacy Policy</h1>
                 <p style={{ fontStyle: 'italic', color: '#6B7280' }}>Last updated: October 2026</p>
                 <h3>1. Introduction</h3>
                 <p>KalamAI ("we," "our," or "us"), developed by Ansh Maurya, is committed to protecting your privacy.</p>
-                <button onClick={() => navigateTo('home')} style={{ marginTop: '40px', background: 'linear-gradient(to right, #F97316, #F59E0B)', color: 'white', border: 'none', padding: '12px 30px', borderRadius: '30px', fontWeight: 'bold', cursor: 'pointer', fontSize: '16px' }}>← Back to Home</button>
+                <button onClick={goToHomeLanding} style={{ marginTop: '40px', background: 'linear-gradient(to right, #F97316, #F59E0B)', color: 'white', border: 'none', padding: '12px 30px', borderRadius: '30px', fontWeight: 'bold', cursor: 'pointer', fontSize: '16px' }}>← Back to Home</button>
              </div>
           )}
 
