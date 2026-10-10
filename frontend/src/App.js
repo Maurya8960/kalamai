@@ -203,6 +203,11 @@ function App() {
 
   const scrollToSyllabus = (e) => {
     e.preventDefault();
+    setCurrentView('syllabus');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+  const _oldScrollToSyllabus = (e) => {
+    e.preventDefault();
     if (currentView !== 'home') {
       setCurrentView('home');
       setTimeout(() => aboutUsRef.current?.scrollIntoView({ behavior: 'smooth' }), 100);
