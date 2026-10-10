@@ -989,83 +989,95 @@ function App() {
           {currentView === 'home' && isLoggedIn && (
         <div style={{ display: "flex", maxWidth: "1260px", margin: "30px auto 80px", gap: "20px", padding: "0 16px", alignItems: "stretch" }}>
 
-          {/* Gemini-Style Collapsible Sidebar */}
+          {/* KalamAI Warm Aesthetic Sidebar */}
           <div style={{
-            width: isSidebarOpen ? "270px" : "56px",
-            transition: "all 0.25s cubic-bezier(0.4, 0, 0.2, 1)",
-            background: "#18181B",
-            borderRadius: "24px",
-            padding: isSidebarOpen ? "16px 14px" : "16px 8px",
-            display: "flex",
-            flexDirection: "column",
-            boxShadow: "0 8px 30px rgba(0,0,0,0.14)",
+            width: isSidebarOpen ? '280px' : '64px',
+            transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+            background: 'linear-gradient(180deg, #FFF7ED 0%, #FFEDD5 50%, #FED7AA 100%)',
+            border: '2px solid rgba(234, 88, 12, 0.2)',
+            borderRadius: '26px',
+            padding: isSidebarOpen ? '18px 14px' : '18px 8px',
+            display: 'flex',
+            flexDirection: 'column',
+            boxShadow: '0 12px 35px rgba(234, 88, 12, 0.12), 0 2px 8px rgba(0, 0, 0, 0.04)',
             flexShrink: 0,
-            boxSizing: "border-box",
-            color: "#FAFAFA"
+            boxSizing: 'border-box',
+            fontFamily: "system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif"
           }}>
-            <div style={{ display: "flex", alignItems: "center", justifyContent: isSidebarOpen ? "space-between" : "center", marginBottom: "12px", borderBottom: "1px solid #27272A", paddingBottom: "10px" }}>
+            {/* Header */}
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: isSidebarOpen ? 'space-between' : 'center', marginBottom: '14px', borderBottom: '1.5px solid rgba(234, 88, 12, 0.18)', paddingBottom: '12px' }}>
               {isSidebarOpen && (
-                <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-                  <span style={{ fontSize: "16px", color: "#F97316" }}>✦</span>
-                  <span style={{ fontWeight: "800", fontSize: "14px" }}>KalamAI Chats</span>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <div style={{ width: '28px', height: '28px', borderRadius: '8px', background: 'linear-gradient(135deg, #FF6B00, #EA580C)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#FFF', fontSize: '14px', fontWeight: '900', boxShadow: '0 2px 8px rgba(234, 88, 12, 0.3)' }}>✦</div>
+                  <span style={{ fontWeight: '800', fontSize: '15px', color: '#9A3412', letterSpacing: '-0.3px' }}>KalamAI Chats</span>
                 </div>
               )}
               <button
                 type="button"
                 onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-                style={{ background: "#27272A", border: "none", color: "#A1A1AA", width: "28px", height: "28px", borderRadius: "8px", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "12px" }}
+                style={{ background: '#FFFFFF', border: '1px solid rgba(234, 88, 12, 0.25)', color: '#EA580C', width: '30px', height: '30px', borderRadius: '10px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '12px', fontWeight: '800', boxShadow: '0 2px 6px rgba(234, 88, 12, 0.1)' }}
               >
-                {isSidebarOpen ? "◀" : "▶"}
+                {isSidebarOpen ? '◀' : '▶'}
               </button>
             </div>
 
             {isSidebarOpen && (
               <>
+                {/* New Chat Button - Send Button Match */}
                 <button
                   type="button"
                   onClick={handleNewChat}
                   style={{
-                    padding: "10px 12px",
-                    borderRadius: "14px",
-                    background: "#27272A",
-                    color: "#FAFAFA",
-                    border: "1px solid #3F3F46",
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "8px",
-                    fontWeight: "700",
-                    fontSize: "13px",
-                    cursor: "pointer",
-                    marginBottom: "12px"
+                    padding: '12px 14px',
+                    borderRadius: '16px',
+                    background: 'linear-gradient(135deg, #FF6B00 0%, #EA580C 100%)',
+                    color: '#FFFFFF',
+                    border: 'none',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: '10px',
+                    fontWeight: '800',
+                    fontSize: '14px',
+                    cursor: 'pointer',
+                    marginBottom: '14px',
+                    boxShadow: '0 6px 18px rgba(234, 88, 12, 0.35)',
+                    transition: 'transform 0.15s ease'
                   }}
+                  onMouseEnter={(e) => e.currentTarget.style.transform = 'scale(1.02)'}
+                  onMouseLeave={(e) => e.currentTarget.style.transform = 'scale(1)'}
                 >
-                  <span>✏️</span>
-                  <span>New chat</span>
+                  <span style={{ fontSize: '16px' }}>✏️</span>
+                  <span>New Chat</span>
                 </button>
 
-                <div style={{ position: "relative", marginBottom: "14px" }}>
+                {/* Search Box */}
+                <div style={{ position: 'relative', marginBottom: '16px' }}>
                   <input
                     type="text"
-                    placeholder="Search chats..."
+                    placeholder="Search conversations..."
                     value={searchChatQuery}
                     onChange={(e) => setSearchChatQuery(e.target.value)}
                     style={{
-                      width: "100%",
-                      padding: "7px 10px 7px 28px",
-                      borderRadius: "10px",
-                      background: "#09090B",
-                      border: "1px solid #27272A",
-                      color: "#E4E4E7",
-                      fontSize: "12px",
-                      outline: "none",
-                      boxSizing: "border-box"
+                      width: '100%',
+                      padding: '9px 12px 9px 34px',
+                      borderRadius: '14px',
+                      background: '#FFFFFF',
+                      border: '1.5px solid rgba(234, 88, 12, 0.25)',
+                      color: '#431407',
+                      fontSize: '12px',
+                      fontWeight: '600',
+                      outline: 'none',
+                      boxSizing: 'border-box',
+                      boxShadow: 'inset 0 1px 3px rgba(0,0,0,0.03)'
                     }}
                   />
-                  <span style={{ position: "absolute", left: "8px", top: "7px", fontSize: "11px", color: "#71717A" }}>🔍</span>
+                  <span style={{ position: 'absolute', left: '11px', top: '9px', fontSize: '12px', color: '#EA580C' }}>🔍</span>
                 </div>
 
-                <div style={{ flex: 1, overflowY: "auto", display: "flex", flexDirection: "column", gap: "4px", maxHeight: "320px" }}>
-                  <span style={{ fontSize: "11px", fontWeight: "800", color: "#71717A", padding: "0 6px", textTransform: "uppercase" }}>Recent</span>
+                {/* Recent Chats Section */}
+                <div style={{ flex: 1, overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '6px', maxHeight: '360px', paddingRight: '2px' }}>
+                  <span style={{ fontSize: '11px', fontWeight: '900', color: '#C2410C', padding: '0 6px 2px', textTransform: 'uppercase', letterSpacing: '0.6px' }}>Recent</span>
                   {sessions
                     .filter(s => s.title.toLowerCase().includes(searchChatQuery.toLowerCase()))
                     .map((s) => {
@@ -1075,25 +1087,28 @@ function App() {
                           key={s.id}
                           onClick={() => handleSelectSession(s.id)}
                           style={{
-                            padding: "8px 10px",
-                            borderRadius: "10px",
-                            cursor: "pointer",
-                            fontSize: "12px",
-                            fontWeight: isActive ? "700" : "500",
-                            background: isActive ? "#27272A" : "transparent",
-                            color: isActive ? "#FFFFFF" : "#A1A1AA",
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "space-between",
-                            gap: "6px"
+                            padding: '10px 12px',
+                            borderRadius: '14px',
+                            cursor: 'pointer',
+                            fontSize: '13px',
+                            fontWeight: isActive ? '800' : '600',
+                            background: isActive ? '#FFFFFF' : 'rgba(255, 255, 255, 0.45)',
+                            border: isActive ? '2px solid #EA580C' : '1px solid rgba(234, 88, 12, 0.12)',
+                            color: isActive ? '#9A3412' : '#7C2D12',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'space-between',
+                            gap: '6px',
+                            boxShadow: isActive ? '0 4px 12px rgba(234, 88, 12, 0.18)' : 'none',
+                            transition: 'all 0.15s ease'
                           }}
                         >
-                          <span style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", flex: 1 }}>{s.title}</span>
+                          <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', flex: 1 }}>{s.title}</span>
                           {sessions.length > 1 && (
                             <button
                               type="button"
                               onClick={(e) => handleDeleteSession(e, s.id)}
-                              style={{ background: "none", border: "none", color: "#71717A", cursor: "pointer", fontSize: "11px" }}
+                              style={{ background: 'none', border: 'none', color: '#C2410C', cursor: 'pointer', fontSize: '12px', padding: '2px 4px', fontWeight: 'bold' }}
                             >
                               ✕
                             </button>
@@ -1103,16 +1118,25 @@ function App() {
                     })}
                 </div>
 
-                <div style={{ borderTop: "1px solid #27272A", paddingTop: "10px", marginTop: "10px", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-                  <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-                    <div style={{ width: "28px", height: "28px", borderRadius: "50%", background: "#F97316", color: "#FFF", display: "flex", alignItems: "center", justifyContent: "center", fontWeight: "bold", fontSize: "12px" }}>
-                      {"Ansh Maurya" ? user.name[0].toUpperCase() : "A"}
+                {/* Profile Section */}
+                <div style={{ borderTop: '1.5px solid rgba(234, 88, 12, 0.2)', paddingTop: '12px', marginTop: '12px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                    <div style={{ width: '34px', height: '34px', borderRadius: '50%', background: 'linear-gradient(135deg, #FF6B00, #EA580C)', color: '#FFF', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: '900', fontSize: '14px', boxShadow: '0 3px 8px rgba(234, 88, 12, 0.3)' }}>
+                      A
                     </div>
-                    <div style={{ fontSize: "12px", fontWeight: "700", color: "#FAFAFA", overflow: "hidden", textOverflow: "ellipsis", maxWidth: "140px", whiteSpace: "nowrap" }}>
-                      {"Ansh Maurya"}
+                    <div>
+                      <div style={{ fontSize: '13px', fontWeight: '800', color: '#7C2D12' }}>Ansh Maurya</div>
+                      <div style={{ fontSize: '11px', color: '#EA580C', fontWeight: '700' }}>Student Scholar</div>
                     </div>
                   </div>
-                  <button type="button" onClick={() => setIsSettingsOpen(true)} title="Settings" style={{ background: "none", border: "none", fontSize: "15px", color: "#A1A1AA", cursor: "pointer", padding: "4px", display: "flex", alignItems: "center", justifyContent: "center", borderRadius: "6px" }}>⚙️</button>
+                  <button
+                    type="button"
+                    onClick={() => setIsSettingsOpen(true)}
+                    title="Settings"
+                    style={{ background: '#FFFFFF', border: '1px solid rgba(234, 88, 12, 0.25)', borderRadius: '10px', width: '30px', height: '30px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '14px', color: '#EA580C', cursor: 'pointer', boxShadow: '0 2px 6px rgba(0,0,0,0.05)' }}
+                  >
+                    ⚙️
+                  </button>
                 </div>
               </>
             )}
