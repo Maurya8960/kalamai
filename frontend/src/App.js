@@ -794,99 +794,116 @@ function App() {
             <h1 style={{ margin: 0, fontSize: '26px', fontWeight: '900', color: '#EA580C' }}>KalamAI</h1>
           </div>
           <nav style={{ display: 'flex', gap: '30px', fontWeight: 'bold', alignItems: 'center' }}>
-              {/* Home */}
-              <span
-                onClick={() => { setCurrentView("home"); window.scrollTo({ top: 0, behavior: "smooth" }); }}
-                style={{
-                  cursor: "pointer",
-                  color: currentView === "home" ? "#EA580C" : "#4B5563",
-                  borderBottom: currentView === "home" ? "3px solid #EA580C" : "3px solid transparent",
-                  paddingBottom: "6px",
-                  fontWeight: currentView === "home" ? "800" : "600",
-                  transition: "all 0.2s ease"
-                }}
-              >
-                Home
-              </span>
+{currentView === "chat" ? (
+              <>
+                {/* KalamAI Chat */}
+                <span
+                  onClick={() => handleNavClick("chat")}
+                  style={{
+                    cursor: "pointer",
+                    color: "#EA580C",
+                    borderBottom: "3px solid #EA580C",
+                    paddingBottom: "6px",
+                    fontWeight: "800",
+                    transition: "all 0.2s ease"
+                  }}
+                >
+                  KalamAI Chat
+                </span>
 
-              {/* KalamAI Chat */}
-              <span
-                onClick={() => {
-                  if (!isLoggedIn) {
-                    alert("KalamAI Chat ke liye kripya sign in karein.");
-                    setCurrentView("home");
-                    return;
-                  }
-                  setCurrentView("chat");
-                }}
-                style={{
-                  cursor: "pointer",
-                  color: currentView === "chat" ? "#EA580C" : "#4B5563",
-                  borderBottom: currentView === "chat" ? "3px solid #EA580C" : "3px solid transparent",
-                  paddingBottom: "6px",
-                  fontWeight: currentView === "chat" ? "800" : "600",
-                  transition: "all 0.2s ease"
-                }}
-              >
-                KalamAI Chat
-              </span>
+                {/* Syllabus */}
+                <span
+                  onClick={() => handleNavClick("syllabus")}
+                  style={{
+                    cursor: "pointer",
+                    color: "#4B5563",
+                    borderBottom: "3px solid transparent",
+                    paddingBottom: "6px",
+                    fontWeight: "600",
+                    transition: "all 0.2s ease"
+                  }}
+                >
+                  Syllabus
+                </span>
+              </>
+            ) : (
+              <>
+                {/* Home */}
+                <span
+                  onClick={() => handleNavClick("home")}
+                  style={{
+                    cursor: "pointer",
+                    color: currentView === "home" ? "#EA580C" : "#4B5563",
+                    borderBottom: currentView === "home" ? "3px solid #EA580C" : "3px solid transparent",
+                    paddingBottom: "6px",
+                    fontWeight: currentView === "home" ? "800" : "600",
+                    transition: "all 0.2s ease"
+                  }}
+                >
+                  Home
+                </span>
 
-              {/* Features */}
-              <span
-                onClick={() => {
-                  setCurrentView("home");
-                  setTimeout(() => {
-                    const el = document.getElementById("features");
-                    if (el) el.scrollIntoView({ behavior: "smooth" });
-                  }, 120);
-                }}
-                style={{
-                  cursor: "pointer",
-                  color: "#4B5563",
-                  borderBottom: "3px solid transparent",
-                  paddingBottom: "6px",
-                  fontWeight: "600",
-                  transition: "all 0.2s ease"
-                }}
-              >
-                Features
-              </span>
+                {/* KalamAI Chat */}
+                <span
+                  onClick={() => handleNavClick("chat")}
+                  style={{
+                    cursor: "pointer",
+                    color: currentView === "chat" ? "#EA580C" : "#4B5563",
+                    borderBottom: currentView === "chat" ? "3px solid #EA580C" : "3px solid transparent",
+                    paddingBottom: "6px",
+                    fontWeight: currentView === "chat" ? "800" : "600",
+                    transition: "all 0.2s ease"
+                  }}
+                >
+                  KalamAI Chat
+                </span>
 
-              {/* Syllabus */}
-              <span
-                onClick={() => setCurrentView("syllabus")}
-                style={{
-                  cursor: "pointer",
-                  color: currentView === "syllabus" ? "#EA580C" : "#4B5563",
-                  borderBottom: currentView === "syllabus" ? "3px solid #EA580C" : "3px solid transparent",
-                  paddingBottom: "6px",
-                  fontWeight: currentView === "syllabus" ? "800" : "600",
-                  transition: "all 0.2s ease"
-                }}
-              >
-                Syllabus
-              </span>
+                {/* Features */}
+                <span
+                  onClick={() => handleNavClick("features")}
+                  style={{
+                    cursor: "pointer",
+                    color: "#4B5563",
+                    borderBottom: "3px solid transparent",
+                    paddingBottom: "6px",
+                    fontWeight: "600",
+                    transition: "all 0.2s ease"
+                  }}
+                >
+                  Features
+                </span>
 
-              {/* About Us */}
-              <span
-                onClick={() => {
-                  setCurrentView("home");
-                  setTimeout(() => {
-                    window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
-                  }, 120);
-                }}
-                style={{
-                  cursor: "pointer",
-                  color: "#4B5563",
-                  borderBottom: "3px solid transparent",
-                  paddingBottom: "6px",
-                  fontWeight: "600",
-                  transition: "all 0.2s ease"
-                }}
-              >
-                About Us
-              </span>
-    
+                {/* Syllabus */}
+                <span
+                  onClick={() => handleNavClick("syllabus")}
+                  style={{
+                    cursor: "pointer",
+                    color: currentView === "syllabus" ? "#EA580C" : "#4B5563",
+                    borderBottom: currentView === "syllabus" ? "3px solid #EA580C" : "3px solid transparent",
+                    paddingBottom: "6px",
+                    fontWeight: currentView === "syllabus" ? "800" : "600",
+                    transition: "all 0.2s ease"
+                  }}
+                >
+                  Syllabus
+                </span>
+
+                {/* About Us */}
+                <span
+                  onClick={() => handleNavClick("about")}
+                  style={{
+                    cursor: "pointer",
+                    color: "#4B5563",
+                    borderBottom: "3px solid transparent",
+                    paddingBottom: "6px",
+                    fontWeight: "600",
+                    transition: "all 0.2s ease"
+                  }}
+                >
+                  About Us
+                </span>
+              </>
+            )}
             </nav>
           <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
             {!isLoggedIn ? (
