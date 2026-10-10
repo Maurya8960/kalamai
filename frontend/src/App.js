@@ -289,6 +289,13 @@ function App() {
 
     // Razorpay Checkout Handler
   
+  
+  const handleProBadgeClick = () => {
+    const planName = localStorage.getItem("kalamai_pro_plan_" + (user?.email || "guest")) || "KalamAI Pro";
+    const expDate = proExpiry ? new Date(proExpiry).toLocaleString("en-IN", { dateStyle: "medium", timeStyle: "short" }) : "";
+    alert("👑 " + planName + " Active!\n\nValid Till: " + expDate + "\n\nAapka Pro plan already active hai. Expire hone ke baad hi naya plan upgrade kar sakte hain.");
+  };
+
   const handleUpgradeClick = () => {
     if (!isLoggedIn) {
       alert("Kripya Pro upgrade karne ke liye pehle apni student ID se Login karein!");
@@ -583,7 +590,8 @@ function App() {
 <span onClick={() => { if(!isLoggedIn) setIsLoggedIn(true); navigateTo('home'); }} style={{ cursor: 'pointer', color: '#4B5563', fontWeight: '700' }}>KalamAI Chat</span>
               {isProActive ? (
                 <div
-                  title={"Valid till: " + new Date(proExpiry).toLocaleDateString()}
+                  title={"Valid till: " + (proExpiry ? new Date(proExpiry).toLocaleDateString() : "")}
+                  onClick={handleProBadgeClick}
                   style={{
                     background: "linear-gradient(135deg, #10B981, #059669)",
                     color: "#FFFFFF",
@@ -596,9 +604,7 @@ function App() {
                     gap: "6px",
                     boxShadow: "0 2px 10px rgba(16, 185, 129, 0.35)",
                     cursor: "pointer"
-                  }}
-                  onClick={handleUpgradeClick}
-                >
+                  }}>
                   <span>👑</span> Pro Active ({getRemainingDays()})
                 </div>
               ) : (
