@@ -119,3 +119,9 @@ body::after {
   50% { transform: translate(40px, -35px) scale(1.1); }
   100% { transform: translate(-30px, 25px) scale(0.94); }
 }
+
+@keyframes floatSlow {
+  0% { transform: translateY(0px) rotate(0deg) scale(1); }
+  50% { transform: translateY(-24px) rotate(8deg) scale(1.06); }
+  100% { transform: translateY(16px) rotate(-6deg) scale(0.95); }
+}
