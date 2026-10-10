@@ -426,7 +426,7 @@ function App() {
     } else if (tab === "features") {
       setCurrentView("home");
       setTimeout(() => {
-        const el = document.getElementById("features") || document.querySelector("[id*="feature"]");
+        const el = document.getElementById("features") || document.querySelector("[id*=feature]");
         if (el) el.scrollIntoView({ behavior: "smooth" });
       }, 150);
     } else if (tab === "syllabus") {
@@ -800,7 +800,7 @@ function App() {
                 style={{
                   cursor: "pointer",
                   color: currentView === "home" ? "#EA580C" : "#4B5563",
-                  borderBottom: currentView === "home" ? "3px solid "#EA580C" : "none",
+                  borderBottom: currentView === 'home' ? '3px solid #EA580C' : 'none',
                   paddingBottom: "5px",
                   fontWeight: currentView === "home" ? "800" : "600",
                   transition: "all 0.2s ease"
@@ -815,7 +815,7 @@ function App() {
                 style={{
                   cursor: "pointer",
                   color: currentView === "chat" ? "#EA580C" : "#4B5563",
-                  borderBottom: currentView === "chat" ? "3px solid "#EA580C" : "none",
+                  borderBottom: currentView === 'home' ? '3px solid #EA580C' : 'none',
                   paddingBottom: "5px",
                   fontWeight: currentView === "chat" ? "800" : "600",
                   transition: "all 0.2s ease"
@@ -844,7 +844,7 @@ function App() {
                 style={{
                   cursor: "pointer",
                   color: currentView === "syllabus" ? "#EA580C" : "#4B5563",
-                  borderBottom: currentView === "syllabus" ? "3px solid "#EA580C" : "none",
+                  borderBottom: currentView === 'home' ? '3px solid #EA580C' : 'none',
                   paddingBottom: "5px",
                   fontWeight: currentView === "syllabus" ? "800" : "600",
                   transition: "all 0.2s ease"
