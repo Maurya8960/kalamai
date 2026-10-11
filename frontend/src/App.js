@@ -1940,66 +1940,114 @@ function App() {
               <button onClick={() => navigateTo('privacy')} className="footer-link">Terms of Service</button>
             </div>
 
-            <div>
-              <h3 style={{ margin: '0 0 25px 0', color: '#111827', fontSize: '20px', fontWeight: '900' }}>Contact Info</h3>
+            <div style={{ flex: 1, minWidth: "260px" }}>
+              <h3 style={{ fontSize: "20px", fontWeight: "800", color: "#0F172A", marginBottom: "20px" }}>
+                Contact Info
+              </h3>
               
-              <div className="contact-card">
-                <div className="icon-circle"><Mail size={20} /></div>
+              {/* EMAIL US */}
+              <div 
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "16px",
+                  background: "#FFFFFF",
+                  padding: "16px 20px",
+                  borderRadius: "16px",
+                  border: "1px solid #E2E8F0",
+                  marginBottom: "14px",
+                  boxShadow: "0 4px 18px rgba(0,0,0,0.04)"
+                }}
+              >
+                <div style={{
+                  width: "44px",
+                  height: "44px",
+                  borderRadius: "50%",
+                  background: "#FFF7ED",
+                  color: "#EA580C",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center"
+                }}>
+                  <Mail size={20} />
+                </div>
                 <div>
-                  <div style={{ fontSize: '10px', fontWeight: '800', color: '#EA580C', letterSpacing: '1px' }}>EMAIL US</div>
-                  <div style={{ fontSize: '14px', fontWeight: 'bold', color: '#111827' }}></div>
+                  <div style={{ fontSize: "10px", fontWeight: "800", color: "#EA580C", letterSpacing: "1px" }}>EMAIL US</div>
+                  <a href="mailto:maurya1.ansh@gmail.com" style={{ fontSize: "14px", fontWeight: "bold", color: "#111827", textDecoration: "none" }}>
+                    maurya1.ansh@gmail.com
+                  </a>
                 </div>
               </div>
 
-              <div className="contact-card">
-                <div className="icon-circle" style={{background: '#FEF3C7', color: '#F59E0B', transition: "all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)", cursor: "pointer"}}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.transform = "translateY(-8px) scale(1.02)";
-                e.currentTarget.style.boxShadow = "0 20px 35px rgba(234, 88, 12, 0.18), 0 4px 12px rgba(0,0,0,0.06)";
-                e.currentTarget.style.borderColor = "#EA580C";
-                const icon = e.currentTarget.querySelector("div");
-                if (icon) icon.style.transform = "scale(1.15) rotate(8deg)";
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.transform = "translateY(0px) scale(1)";
-                e.currentTarget.style.boxShadow = "0 4px 18px rgba(0,0,0,0.04)";
-                e.currentTarget.style.borderColor = "#E2E8F0";
-                const icon = e.currentTarget.querySelector("div");
-                if (icon) icon.style.transform = "scale(1) rotate(0deg)";
-              }}><MessageCircle size={20} /></div>
+              {/* WHATSAPP */}
+              <div 
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "16px",
+                  background: "#FFFFFF",
+                  padding: "16px 20px",
+                  borderRadius: "16px",
+                  border: "1px solid #E2E8F0",
+                  marginBottom: "14px",
+                  boxShadow: "0 4px 18px rgba(0,0,0,0.04)"
+                }}
+              >
+                <div style={{
+                  width: "44px",
+                  height: "44px",
+                  borderRadius: "50%",
+                  background: "#FFF7ED",
+                  color: "#EA580C",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center"
+                }}>
+                  <span style={{ fontSize: "20px" }}>💬</span>
+                </div>
                 <div>
-                  <div style={{ fontSize: '10px', fontWeight: '800', color: '#F59E0B', letterSpacing: '1px' }}>WHATSAPP</div>
-                  <div style={{ fontSize: '14px', fontWeight: 'bold', color: '#111827' }}>+91 94542 47006</div>
+                  <div style={{ fontSize: "10px", fontWeight: "800", color: "#EA580C", letterSpacing: "1px" }}>WHATSAPP</div>
+                  <div style={{ fontSize: "14px", fontWeight: "bold", color: "#111827" }}>+91 94542 47006</div>
                 </div>
               </div>
 
-              <div className="contact-card">
-                <div className="icon-circle" style={{background: '#F3F4F6', color: '#6B7280', transition: "all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)", cursor: "pointer"}}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.transform = "translateY(-8px) scale(1.02)";
-                e.currentTarget.style.boxShadow = "0 20px 35px rgba(234, 88, 12, 0.18), 0 4px 12px rgba(0,0,0,0.06)";
-                e.currentTarget.style.borderColor = "#EA580C";
-                const icon = e.currentTarget.querySelector("div");
-                if (icon) icon.style.transform = "scale(1.15) rotate(8deg)";
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.transform = "translateY(0px) scale(1)";
-                e.currentTarget.style.boxShadow = "0 4px 18px rgba(0,0,0,0.04)";
-                e.currentTarget.style.borderColor = "#E2E8F0";
-                const icon = e.currentTarget.querySelector("div");
-                if (icon) icon.style.transform = "scale(1) rotate(0deg)";
-              }}><Phone size={20} /></div>
+              {/* PHONE */}
+              <div 
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "16px",
+                  background: "#FFFFFF",
+                  padding: "16px 20px",
+                  borderRadius: "16px",
+                  border: "1px solid #E2E8F0",
+                  marginBottom: "14px",
+                  boxShadow: "0 4px 18px rgba(0,0,0,0.04)"
+                }}
+              >
+                <div style={{
+                  width: "44px",
+                  height: "44px",
+                  borderRadius: "50%",
+                  background: "#FFF7ED",
+                  color: "#EA580C",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center"
+                }}>
+                  <Phone size={20} />
+                </div>
                 <div>
-                  <div style={{ fontSize: '10px', fontWeight: '800', color: '#EA580C', letterSpacing: '1px' }}>PHONE</div>
-                  <div style={{ fontSize: '14px', fontWeight: 'bold', color: '#111827' }}>+91 94542 47006</div>
+                  <div style={{ fontSize: "10px", fontWeight: "800", color: "#EA580C", letterSpacing: "1px" }}>PHONE</div>
+                  <div style={{ fontSize: "14px", fontWeight: "bold", color: "#111827" }}>+91 94542 47006</div>
                 </div>
               </div>
             </div>
 
           </div>
-          <div style={{ textAlign: 'center', marginTop: '60px', color: '#4B5563', fontSize: '14px', fontWeight: '600' }}>
-            © 2026 KalamAI. Developed by Ansh Maurya. All rights reserved.
-           · <span onClick={() => navigateTo("admin")} style={{ cursor: "pointer", color: "#EA580C", fontWeight: "700" }}>Admin Portal</span></div>
+          <div style={{ textAlign: "center", marginTop: "60px", color: "#4B5563", fontSize: "14px", fontWeight: "600" }}>
+            © 2026 KalamAI. Developed by Ansh Maurya. All rights reserved. · <span onClick={() => navigateTo("admin")} style={{ cursor: "pointer", color: "#EA580C", fontWeight: "700" }}>Admin Portal</span>
+          </div>
         </footer>
     )}
       </div>
