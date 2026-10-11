@@ -1253,7 +1253,7 @@ function App() {
             </>
           )}
 
-          {(currentView === "home" || currentView === "features") && isLoggedIn && (
+          {currentView === "chat" && (
         <div style={{ display: "flex", maxWidth: "1260px", margin: "30px auto 80px", gap: "20px", padding: "0 16px", alignItems: "stretch" }}>
 
           {/* KalamAI Warm Aesthetic Sidebar */}
