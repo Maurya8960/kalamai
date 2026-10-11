@@ -1276,10 +1276,7 @@ function App() {
         )}
 
         {currentView === "pyq" && (
-          <PyqDirectory onOpenSubjectPrompt={(promptText) => {
-            setCurrentView("chat");
-            if (typeof setInputMessage === "function") setInputMessage(promptText);
-          }} />
+          <PyqDirectory onOpenSubjectPrompt={() => setCurrentView("chat")} />
         )}
 
         {currentView === "cheatsheet" && (
