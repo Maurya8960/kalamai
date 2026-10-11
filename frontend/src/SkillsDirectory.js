@@ -4,6 +4,7 @@ const SkillsDirectory = () => {
   const [filter, setFilter] = useState("all");
 
   const skillBooks = [
+    // --- 1. CORE & LANGUAGES ---
     {
       id: "cpp",
       category: "core",
@@ -24,23 +25,23 @@ const SkillsDirectory = () => {
       filename: "CPlusPlus0.pdf"
     },
     {
-      id: "python",
-      category: "backend",
-      title: "Python 3 & 2 Architecture",
+      id: "c-lang",
+      category: "core",
+      title: "C Language Mastery",
       subtitle: "Notes for Professionals",
-      pages: "800+ Pages",
-      edition: "Pythonic Best Practices & PEP8",
-      icon: "🐍",
-      color: "#059669",
-      bgGradient: "linear-gradient(135deg, #ECFDF5 0%, #D1FAE5 100%)",
-      badgeColor: "#047857",
+      pages: "300+ Pages",
+      edition: "ANSI C / C99 / C11 Foundations",
+      icon: "🧱",
+      color: "#0284C7",
+      bgGradient: "linear-gradient(135deg, #F0F9FF 0%, #E0F2FE 100%)",
+      badgeColor: "#0369A1",
       highlights: [
-        "Core Data Types, Comprehensions & Generators",
-        "Decorators, Metaclasses & Context Managers",
-        "Multiprocessing, Threading & Asyncio",
-        "Data Science Foundations & File I/O Workflows"
+        "Pointers Arithmetic & Memory Pointers",
+        "Structs, Unions & Low-level System I/O",
+        "Preprocessor Directives & Compilation Workflow",
+        "Dynamic Memory Allocation (malloc, free)"
       ],
-      filename: "Python0.pdf"
+      filename: "C1.pdf"
     },
     {
       id: "algo",
@@ -61,6 +62,145 @@ const SkillsDirectory = () => {
       ],
       filename: "Algorithms0.pdf"
     },
+
+    // --- 2. PYTHON & BACKEND ---
+    {
+      id: "python",
+      category: "backend",
+      title: "Python 3 & 2 Architecture",
+      subtitle: "Notes for Professionals",
+      pages: "800+ Pages",
+      edition: "Pythonic Best Practices & PEP8",
+      icon: "🐍",
+      color: "#059669",
+      bgGradient: "linear-gradient(135deg, #ECFDF5 0%, #D1FAE5 100%)",
+      badgeColor: "#047857",
+      highlights: [
+        "Core Data Types, Comprehensions & Generators",
+        "Decorators, Metaclasses & Context Managers",
+        "Multiprocessing, Threading & Asyncio",
+        "Data Science Foundations & File I/O Workflows"
+      ],
+      filename: "Python0.pdf"
+    },
+    {
+      id: "csharp",
+      category: "backend",
+      title: "C# Programming Handbook",
+      subtitle: "Notes for Professionals",
+      pages: "700+ Pages",
+      edition: "C# 6.0 to C# 10 & CLR Runtimes",
+      icon: "🔷",
+      color: "#4338CA",
+      bgGradient: "linear-gradient(135deg, #EEF2FF 0%, #E0E7FF 100%)",
+      badgeColor: "#3730A3",
+      highlights: [
+        "LINQ Queries, Expressions & Lambdas",
+        "Async / Await Task Parallel Library",
+        "Delegates, Events & Generic Collections",
+        "Reflection, Dependency Injection & Interfaces"
+      ],
+      filename: "CSharp1.pdf"
+    },
+    {
+      id: "dotnet",
+      category: "backend",
+      title: ".NET Framework Architecture",
+      subtitle: "Notes for Professionals",
+      pages: "100+ Pages",
+      edition: "Enterprise .NET & Web API Frameworks",
+      icon: "🌐",
+      color: "#1E40AF",
+      bgGradient: "linear-gradient(135deg, #EFF6FF 0%, #DBEAFE 100%)",
+      badgeColor: "#1E3A8A",
+      highlights: [
+        "Common Language Runtime (CLR) & Assemblies",
+        "Memory Management & Garbage Collector",
+        "ASP.NET Web API & RESTful Services",
+        "Configuration, AppDomains & Windows Services"
+      ],
+      filename: "DotNETFramework1.pdf"
+    },
+    {
+      id: "entity-framework",
+      category: "backend",
+      title: "Entity Framework ORM",
+      subtitle: "Notes for Professionals",
+      pages: "80+ Pages",
+      edition: "Database First & Code First Systems",
+      icon: "🗄️",
+      color: "#047857",
+      bgGradient: "linear-gradient(135deg, #ECFDF5 0%, #D1FAE5 100%)",
+      badgeColor: "#065F46",
+      highlights: [
+        "Code-First Migrations & Fluent API",
+        "LINQ to Entities & Eager/Lazy Loading",
+        "Relationships, Foreign Keys & Cascades",
+        "Stored Procedures & Performance Profiling"
+      ],
+      filename: "EntityFramework1.pdf"
+    },
+
+    // --- 3. FRONTEND & WEB ---
+    {
+      id: "angular",
+      category: "frontend",
+      title: "Angular Modern Framework",
+      subtitle: "Notes for Professionals",
+      pages: "200+ Pages",
+      edition: "Angular 2+ Components & TypeScript",
+      icon: "🅰️",
+      color: "#DC2626",
+      bgGradient: "linear-gradient(135deg, #FEF2F2 0%, #FEE2E2 100%)",
+      badgeColor: "#991B1B",
+      highlights: [
+        "Directives, Pipes, Components & Data Binding",
+        "RxJS Observables & Reactive Forms",
+        "Services, Dependency Injection & Routing Guards",
+        "HTTP Client & State Management Systems"
+      ],
+      filename: "Angular0.pdf"
+    },
+    {
+      id: "angularjs",
+      category: "frontend",
+      title: "AngularJS Legacy Notes",
+      subtitle: "Notes for Professionals",
+      pages: "100+ Pages",
+      edition: "AngularJS 1.x Architecture",
+      icon: "🛡️",
+      color: "#B91C1C",
+      bgGradient: "linear-gradient(135deg, #FFF1F2 0%, #FFE4E6 100%)",
+      badgeColor: "#881337",
+      highlights: [
+        "Controllers, Scopes ($scope) & Digest Cycles",
+        "Two-Way Data Binding & Custom Directives",
+        "Filters, Factories & Providers Architecture",
+        "$http Service & Module Injection"
+      ],
+      filename: "AngularJS1.pdf"
+    },
+    {
+      id: "css",
+      category: "frontend",
+      title: "CSS & Web Styling",
+      subtitle: "Notes for Professionals",
+      pages: "200+ Pages",
+      edition: "CSS3, Flexbox & Modern Grid",
+      icon: "🎨",
+      color: "#0891B2",
+      bgGradient: "linear-gradient(135deg, #ECFEFF 0%, #CFFAFE 100%)",
+      badgeColor: "#0E7490",
+      highlights: [
+        "Flexbox Layouts & Responsive CSS Grid",
+        "Keyframe Animations, Transitions & Transforms",
+        "Media Queries, Viewport & Mobile-First Styling",
+        "Pseudo-classes, Variables & Modern Selectors"
+      ],
+      filename: "CSS1.pdf"
+    },
+
+    // --- 4. MOBILE DEVELOPMENT ---
     {
       id: "android",
       category: "mobile",
@@ -88,9 +228,9 @@ const SkillsDirectory = () => {
       pages: "800+ Pages",
       edition: "Xcode, UIKit & Cocoa Touch",
       icon: "🍏",
-      color: "#DC2626",
-      bgGradient: "linear-gradient(135deg, #FEF2F2 0%, #FEE2E2 100%)",
-      badgeColor: "#B91C1C",
+      color: "#EA580C",
+      bgGradient: "linear-gradient(135deg, #FFF7ED 0%, #FFEDD5 100%)",
+      badgeColor: "#C2410C",
       highlights: [
         "UIKit, Storyboard, Autolayout & Size Classes",
         "UITableView, UICollectionView & Custom Cells",
@@ -98,6 +238,65 @@ const SkillsDirectory = () => {
         "CoreData, Networking (Alamofire/URLSession) & Memory"
       ],
       filename: "iOS0.pdf"
+    },
+
+    // --- 5. DEVOPS, SCRIPTS & PRODUCTIVITY ---
+    {
+      id: "git",
+      category: "tools",
+      title: "Git Version Control Guide",
+      subtitle: "Notes for Professionals",
+      pages: "100+ Pages",
+      edition: "Git Core, Branching & Merge Strategies",
+      icon: "🌿",
+      color: "#EA580C",
+      bgGradient: "linear-gradient(135deg, #FFF7ED 0%, #FFEDD5 100%)",
+      badgeColor: "#9A3412",
+      highlights: [
+        "Branching Workflows, Stashing & Merging",
+        "Rebase, Cherry-Pick & Resolving Conflicts",
+        "Remote Tracking, GitHub Pull Requests & Tags",
+        "Git Hooks, Submodules & Clean History"
+      ],
+      filename: "Git1.pdf"
+    },
+    {
+      id: "bash",
+      category: "tools",
+      title: "Bash Scripting & CLI",
+      subtitle: "Notes for Professionals",
+      pages: "100+ Pages",
+      edition: "Shell Automation & Linux Admin",
+      icon: "💻",
+      color: "#334155",
+      bgGradient: "linear-gradient(135deg, #F8FAFC 0%, #E2E8F0 100%)",
+      badgeColor: "#1E293B",
+      highlights: [
+        "Shell Script Structure, Loops & Conditional Tests",
+        "Pipes, Redirection (stdin/stdout) & Awk/Sed",
+        "Environment Variables & Cron Automation",
+        "Process Control, Signals & Error Handling"
+      ],
+      filename: "Bash1.pdf"
+    },
+    {
+      id: "excel-vba",
+      category: "tools",
+      title: "Excel VBA & Macros",
+      subtitle: "Notes for Professionals",
+      pages: "100+ Pages",
+      edition: "Data Processing & Office Automation",
+      icon: "📊",
+      color: "#15803D",
+      bgGradient: "linear-gradient(135deg, #F0FDF4 0%, #DCFCE7 100%)",
+      badgeColor: "#166534",
+      highlights: [
+        "Automating Spreadsheets, Workbooks & Ranges",
+        "VBA Loops, User Forms & Event Handlers",
+        "Custom Functions (UDF) & Fast Calculation Macros",
+        "Data Import / Export & Report Generation"
+      ],
+      filename: "ExcelVBA1.pdf"
     }
   ];
 
@@ -107,10 +306,10 @@ const SkillsDirectory = () => {
     <div style={{ maxWidth: "1280px", margin: "0 auto", padding: "24px 20px 80px", fontFamily: "inherit" }}>
       {/* Breadcrumb */}
       <div style={{ fontSize: "13px", color: "#64748B", marginBottom: "16px", fontWeight: "500" }}>
-        <span>Home</span> <span style={{ margin: "0 6px" }}>›</span> <span style={{ color: "#0F172A", fontWeight: "700" }}>Software Engineering & Skills Vault</span>
+        <span>Home</span> <span style={{ margin: "0 6px" }}>›</span> <span style={{ color: "#0F172A", fontWeight: "700" }}>Engineering Skills & Professional Books Vault</span>
       </div>
 
-      {/* Header Tag & Heading */}
+      {/* Header Banner */}
       <div style={{ marginBottom: "26px" }}>
         <span style={{
           display: "inline-block",
@@ -125,29 +324,31 @@ const SkillsDirectory = () => {
           border: "1px solid #FED7AA",
           textTransform: "uppercase"
         }}>
-          HANDPICKED TECH PROFESSIONAL COMPILATIONS • 3400+ PAGES
+          OFFICIAL DEVELOPER COMPILATIONS • 15 HIGH-IMPACT BOOKS • 5500+ PAGES
         </span>
         <h1 style={{ fontSize: "34px", fontWeight: "900", color: "#0F172A", margin: "0 0 10px", letterSpacing: "-0.5px" }}>
           Engineering Skills & Career Vault ⚡
         </h1>
         <p style={{ color: "#475569", fontSize: "15px", margin: 0, lineHeight: "1.6" }}>
-          Comprehensive, industry-standard engineering handbooks. Master high-performance programming, systems architecture, and mobile engineering with professional reference guides.
+          Industry-tested computer science notes, frameworks, and programming books. Filter by domain and download complete high-quality reference PDFs directly.
         </p>
       </div>
 
-      {/* Filter Tabs */}
+      {/* Domain Filters */}
       <div style={{ display: "flex", flexWrap: "wrap", gap: "10px", marginBottom: "32px" }}>
         {[
-          { id: "all", label: "All Skills" },
-          { id: "core", label: "Core CS & Algorithms" },
-          { id: "backend", label: "Backend & Systems" },
-          { id: "mobile", label: "Mobile Development" }
+          { id: "all", label: "All Tech Books (15)" },
+          { id: "core", label: "Core CS, C/C++ & Algorithms" },
+          { id: "backend", label: "Backend, Python & .NET" },
+          { id: "frontend", label: "Frontend, Angular & CSS" },
+          { id: "mobile", label: "Mobile (Android & iOS)" },
+          { id: "tools", label: "Git, Bash & Automation" }
         ].map((tab) => (
           <button
             key={tab.id}
             onClick={() => setFilter(tab.id)}
             style={{
-              padding: "9px 20px",
+              padding: "9px 18px",
               borderRadius: "8px",
               border: filter === tab.id ? "1.5px solid #EA580C" : "1px solid #E2E8F0",
               background: filter === tab.id ? "#EA580C" : "#FFFFFF",
@@ -163,7 +364,7 @@ const SkillsDirectory = () => {
         ))}
       </div>
 
-      {/* Books Grid */}
+      {/* Responsive Cards Grid */}
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(340px, 1fr))", gap: "24px" }}>
         {filteredBooks.map((book) => (
           <div
@@ -204,7 +405,7 @@ const SkillsDirectory = () => {
                     {book.icon}
                   </div>
                   <div>
-                    <h3 style={{ fontSize: "18px", fontWeight: "900", color: "#0F172A", margin: 0 }}>
+                    <h3 style={{ fontSize: "17.5px", fontWeight: "900", color: "#0F172A", margin: 0 }}>
                       {book.title}
                     </h3>
                     <span style={{ fontSize: "12px", color: "#64748B", fontWeight: "600" }}>
@@ -219,7 +420,8 @@ const SkillsDirectory = () => {
                   fontSize: "11px",
                   fontWeight: "800",
                   padding: "4px 10px",
-                  borderRadius: "20px"
+                  borderRadius: "20px",
+                  whiteSpace: "nowrap"
                 }}>
                   {book.pages}
                 </span>
@@ -233,7 +435,7 @@ const SkillsDirectory = () => {
 
               <div style={{ background: "#F8FAFC", borderRadius: "10px", padding: "12px 14px", marginBottom: "20px", border: "1px solid #E2E8F0" }}>
                 <p style={{ margin: "0 0 6px", fontSize: "12px", fontWeight: "800", color: "#334155", textTransform: "uppercase" }}>
-                  Key Syllabus & Chapters:
+                  Key Topics & Syllabus:
                 </p>
                 <ul style={{ margin: 0, paddingLeft: "18px", fontSize: "12.5px", color: "#475569", lineHeight: "1.6" }}>
                   {book.highlights.map((h, i) => (
@@ -243,17 +445,13 @@ const SkillsDirectory = () => {
               </div>
             </div>
 
-            {/* Action Buttons */}
+            {/* Direct Download Button */}
             <div>
               <a
                 href={"/" + book.filename}
                 download={book.filename}
                 target="_blank"
                 rel="noopener noreferrer"
-                onClick={(e) => {
-                  // Direct prompt fallback if not static hosted
-                  console.log("Downloading " + book.filename);
-                }}
                 style={{
                   display: "flex",
                   alignItems: "center",
