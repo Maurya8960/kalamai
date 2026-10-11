@@ -417,30 +417,37 @@ function App() {
   };
 
   
-  const handleNavClick = (tab) => {
+    const handleNavClick = (tab) => {
     if (tab === "home") {
-      setCurrentView("home");
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    } else if (tab === "chat") {
-      if (!isLoggedIn) {
-        alert("KalamAI Chat access karne ke liye pehle Sign In karein.");
+      if (isLoggedIn) {
+        setCurrentView("chat");
+      } else {
         setCurrentView("home");
-        return;
+        window.scrollTo({ top: 0, behavior: "smooth" });
       }
+    } else if (tab === "chat") {
       setCurrentView("chat");
     } else if (tab === "features") {
-      setCurrentView("home");
-      setTimeout(() => {
-        const el = document.getElementById("features") || document.querySelector("[id*=feature]");
-        if (el) el.scrollIntoView({ behavior: "smooth" });
-      }, 150);
+      if (isLoggedIn) {
+        setCurrentView("chat");
+      } else {
+        setCurrentView("home");
+        setTimeout(() => {
+          const el = document.getElementById("features");
+          if (el) el.scrollIntoView({ behavior: "smooth" });
+        }, 120);
+      }
     } else if (tab === "syllabus") {
       setCurrentView("syllabus");
     } else if (tab === "about") {
-      setCurrentView("home");
-      setTimeout(() => {
-        window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
-      }, 150);
+      if (isLoggedIn) {
+        setCurrentView("chat");
+      } else {
+        setCurrentView("home");
+        setTimeout(() => {
+          window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
+        }, 120);
+      }
     }
   };
 
@@ -799,24 +806,24 @@ function App() {
             <h1 style={{ margin: 0, fontSize: '26px', fontWeight: '900', color: '#EA580C' }}>KalamAI</h1>
           </div>
           <nav style={{ display: 'flex', gap: '30px', fontWeight: 'bold', alignItems: 'center' }}>
-{currentView === "chat" ? (
+{isLoggedIn ? (
               <>
                 {/* KalamAI Chat */}
                 <span
-                  onClick={() => handleNavClick("chat")}
+                  onClick={() => setCurrentView("chat")}
                   style={{
                     cursor: "pointer",
-                    color: "#EA580C",
-                    borderBottom: "3px solid #EA580C",
+                    color: currentView === "chat" ? "#EA580C" : "#4B5563",
+                    borderBottom: currentView === "chat" ? "3px solid #EA580C" : "3px solid transparent",
                     paddingBottom: "6px",
-                    fontWeight: "800",
+                    fontWeight: currentView === "chat" ? "800" : "600",
                     transition: "all 0.2s ease"
                   }}
                 >
                   KalamAI Chat
                 </span>
 
-{/* ⚡ Upgrade Pro Button (Restored) */}
+                {/* Upgrade Pro */}
                 <button
                   type="button"
                   onClick={() => {
@@ -839,7 +846,7 @@ function App() {
                     gap: "6px",
                     cursor: "pointer",
                     boxShadow: "0 4px 15px rgba(234, 88, 12, 0.35)",
-                    transition: "all 0.2s ease"
+                    transition: "transform 0.2s ease, box-shadow 0.2s ease"
                   }}
                   onMouseEnter={(e) => {
                     e.currentTarget.style.transform = "translateY(-2px) scale(1.03)";
@@ -855,13 +862,13 @@ function App() {
 
                 {/* Syllabus */}
                 <span
-                  onClick={() => handleNavClick("syllabus")}
+                  onClick={() => setCurrentView("syllabus")}
                   style={{
                     cursor: "pointer",
-                    color: "#4B5563",
-                    borderBottom: "3px solid transparent",
+                    color: currentView === "syllabus" ? "#EA580C" : "#4B5563",
+                    borderBottom: currentView === "syllabus" ? "3px solid #EA580C" : "3px solid transparent",
                     paddingBottom: "6px",
-                    fontWeight: "600",
+                    fontWeight: currentView === "syllabus" ? "800" : "600",
                     transition: "all 0.2s ease"
                   }}
                 >
@@ -876,7 +883,7 @@ function App() {
                   style={{
                     cursor: "pointer",
                     color: currentView === "home" ? "#EA580C" : "#4B5563",
-                  borderBottom: currentView === 'home' ? '3px solid #EA580C' : '3px solid transparent',
+                    borderBottom: currentView === "home" ? "3px solid #EA580C" : "3px solid transparent",
                     paddingBottom: "6px",
                     fontWeight: currentView === "home" ? "800" : "600",
                     transition: "all 0.2s ease"
@@ -891,7 +898,7 @@ function App() {
                   style={{
                     cursor: "pointer",
                     color: currentView === "chat" ? "#EA580C" : "#4B5563",
-                  borderBottom: currentView === 'chat' ? '3px solid #EA580C' : '3px solid transparent',
+                    borderBottom: currentView === "chat" ? "3px solid #EA580C" : "3px solid transparent",
                     paddingBottom: "6px",
                     fontWeight: currentView === "chat" ? "800" : "600",
                     transition: "all 0.2s ease"
@@ -900,7 +907,7 @@ function App() {
                   KalamAI Chat
                 </span>
 
-{/* ⚡ Upgrade Pro Button (Restored) */}
+                {/* Upgrade Pro */}
                 <button
                   type="button"
                   onClick={() => {
@@ -925,14 +932,6 @@ function App() {
                     boxShadow: "0 4px 15px rgba(234, 88, 12, 0.35)",
                     transition: "all 0.2s ease"
                   }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.transform = "translateY(-2px) scale(1.03)";
-                    e.currentTarget.style.boxShadow = "0 6px 20px rgba(147, 51, 234, 0.4)";
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.transform = "translateY(0) scale(1)";
-                    e.currentTarget.style.boxShadow = "0 4px 15px rgba(234, 88, 12, 0.35)";
-                  }}
                 >
                   <span>⚡</span> Upgrade Pro
                 </button>
@@ -942,10 +941,10 @@ function App() {
                   onClick={() => handleNavClick("features")}
                   style={{
                     cursor: "pointer",
-                    color: currentView === "features" ? "#EA580C" : "#4B5563",
-                  borderBottom: currentView === 'features' ? '3px solid #EA580C' : '3px solid transparent',
+                    color: "#4B5563",
+                    borderBottom: "3px solid transparent",
                     paddingBottom: "6px",
-                    fontWeight: currentView === "features" ? "800" : "600",
+                    fontWeight: "600",
                     transition: "all 0.2s ease"
                   }}
                 >
@@ -958,7 +957,7 @@ function App() {
                   style={{
                     cursor: "pointer",
                     color: currentView === "syllabus" ? "#EA580C" : "#4B5563",
-                  borderBottom: currentView === 'syllabus' ? '3px solid #EA580C' : '3px solid transparent',
+                    borderBottom: currentView === "syllabus" ? "3px solid #EA580C" : "3px solid transparent",
                     paddingBottom: "6px",
                     fontWeight: currentView === "syllabus" ? "800" : "600",
                     transition: "all 0.2s ease"
