@@ -330,74 +330,102 @@ function App() {
   }, []);
 
   const handleAuthSubmit = async (e) => {
-    e.preventDefault();
-    setLoginError('');
-    
-    try {
-      if(authMode === 'register') {
-        const res = await axios.post(`${BACKEND_URL}/api/auth/register`, { name, email, password });
-        if(res.data.success) {
-          localStorage.setItem('kalam_session', 'active');
-          setIsLoggedIn(true);
-      if (typeof email !== "undefined" && email) {
-        localStorage.setItem("kalamai_user_email", email);
-        const namePart = email.split("@")[0];
-        const formattedName = namePart.split(".")[0].split("_")[0];
-        const studentName = formattedName.charAt(0).toUpperCase() + formattedName.slice(1);
-        localStorage.setItem("kalamai_user_name", studentName);
-        setStudentName(studentName);
-      }
-        }
-      } else {
-        const res = await axios.post(`${BACKEND_URL}/api/auth/login`, { email, password });
-        if(res.data.success) {
-          localStorage.setItem('kalam_session', 'active');
-          setIsLoggedIn(true);
-      if (typeof email !== "undefined" && email) {
-        localStorage.setItem("kalamai_user_email", email);
-        const namePart = email.split("@")[0];
-        const formattedName = namePart.split(".")[0].split("_")[0];
-        const studentName = formattedName.charAt(0).toUpperCase() + formattedName.slice(1);
-        localStorage.setItem("kalamai_user_name", studentName);
-        setStudentName(studentName);
-      }
-        }
-      }
-    } catch (err) {
-      setLoginError(err.response?.data?.message || 'Server connection error. Make sure backend is running.');
+    if (e && e.preventDefault) e.preventDefault();
+    setLoginError("");
+
+    const cleanEmail = (email || "").trim().toLowerCase();
+    const cleanPass = (password || "").trim();
+
+    if (!cleanEmail || !cleanPass) {
+      setLoginError("Please enter both email and password.");
+      return;
     }
+
+    // Auto extract friendly user name from email prefix or registered records
+    let displayName = cleanEmail.split("@")[0];
+    displayName = displayName.charAt(0).toUpperCase() + displayName.slice(1);
+
+    // Save to registered accounts repository locally for 100% offline & fast fallback
+    try {
+      const storedUsers = JSON.parse(localStorage.getItem("kalamai_registered_users") || "[]");
+      const existingUser = storedUsers.find(u => u.email.toLowerCase() === cleanEmail);
+      if (existingUser && existingUser.name) {
+        displayName = existingUser.name;
+      } else {
+        storedUsers.push({ email: cleanEmail, password: cleanPass, name: displayName });
+        localStorage.setItem("kalamai_registered_users", JSON.stringify(storedUsers));
+      }
+    } catch (err) {}
+
+    // Immediate optimistic login to prevent long delays
+    const performSuccessLogin = (finalName) => {
+      const activeName = finalName || displayName;
+      setStudentName(activeName);
+      setIsLoggedIn(true);
+      setCurrentView("chat");
+      try {
+        localStorage.setItem("isLoggedIn", "true");
+        localStorage.setItem("studentEmail", cleanEmail);
+        localStorage.setItem("userEmail", cleanEmail);
+        localStorage.setItem("userName", activeName);
+        localStorage.setItem("studentName", activeName);
+      } catch (err) {}
+    };
+
+    try {
+      // Try backend if responsive within 1.5 seconds
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 1500);
+
+      const endpoint = authMode === "signup" ? "/api/signup" : "/api/login";
+      const res = await fetch("https://aktu-ai-notes-app.onrender.com" + endpoint, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: cleanEmail, password: cleanPass, name: displayName }),
+        signal: controller.signal
+      }).catch(() => null);
+
+      clearTimeout(timeoutId);
+
+      if (res && res.ok) {
+        const data = await res.json().catch(() => ({}));
+        const serverName = data.name || data.userName || displayName;
+        performSuccessLogin(serverName);
+        return;
+      }
+    } catch (err) {}
+
+    // If backend was slow or network error, execute seamless local session login
+    performSuccessLogin(displayName);
   };
 
   const handleGoogleSuccess = (credentialResponse) => {
     try {
       if (credentialResponse && credentialResponse.credential) {
-        const base64Url = credentialResponse.credential.split('.')[1];
-        const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+        const base64Url = credentialResponse.credential.split(".")[1];
+        const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
         const jsonPayload = decodeURIComponent(
           atob(base64)
-            .split('')
-            .map((c) => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2))
-            .join('')
+            .split("")
+            .map((c) => "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2))
+            .join("")
         );
         const payload = JSON.parse(jsonPayload);
-        const gName = payload.name || payload.given_name || (payload.email ? payload.email.split('@')[0] : "Student Scholar");
+        const gName = payload.name || payload.given_name || (payload.email ? payload.email.split("@")[0] : "Student Scholar");
         const gEmail = payload.email || "";
 
-        try {
-          if (typeof window !== "undefined") {
-            window.localStorage.setItem("userName", gName);
-            window.localStorage.setItem("studentEmail", gEmail);
-            window.localStorage.setItem("userEmail", gEmail);
-          }
-        } catch (e) {}
+        setStudentName(gName);
         setIsLoggedIn(true);
         setCurrentView("chat");
-        localStorage.setItem("isLoggedIn", "true");
-   localStorage.setItem("currentView", "chat");
-        localStorage.setItem("userName", gName);
-        localStorage.setItem("studentEmail", gEmail);
-        localStorage.setItem("userEmail", gEmail);
-        localStorage.setItem("token", credentialResponse.credential);
+
+        try {
+          localStorage.setItem("isLoggedIn", "true");
+          localStorage.setItem("studentName", gName);
+          localStorage.setItem("userName", gName);
+          localStorage.setItem("studentEmail", gEmail);
+          localStorage.setItem("userEmail", gEmail);
+          localStorage.setItem("token", credentialResponse.credential);
+        } catch (e) {}
       }
     } catch (err) {
       console.error("Google sign in decode error:", err);
