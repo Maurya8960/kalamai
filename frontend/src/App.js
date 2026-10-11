@@ -1273,6 +1273,18 @@ function App() {
 
         {currentView === "syllabus" && (
         <SyllabusDirectory onBackToChat={() => navigateTo("home")} />
+        )}
+
+        {currentView === "pyq" && (
+          <PyqDirectory onOpenSubjectPrompt={(promptText) => {
+            setCurrentView("chat");
+            if (typeof setInputMessage === "function") setInputMessage(promptText);
+          }} />
+        )}
+
+        {currentView === "cheatsheet" && (
+          <CheatSheetDirectory />
+        
       )}
 
 {(currentView === "home" || currentView === "features") && !isLoggedIn && (
