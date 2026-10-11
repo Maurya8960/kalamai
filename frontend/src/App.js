@@ -1,3 +1,6 @@
+
+
+
 import SyllabusDirectory from './SyllabusDirectory';
 import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
@@ -5,6 +8,87 @@ import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { GoogleOAuthProvider, GoogleLogin } from "@react-oauth/google";
 import { 
+
+
+// AKTU High-Yield PYQs & Quick Revision Sheets Hub
+const ExamRevisionHub = ({ onOpenSubjectPrompt }) => {
+  const revisionPacks = [
+    { title: "B.Tech Unit-Wise PYQs (Last 5 Years)", icon: "📑", desc: "Most repeated questions with AI-generated step-by-step model solutions.", badge: "Must Solve", prompt: "Explain the top 5 most repeated exam questions from AKTU Previous Year Papers with step-by-step numerical solutions." },
+    { title: "One-Night Formula & Cheat Sheets", icon: "⚡", desc: "Dense 1-page formula summaries, circuit diagrams, and derivation roadmaps.", badge: "Exam Booster", prompt: "Generate a comprehensive 1-page exam cheat sheet with all essential formulas and derivations for today study." },
+    { title: "Quantum Series AI Explainer", icon: "🧠", desc: "Break down difficult Quantum topic questions into crisp 7-mark & 10-mark answers.", badge: "High Yield", prompt: "Format an answer for a 10-mark AKTU semester question: include key points, diagram description, and conclusion." },
+    { title: "Viva & Lab Practical Quick Notes", icon: "🔬", desc: "Viva viva-voce questions and lab experiment code snippets ready to memorize.", badge: "Practical", prompt: "Provide the top 10 most asked viva questions and concepts for engineering practicals." }
+  ];
+
+  return (
+    <div style={{ maxWidth: "1200px", margin: "20px auto 60px", padding: "0 20px" }}>
+      <div style={{ textAlign: "center", marginBottom: "32px" }}>
+        <h2 style={{ fontSize: "28px", fontWeight: "900", color: "#0F172A", marginBottom: "8px" }}>
+          AKTU Exam Preparation & PYQ Hub 🎯
+        </h2>
+        <p style={{ color: "#64748B", fontSize: "15px" }}>
+          Instant access to repeated exam questions, concise derivations, and AI-powered revision sheets.
+        </p>
+      </div>
+
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(270px, 1fr))", gap: "20px" }}>
+        {revisionPacks.map((pack, idx) => (
+          <div
+            key={idx}
+            style={{
+              background: "#FFFFFF",
+              borderRadius: "18px",
+              padding: "24px",
+              border: "1.5px solid #FED7AA",
+              boxShadow: "0 8px 24px rgba(234, 88, 12, 0.06)",
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "space-between",
+              transition: "transform 0.2s ease, box-shadow 0.2s ease",
+              cursor: "pointer"
+            }}
+            onClick={() => onOpenSubjectPrompt(pack.prompt)}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.transform = "translateY(-4px)";
+              e.currentTarget.style.boxShadow = "0 14px 30px rgba(234, 88, 12, 0.16)";
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.transform = "translateY(0)";
+              e.currentTarget.style.boxShadow = "0 8px 24px rgba(234, 88, 12, 0.06)";
+            }}
+          >
+            <div>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "12px" }}>
+                <span style={{ fontSize: "32px" }}>{pack.icon}</span>
+                <span style={{ background: "#FFF7ED", color: "#EA580C", fontSize: "11px", fontWeight: "800", padding: "4px 10px", borderRadius: "12px" }}>
+                  {pack.badge}
+                </span>
+              </div>
+              <h3 style={{ fontSize: "17px", fontWeight: "800", color: "#0F172A", marginBottom: "8px" }}>{pack.title}</h3>
+              <p style={{ fontSize: "13px", color: "#64748B", lineHeight: "1.5" }}>{pack.desc}</p>
+            </div>
+            <button
+              style={{
+                marginTop: "18px",
+                width: "100%",
+                background: "linear-gradient(135deg, #EA580C 0%, #C2410C 100%)",
+                color: "#FFFFFF",
+                border: "none",
+                borderRadius: "12px",
+                padding: "10px",
+                fontSize: "13px",
+                fontWeight: "700",
+                cursor: "pointer"
+              }}
+            >
+              Solve in KalamAI →
+            </button>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
+
   Mail, MessageCircle, Phone, Quote, ChevronLeft, ChevronRight, 
   Star, BookOpen, Layers, Award, Sparkles, CheckCircle2, Shield, 
   Brain, Zap, Target, LayoutDashboard, Rocket 
@@ -427,6 +511,10 @@ function App() {
       }
     } else if (tab === "chat") {
       setCurrentView("chat");
+    } else if (tab === "syllabus") {
+      setCurrentView("syllabus");
+    } else if (tab === "pyq") {
+      setCurrentView("pyq");
     } else if (tab === "features") {
       if (isLoggedIn) {
         setCurrentView("chat");
@@ -437,8 +525,6 @@ function App() {
           if (el) el.scrollIntoView({ behavior: "smooth" });
         }, 120);
       }
-    } else if (tab === "syllabus") {
-      setCurrentView("syllabus");
     } else if (tab === "about") {
       if (isLoggedIn) {
         setCurrentView("chat");
@@ -823,7 +909,7 @@ function App() {
                   KalamAI Chat
                 </span>
 
-                {/* Upgrade Pro */}
+                {/* ⚡ Upgrade Pro Button */}
                 <button
                   type="button"
                   onClick={() => {
@@ -873,6 +959,21 @@ function App() {
                   }}
                 >
                   Syllabus
+                </span>
+
+                {/* PYQ Hub */}
+                <span
+                  onClick={() => setCurrentView("pyq")}
+                  style={{
+                    cursor: "pointer",
+                    color: currentView === "pyq" ? "#EA580C" : "#4B5563",
+                    borderBottom: currentView === "pyq" ? "3px solid #EA580C" : "3px solid transparent",
+                    paddingBottom: "6px",
+                    fontWeight: currentView === "pyq" ? "800" : "600",
+                    transition: "all 0.2s ease"
+                  }}
+                >
+                  PYQ & Cheat Sheets
                 </span>
               </>
             ) : (
