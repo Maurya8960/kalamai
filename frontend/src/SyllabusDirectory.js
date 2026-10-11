@@ -129,6 +129,50 @@ export default function SyllabusDirectory({ onBackToChat }) {
     b.code.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
+  
+const bpharmSyllabusData = [
+  {
+    code: "BP-01",
+    bg: "#EFF6FF",
+    color: "#2563EB",
+    title: "Regulations & Ordinance (I, II, III & IV Year): 2026-27",
+    desc: "Complete academic regulations, PCI guidelines and ordinance for all 4 years",
+    pdfUrl: "/syllabus_btech/B.Pharm. Programme.pdf"
+  },
+  {
+    code: "BP-02",
+    bg: "#ECFDF5",
+    color: "#059669",
+    title: "Evaluation scheme & syllabus (I, II, III & IV Year): 2026-27",
+    desc: "Official semester-wise credit distribution, practicals and evaluation matrix",
+    pdfUrl: "/syllabus_btech/Evaluation Scheme and Syll...mme.pdf"
+  },
+  {
+    code: "BP-03",
+    bg: "#FFF7ED",
+    color: "#D97706",
+    title: "Updated Ordinance – Bachelor of Pharmacy: 2020 – 21",
+    desc: "Revised university notifications, grading standards & ordinance clauses",
+    pdfUrl: "/syllabus_btech/Updated Ordinan...ct 20.pdf"
+  },
+  {
+    code: "BP-04",
+    bg: "#FDF2F8",
+    color: "#DB2777",
+    title: "Bachelor of Pharmacy 4th year on (PCI Guidelines) – Modified: 2020-21",
+    desc: "Final year advanced pharmaceutical technology, project work & clinical modules",
+    pdfUrl: "/syllabus_btech/B.Pharm.-IVth Year revi...021.pdf"
+  },
+  {
+    code: "BP-05",
+    bg: "#F5F3FF",
+    color: "#7C3AED",
+    title: "Bachelor of Pharmacy I, II, III & IV Year syllabus 2019-2020",
+    desc: "Foundational syllabus for pharmaceutics, pharmacology & chemistry modules",
+    pdfUrl: "/syllabus_btech/Bachelor of Pharma...2021.pdf"
+  }
+];
+
   return (
     <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '30px 20px 80px', fontFamily: 'inherit' }}>
       
@@ -190,11 +234,11 @@ export default function SyllabusDirectory({ onBackToChat }) {
         </div>
 
         {/* B.Pharm Card */}
-        <div style={{ background: '#FFFFFF', border: '1.5px solid #E2E8F0', borderRadius: '20px', padding: '24px 20px', textAlign: 'center' }}>
+        <div onClick={() => setActiveTab('bpharm')} style={{ background: activeTab === 'bpharm' ? 'linear-gradient(180deg, #FFFFFF, #FFF7ED)' : '#FFFFFF', border: activeTab === 'bpharm' ? '2px solid #EA580C' : '1.5px solid #E2E8F0', borderRadius: '20px', padding: '24px 20px', textAlign: 'center', cursor: 'pointer', boxShadow: activeTab === 'bpharm' ? '0 12px 28px rgba(234, 88, 12, 0.14)' : '0 4px 12px rgba(0,0,0,0.03)', transition: 'all 0.25s ease' }}>
           <div style={{ width: '52px', height: '52px', margin: '0 auto 14px', borderRadius: '16px', background: '#ECFDF5', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '22px' }}>🧪</div>
           <h3 style={{ fontSize: '20px', fontWeight: '800', color: '#0F172A', margin: '0 0 6px' }}>B.Pharm</h3>
           <p style={{ fontSize: '12px', color: '#64748B', fontWeight: '600', margin: '0 0 16px' }}>PCI Approved 8 Semesters</p>
-          <button style={{ background: '#F8FAFC', border: '1px solid #CBD5E1', color: '#475569', padding: '7px 16px', borderRadius: '12px', fontSize: '12px', fontWeight: '700' }}>
+          <button style={{ background: activeTab === 'bpharm' ? '#EA580C' : '#FFF', border: '1.5px solid #EA580C', color: activeTab === 'bpharm' ? '#FFF' : '#EA580C', padding: '7px 16px', borderRadius: '12px', fontSize: '12px', fontWeight: '800', cursor: 'pointer' }}>
             View Syllabus →
           </button>
         </div>
@@ -204,7 +248,7 @@ export default function SyllabusDirectory({ onBackToChat }) {
           <div style={{ width: '52px', height: '52px', margin: '0 auto 14px', borderRadius: '16px', background: '#FFFBEB', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '22px' }}>📊</div>
           <h3 style={{ fontSize: '20px', fontWeight: '800', color: '#0F172A', margin: '0 0 6px' }}>MBA</h3>
           <p style={{ fontSize: '12px', color: '#64748B', fontWeight: '600', margin: '0 0 16px' }}>1st & 2nd Year Dual Specializations</p>
-          <button style={{ background: '#F8FAFC', border: '1px solid #CBD5E1', color: '#475569', padding: '7px 16px', borderRadius: '12px', fontSize: '12px', fontWeight: '700' }}>
+          <button onClick={(e) => { e.stopPropagation(); setActiveTab('bpharm'); }} style={{ background: activeTab === 'bpharm' ? '#EA580C' : '#FFF', border: '1.5px solid #EA580C', color: activeTab === 'bpharm' ? '#FFF' : '#EA580C', padding: '7px 16px', borderRadius: '12px', fontSize: '12px', fontWeight: '800', cursor: 'pointer' }}>
             1st & 2nd Year Portals →
           </button>
         </div>
@@ -579,6 +623,92 @@ export default function SyllabusDirectory({ onBackToChat }) {
         </div>
       </div>
 
+
+      {/* B.Pharm Section: Table + Materials + Detailed Structure */}
+      {activeTab === 'bpharm' && (
+        <div style={{ marginTop: '24px', marginBottom: '36px' }}>
+          <div style={{ background: '#0F172A', borderRadius: '16px 16px 0 0', padding: '18px 24px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <div>
+              <span style={{ fontSize: '11px', fontWeight: '800', color: '#38BDF8', letterSpacing: '1px', textTransform: 'uppercase' }}>DIRECT OFFICIAL DOWNLOADS</span>
+              <h3 style={{ fontSize: '18px', fontWeight: '800', color: '#FFFFFF', margin: '4px 0 0' }}>AKTU B.PHARM OFFICIAL SYLLABUS (2026-27)</h3>
+            </div>
+          </div>
+
+          <div style={{ background: '#FFFFFF', border: '1px solid #E2E8F0', borderTop: 'none', borderRadius: '0 0 16px 16px', overflow: 'hidden', boxShadow: '0 10px 25px rgba(0,0,0,0.03)' }}>
+            {bpharmSyllabusData.map((item, idx) => (
+              <div key={idx} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '18px 24px', borderBottom: idx !== bpharmSyllabusData.length - 1 ? '1px solid #F1F5F9' : 'none', flexWrap: 'wrap', gap: '12px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '16px', flex: 1, minWidth: '260px' }}>
+                  <span style={{ background: item.bg, color: item.color, fontWeight: '800', fontSize: '12px', padding: '6px 12px', borderRadius: '8px', border: '1px solid ' + item.color + '33' }}>{item.code}</span>
+                  <div>
+                    <h4 style={{ fontSize: '15px', fontWeight: '700', color: '#0F172A', margin: 0 }}>{item.title}</h4>
+                    <p style={{ fontSize: '12px', color: '#64748B', margin: '3px 0 0' }}>{item.desc}</p>
+                  </div>
+                </div>
+                <a 
+                  href={item.pdfUrl} 
+                  download 
+                  target="_blank" 
+                  rel="noreferrer"
+                  style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '8px',
+                    background: 'linear-gradient(135deg, #2563EB 0%, #1D4ED8 100%)',
+                    color: '#FFFFFF',
+                    padding: '10px 22px',
+                    borderRadius: '12px',
+                    fontWeight: '700',
+                    fontSize: '13px',
+                    textDecoration: 'none',
+                    boxShadow: '0 4px 14px rgba(37,99,235,0.35)'
+                  }}
+                >
+                  📥 Download PDF
+                </a>
+              </div>
+            ))}
+          </div>
+
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '16px', marginTop: '24px' }}>
+            {[
+              { title: 'B.Pharm All Subject PYQs', icon: '📑' },
+              { title: 'B.Pharm All Subject Notes', icon: '📚' },
+              { title: 'B.Pharm All Subject Syllabus', icon: '📋' }
+            ].map((mat, i) => (
+              <div key={i} style={{ background: '#FFFFFF', border: '1px solid #E2E8F0', borderRadius: '14px', padding: '16px 20px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', boxShadow: '0 4px 12px rgba(0,0,0,0.03)' }}>
+                <span style={{ fontSize: '14px', fontWeight: '700', color: '#0F172A' }}>{mat.icon} {mat.title}</span>
+                <span style={{ color: '#2563EB', fontWeight: 'bold' }}>→</span>
+              </div>
+            ))}
+          </div>
+
+          <div style={{ marginTop: '28px', background: '#FFFFFF', border: '1px solid #E2E8F0', borderRadius: '18px', padding: '30px', boxShadow: '0 4px 20px rgba(0,0,0,0.03)' }}>
+            <h3 style={{ fontSize: '20px', fontWeight: '800', color: '#0F172A', marginBottom: '10px' }}>AKTU B.Pharm Academic Structure & Subjects (2026–27)</h3>
+            <p style={{ fontSize: '14px', color: '#475569', lineHeight: '1.7', marginBottom: '22px' }}>
+              Prescribed curriculum under PCI guidelines spanning across 8 comprehensive semesters.
+            </p>
+
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '18px' }}>
+              <div style={{ background: '#F8FAFC', padding: '18px', borderRadius: '12px', border: '1px solid #E2E8F0' }}>
+                <h4 style={{ fontSize: '14px', fontWeight: '800', color: '#2563EB', marginBottom: '6px' }}>1st Year (Sem I & II)</h4>
+                <p style={{ fontSize: '12px', color: '#475569', margin: 0, lineHeight: '1.5' }}>Human Anatomy & Physiology, Pharmaceutical Analysis, Inorganic Chemistry, Remedial Biology/Maths & Biochemistry.</p>
+              </div>
+              <div style={{ background: '#F8FAFC', padding: '18px', borderRadius: '12px', border: '1px solid #E2E8F0' }}>
+                <h4 style={{ fontSize: '14px', fontWeight: '800', color: '#059669', marginBottom: '6px' }}>2nd Year (Sem III & IV)</h4>
+                <p style={{ fontSize: '12px', color: '#475569', margin: 0, lineHeight: '1.5' }}>Organic Chemistry, Physical Pharmaceutics, Microbiology, Pharmaceutical Engineering & Pharmacology.</p>
+              </div>
+              <div style={{ background: '#F8FAFC', padding: '18px', borderRadius: '12px', border: '1px solid #E2E8F0' }}>
+                <h4 style={{ fontSize: '14px', fontWeight: '800', color: '#D97706', marginBottom: '6px' }}>3rd Year (Sem V & VI)</h4>
+                <p style={{ fontSize: '12px', color: '#475569', margin: 0, lineHeight: '1.5' }}>Medicinal Chemistry, Industrial Pharmacy, Pharmacology, Herbal Drug Technology & Biopharmaceutics.</p>
+              </div>
+              <div style={{ background: '#F8FAFC', padding: '18px', borderRadius: '12px', border: '1px solid #E2E8F0' }}>
+                <h4 style={{ fontSize: '14px', fontWeight: '800', color: '#7C3AED', marginBottom: '6px' }}>4th Year (Sem VII & VIII)</h4>
+                <p style={{ fontSize: '12px', color: '#475569', margin: 0, lineHeight: '1.5' }}>Instrumental Methods, Pharmacy Practice, Novel Drug Delivery Systems (NDDS), Biostatistics & Project Work.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
