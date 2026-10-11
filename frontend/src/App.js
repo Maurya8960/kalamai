@@ -128,6 +128,50 @@ const ExamRevisionHub = ({ onOpenSubjectPrompt }) => {
 };
 
 
+
+const bpharmSyllabusData = [
+  {
+    code: "BP-01",
+    bg: "#EFF6FF",
+    color: "#2563EB",
+    title: "Regulations & Ordinance (I, II, III & IV Year): 2026-27",
+    desc: "Complete academic regulations, PCI guidelines and ordinance for all 4 years",
+    pdfUrl: "/syllabus_btech/B.Pharm. Programme.pdf"
+  },
+  {
+    code: "BP-02",
+    bg: "#ECFDF5",
+    color: "#059669",
+    title: "Evaluation scheme & syllabus (I, II, III & IV Year): 2026-27",
+    desc: "Official semester-wise credit distribution, practicals and evaluation matrix",
+    pdfUrl: "/syllabus_btech/Evaluation Scheme and Syll...mme.pdf"
+  },
+  {
+    code: "BP-03",
+    bg: "#FFF7ED",
+    color: "#D97706",
+    title: "Updated Ordinance – Bachelor of Pharmacy: 2020 – 21",
+    desc: "Revised university notifications, grading standards & ordinance clauses",
+    pdfUrl: "/syllabus_btech/Updated Ordinan...ct 20.pdf"
+  },
+  {
+    code: "BP-04",
+    bg: "#FDF2F8",
+    color: "#DB2777",
+    title: "Bachelor of Pharmacy 4th year on (PCI Guidelines) – Modified: 2020-21",
+    desc: "Final year advanced pharmaceutical technology, project work & clinical modules",
+    pdfUrl: "/syllabus_btech/B.Pharm.-IVth Year revi...021.pdf"
+  },
+  {
+    code: "BP-05",
+    bg: "#F5F3FF",
+    color: "#7C3AED",
+    title: "Bachelor of Pharmacy I, II, III & IV Year syllabus 2019-2020",
+    desc: "Foundational syllabus for pharmaceutics, pharmacology & chemistry modules",
+    pdfUrl: "/syllabus_btech/Bachelor of Pharma...2021.pdf"
+  }
+];
+
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [studentName, setStudentName] = useState(() => localStorage.getItem("userName") || localStorage.getItem("studentName") || "Student Scholar");
