@@ -1,3 +1,5 @@
+import PyqDirectory from './PyqDirectory';
+import CheatSheetDirectory from './CheatSheetDirectory';
 import SyllabusDirectory from './SyllabusDirectory';
 import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
@@ -516,6 +518,8 @@ function App() {
       setCurrentView("syllabus");
     } else if (tab === "pyq") {
       setCurrentView("pyq");
+    } else if (tab === "cheatsheet") {
+      setCurrentView("cheatsheet");
     } else if (tab === "features") {
       if (isLoggedIn) {
         setCurrentView("chat");
@@ -910,7 +914,7 @@ function App() {
                   KalamAI Chat
                 </span>
 
-                {/* ⚡ Upgrade Pro Button */}
+                {/* ⚡ Upgrade Pro */}
                 <button
                   type="button"
                   onClick={() => {
@@ -962,7 +966,7 @@ function App() {
                   Syllabus
                 </span>
 
-                {/* PYQ Hub */}
+                {/* PYQs Tab */}
                 <span
                   onClick={() => setCurrentView("pyq")}
                   style={{
@@ -974,7 +978,22 @@ function App() {
                     transition: "all 0.2s ease"
                   }}
                 >
-                  PYQ & Cheat Sheets
+                  PYQs
+                </span>
+
+                {/* Cheat Sheets Tab */}
+                <span
+                  onClick={() => setCurrentView("cheatsheet")}
+                  style={{
+                    cursor: "pointer",
+                    color: currentView === "cheatsheet" ? "#EA580C" : "#4B5563",
+                    borderBottom: currentView === "cheatsheet" ? "3px solid #EA580C" : "3px solid transparent",
+                    paddingBottom: "6px",
+                    fontWeight: currentView === "cheatsheet" ? "800" : "600",
+                    transition: "all 0.2s ease"
+                  }}
+                >
+                  Cheat Sheets
                 </span>
               </>
             ) : (
