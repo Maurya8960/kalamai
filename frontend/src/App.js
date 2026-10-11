@@ -129,57 +129,9 @@ const ExamRevisionHub = ({ onOpenSubjectPrompt }) => {
 
 
 function App() {
-  // Auto redirect logged in user from empty home to chat
-  useEffect(() => {
-    try {
-      const savedAuth = localStorage.getItem("isLoggedIn") === "true" || !!localStorage.getItem("token") || !!localStorage.getItem("studentEmail");
-      if (savedAuth && currentView === "home") {
-        setCurrentView("chat");
-      }
-    } catch (e) {}
-  }, [isLoggedIn, currentView]);
-
-
-  useEffect(() => {
-    if (isLoggedIn && currentView === "home") {
-      setCurrentView("chat");
-    }
-  }, [isLoggedIn, currentView]);
-
-  const resolvedDisplayName = (() => {
-    try {
-      const explicitName = localStorage.getItem("kalamai_user_name");
-      if (explicitName && explicitName.trim() && explicitName !== "Guest Student") return explicitName;
-      const explicitEmail = localStorage.getItem("kalamai_user_email");
-      if (explicitEmail && explicitEmail.includes("@")) {
-        const p = explicitEmail.split("@")[0].replace(/[^a-zA-Z0-9]/g, " ").trim();
-        return p.split(" ").map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(" ") || "Student Scholar";
-      }
-    } catch(e) {}
-    return "Student Scholar";
-  })();
-
-
-  const decodeGoogleTokenSafe = (token) => {
-    try {
-      const base64Url = token.split(".")[1];
-      const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
-      const jsonPayload = decodeURIComponent(
-        window.atob(base64)
-          .split("")
-          .map((c) => "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2))
-          .join("")
-      );
-      return JSON.parse(jsonPayload);
-    } catch (e) {
-      return null;
-    }
-  };
-
-  
-  const [studentName, setStudentName] = useState(() => localStorage.getItem("kalamai_user_name") || "");
-  const [studentEmail, setStudentEmail] = useState(() => localStorage.getItem("kalamai_user_email") || "");
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [studentName, setStudentName] = useState(() => localStorage.getItem("userName") || localStorage.getItem("studentName") || "Student Scholar");
+  const resolvedDisplayName = studentName || (typeof window !== "undefined" && window.localStorage.getItem("userName")) || "Student Scholar";
   const user = null;
   
   // Logged-in user dynamic info extraction
@@ -223,14 +175,7 @@ function App() {
   const currentUserEmail = getLoggedInUserEmail();
   const userInitial = currentUserName.charAt(0).toUpperCase();
 
-  const [currentView, setCurrentView] = useState(() => {
-    try {
-      const savedAuth = localStorage.getItem("isLoggedIn") === "true" || !!localStorage.getItem("token") || !!localStorage.getItem("studentEmail");
-      return savedAuth ? "chat" : "home";
-    } catch (e) {
-      return "home";
-    }
-  });
+  const [currentView, setCurrentView] = useState("home");
   const [selectedYear, setSelectedYear] = useState(1); 
   const [authMode, setAuthMode] = useState('login'); 
   const [loginError, setLoginError] = useState('');
@@ -364,11 +309,13 @@ function App() {
   }, [currentView]);
 
   useEffect(() => {
-    if(!isLoggedIn && currentView === 'home') {
-      const interval = setInterval(() => { handleNextTestimonial(); }, 5000);
-      return () => clearInterval(interval);
-    }
-  }, [isLoggedIn, currentView, activeTestimonial]);
+    try {
+      const savedAuth = localStorage.getItem("isLoggedIn") === "true";
+      if (savedAuth) {
+        setIsLoggedIn(true);
+      }
+    } catch (e) {}
+  }, []);
 
   useEffect(() => {
     if (localStorage.getItem('kalam_session') === 'active') setIsLoggedIn(true);
@@ -1720,12 +1667,12 @@ function App() {
               <div style={{ background: "#18181B", borderRadius: "20px", border: "1px solid #27272A", padding: "20px", display: "flex", flexDirection: "column" }}>
                 <div style={{ fontWeight: "800", color: "#A1A1AA", fontSize: "13px" }}>DAILY PASS</div>
                 <h3 style={{ fontSize: "18px", margin: "6px 0", color: "#FFF" }}>Exam Cram</h3>
-                <div style={{ fontSize: "28px", fontWeight: "900", color: "#FAFAFA", marginBottom: "14px" }}>₹10 <span style={{ fontSize: "12px", color: "#71717A" }}>/ 24 hrs</span></div>
+                <div style={{ fontSize: "28px", fontWeight: "900", color: "#FAFAFA", marginBottom: "14px" }}>₹5 <span style={{ fontSize: "12px", color: "#71717A" }}>/ 24 hrs</span></div>
                 <button
                   type="button"
                   onClick={() => handlePayPlan({ name: "Daily Cram", price: 5 })}
                   style={{ width: "100%", padding: "10px", borderRadius: "12px", background: "#27272A", border: "1px solid #3F3F46", color: "#FFF", fontWeight: "700", cursor: "pointer", marginBottom: "16px" }}
-                >Pay ₹10</button>
+                >Pay ₹5</button>
                 <div style={{ display: "flex", flexDirection: "column", gap: "8px", fontSize: "12px", color: "#D4D4D8" }}>
                   <div>✓ Unlimited chat for 24 hours</div>
                   <div>✓ AKTU Quick Revision Notes</div>
