@@ -173,6 +173,9 @@ const bpharmSyllabusData = [
   }
 ];
 
+  
+
+
   return (
     <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '30px 20px 80px', fontFamily: 'inherit' }}>
       
@@ -254,7 +257,19 @@ const bpharmSyllabusData = [
         </div>
 
         {/* MCA Card */}
-        <div style={{ background: '#FFFFFF', border: '1.5px solid #E2E8F0', borderRadius: '20px', padding: '24px 20px', textAlign: 'center' }}>
+        <div 
+          onClick={() => setActiveTab('mca')}
+          style={{
+            background: activeTab === 'mca' ? 'linear-gradient(180deg, #FFFFFF, #FFF7ED)' : '#FFFFFF',
+            border: activeTab === 'mca' ? '2px solid #EA580C' : '1.5px solid #E2E8F0',
+            borderRadius: '20px',
+            padding: '24px 20px',
+            textAlign: 'center',
+            cursor: 'pointer',
+            boxShadow: activeTab === 'mca' ? '0 12px 28px rgba(234, 88, 12, 0.14)' : '0 4px 12px rgba(0,0,0,0.03)',
+            transition: 'all 0.25s ease'
+          }}
+        >
           <div style={{ width: '52px', height: '52px', margin: '0 auto 14px', borderRadius: '16px', background: '#F5F3FF', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '22px' }}>💻</div>
           <h3 style={{ fontSize: '20px', fontWeight: '800', color: '#0F172A', margin: '0 0 6px' }}>MCA</h3>
           <p style={{ fontSize: '12px', color: '#64748B', fontWeight: '600', margin: '0 0 16px' }}>2-Year Master of Computer Apps</p>
