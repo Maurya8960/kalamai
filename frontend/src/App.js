@@ -1,6 +1,3 @@
-
-
-
 import SyllabusDirectory from './SyllabusDirectory';
 import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
@@ -10,11 +7,49 @@ import { GoogleOAuthProvider, GoogleLogin } from "@react-oauth/google";
 import { 
 
 
+
+  Mail, MessageCircle, Phone, Quote, ChevronLeft, ChevronRight, 
+  Star, BookOpen, Layers, Award, Sparkles, CheckCircle2, Shield, 
+  Brain, Zap, Target, LayoutDashboard, Rocket 
+} from "lucide-react";
+
+
+
+
+const BACKEND_URL = 'https://kalamai-iy45.onrender.com';
+
+const testimonials = [
+  { name: "Rahul Sharma", role: "B.Tech 3rd Year", text: "KalamAI changed my exam prep. The syllabus tracking and instant notes are just mind-blowing!", img: "https://i.pravatar.cc/150?u=rahul" },
+  { name: "Dr. Anita Desai", role: "Professor, AKTU", text: "A fantastic tool for students. It simplifies complex algorithms into easy-to-understand real-life examples.", img: "https://i.pravatar.cc/150?u=anita" },
+  { name: "Karan Singh", role: "B.Tech Final Year", text: "I cleared my backlogs because of this AI. It's like having a personal tutor 24/7.", img: "https://i.pravatar.cc/150?u=karan" },
+  { name: "Priya Patel", role: "B.Tech 2nd Year", text: "The UI is so premium and the notes generation is lightning fast. Highly recommended!", img: "https://i.pravatar.cc/150?u=priya" },
+  { name: "Vikram Kumar", role: "B.Tech 1st Year", text: "As a fresher, understanding the AKTU pattern was tough. KalamAI made everything crystal clear.", img: "https://i.pravatar.cc/150?u=vikram" }
+];
+
+const features = [
+  { icon: <BookOpen size={24} color="#EA580C" />, title: "Complete AKTU Syllabus", desc: "Access the entire B.Tech curriculum. Every unit, every topic, perfectly aligned.", color: "#FFEDD5" },
+  { icon: <Brain size={24} color="#F59E0B" />, title: "AI Notes Generation", desc: "Get smart, structured, and easy-to-understand notes generated instantly by AI.", color: "#FEF3C7" },
+  { icon: <Zap size={24} color="#EF4444" />, title: "Instant Doubt Resolution", desc: "Stuck on a concept? Ask KalamAI and get detailed explanations 24/7.", color: "#FEE2E2" },
+  { icon: <Target size={24} color="#EAB308" />, title: "Exam-Focused Prep", desc: "Highlight important topics and previous year questions to maximize your score.", color: "#FEF9C3" },
+  { icon: <LayoutDashboard size={24} color="#F97316" />, title: "Personalized Dashboard", desc: "Track your progress and access your saved notes easily from your dashboard.", color: "#FFEDD5" },
+  { icon: <Rocket size={24} color="#F43F5E" />, title: "Career Guidance", desc: "Get AI-driven tips on internships, projects, and skills to boost your career.", color: "#FFE4E6" }
+];
+
+const aboutCards = [
+  { title: "Empowering Students", content: "KalamAI was built with a single mission: to empower B.Tech students by providing them with the best AI-driven educational tools. We believe quality education should be accessible to everyone.", accent: "#EA580C" },
+  { title: "The Developer", content: "Hi, I'm Ansh Maurya, a final-year B.Tech IT student and Full Stack Developer at Kanpur Institute of Technology. I built KalamAI to solve the real problems students face during exam prep.", accent: "#F59E0B" },
+  { title: "Our Technology", content: "We leverage the power of Google's Gemini AI, combined with a robust React & Node.js architecture, to deliver instant, accurate, and syllabus-aligned notes tailored for AKTU.", accent: "#F97316" },
+  { title: "Community Driven", content: "KalamAI is constantly evolving based on feedback from students and professors. Join our community and help us shape the future of learning.", accent: "#EF4444" },
+  { title: "Future Vision", content: "We aim to expand KalamAI to cover more universities and incorporate interactive virtual labs, making complex engineering concepts easier to grasp.", accent: "#EAB308" }
+];
+
+
 // AKTU High-Yield PYQs & Quick Revision Sheets Hub
 const ExamRevisionHub = ({ onOpenSubjectPrompt }) => {
   const revisionPacks = [
     { title: "B.Tech Unit-Wise PYQs (Last 5 Years)", icon: "📑", desc: "Most repeated questions with AI-generated step-by-step model solutions.", badge: "Must Solve", prompt: "Explain the top 5 most repeated exam questions from AKTU Previous Year Papers with step-by-step numerical solutions." },
-    { title: "One-Night Formula & Cheat Sheets", icon: "⚡", desc: "Dense 1-page formula summaries, circuit diagrams, and derivation roadmaps.", badge: "Exam Booster", prompt: "Generate a comprehensive 1-page exam cheat sheet with all essential formulas and derivations for today study." },
+
+{ title: "One-Night Formula & Cheat Sheets", icon: "⚡", desc: "Dense 1-page formula summaries, circuit diagrams, and derivation roadmaps.", badge: "Exam Booster", prompt: "Generate a comprehensive 1-page exam cheat sheet with all essential formulas and derivations for today study." },
     { title: "Quantum Series AI Explainer", icon: "🧠", desc: "Break down difficult Quantum topic questions into crisp 7-mark & 10-mark answers.", badge: "High Yield", prompt: "Format an answer for a 10-mark AKTU semester question: include key points, diagram description, and conclusion." },
     { title: "Viva & Lab Practical Quick Notes", icon: "🔬", desc: "Viva viva-voce questions and lab experiment code snippets ready to memorize.", badge: "Practical", prompt: "Provide the top 10 most asked viva questions and concepts for engineering practicals." }
   ];
@@ -89,40 +124,6 @@ const ExamRevisionHub = ({ onOpenSubjectPrompt }) => {
   );
 };
 
-  Mail, MessageCircle, Phone, Quote, ChevronLeft, ChevronRight, 
-  Star, BookOpen, Layers, Award, Sparkles, CheckCircle2, Shield, 
-  Brain, Zap, Target, LayoutDashboard, Rocket 
-} from "lucide-react";
-
-
-
-
-const BACKEND_URL = 'https://kalamai-iy45.onrender.com';
-
-const testimonials = [
-  { name: "Rahul Sharma", role: "B.Tech 3rd Year", text: "KalamAI changed my exam prep. The syllabus tracking and instant notes are just mind-blowing!", img: "https://i.pravatar.cc/150?u=rahul" },
-  { name: "Dr. Anita Desai", role: "Professor, AKTU", text: "A fantastic tool for students. It simplifies complex algorithms into easy-to-understand real-life examples.", img: "https://i.pravatar.cc/150?u=anita" },
-  { name: "Karan Singh", role: "B.Tech Final Year", text: "I cleared my backlogs because of this AI. It's like having a personal tutor 24/7.", img: "https://i.pravatar.cc/150?u=karan" },
-  { name: "Priya Patel", role: "B.Tech 2nd Year", text: "The UI is so premium and the notes generation is lightning fast. Highly recommended!", img: "https://i.pravatar.cc/150?u=priya" },
-  { name: "Vikram Kumar", role: "B.Tech 1st Year", text: "As a fresher, understanding the AKTU pattern was tough. KalamAI made everything crystal clear.", img: "https://i.pravatar.cc/150?u=vikram" }
-];
-
-const features = [
-  { icon: <BookOpen size={24} color="#EA580C" />, title: "Complete AKTU Syllabus", desc: "Access the entire B.Tech curriculum. Every unit, every topic, perfectly aligned.", color: "#FFEDD5" },
-  { icon: <Brain size={24} color="#F59E0B" />, title: "AI Notes Generation", desc: "Get smart, structured, and easy-to-understand notes generated instantly by AI.", color: "#FEF3C7" },
-  { icon: <Zap size={24} color="#EF4444" />, title: "Instant Doubt Resolution", desc: "Stuck on a concept? Ask KalamAI and get detailed explanations 24/7.", color: "#FEE2E2" },
-  { icon: <Target size={24} color="#EAB308" />, title: "Exam-Focused Prep", desc: "Highlight important topics and previous year questions to maximize your score.", color: "#FEF9C3" },
-  { icon: <LayoutDashboard size={24} color="#F97316" />, title: "Personalized Dashboard", desc: "Track your progress and access your saved notes easily from your dashboard.", color: "#FFEDD5" },
-  { icon: <Rocket size={24} color="#F43F5E" />, title: "Career Guidance", desc: "Get AI-driven tips on internships, projects, and skills to boost your career.", color: "#FFE4E6" }
-];
-
-const aboutCards = [
-  { title: "Empowering Students", content: "KalamAI was built with a single mission: to empower B.Tech students by providing them with the best AI-driven educational tools. We believe quality education should be accessible to everyone.", accent: "#EA580C" },
-  { title: "The Developer", content: "Hi, I'm Ansh Maurya, a final-year B.Tech IT student and Full Stack Developer at Kanpur Institute of Technology. I built KalamAI to solve the real problems students face during exam prep.", accent: "#F59E0B" },
-  { title: "Our Technology", content: "We leverage the power of Google's Gemini AI, combined with a robust React & Node.js architecture, to deliver instant, accurate, and syllabus-aligned notes tailored for AKTU.", accent: "#F97316" },
-  { title: "Community Driven", content: "KalamAI is constantly evolving based on feedback from students and professors. Join our community and help us shape the future of learning.", accent: "#EF4444" },
-  { title: "Future Vision", content: "We aim to expand KalamAI to cover more universities and incorporate interactive virtual labs, making complex engineering concepts easier to grasp.", accent: "#EAB308" }
-];
 
 function App() {
 
