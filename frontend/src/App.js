@@ -1,3 +1,4 @@
+import SkillsDirectory from './SkillsDirectory';
 import PyqDirectory from './PyqDirectory';
 import CheatSheetDirectory from './CheatSheetDirectory';
 import SyllabusDirectory from './SyllabusDirectory';
@@ -513,23 +514,21 @@ function App() {
         window.scrollTo({ top: 0, behavior: "smooth" });
       }
     } else if (tab === "chat") {
+      if (!isLoggedIn) {
+        alert("KalamAI Chat access karne ke liye kripya pehle Login karein!");
+        setCurrentView("home");
+        window.scrollTo({ top: 0, behavior: "smooth" });
+        return;
+      }
       setCurrentView("chat");
+    } else if (tab === "skills") {
+      setCurrentView("skills");
     } else if (tab === "syllabus") {
       setCurrentView("syllabus");
     } else if (tab === "pyq") {
       setCurrentView("pyq");
     } else if (tab === "cheatsheet") {
       setCurrentView("cheatsheet");
-    } else if (tab === "features") {
-      if (isLoggedIn) {
-        setCurrentView("chat");
-      } else {
-        setCurrentView("home");
-        setTimeout(() => {
-          const el = document.getElementById("features");
-          if (el) el.scrollIntoView({ behavior: "smooth" });
-        }, 120);
-      }
     } else if (tab === "about") {
       if (isLoggedIn) {
         setCurrentView("chat");
@@ -995,6 +994,21 @@ function App() {
                 >
                   Cheat Sheets
                 </span>
+
+                {/* Skills Tab */}
+                <span
+                  onClick={() => setCurrentView("skills")}
+                  style={{
+                    cursor: "pointer",
+                    color: currentView === "skills" ? "#EA580C" : "#4B5563",
+                    borderBottom: currentView === "skills" ? "3px solid #EA580C" : "3px solid transparent",
+                    paddingBottom: "6px",
+                    fontWeight: currentView === "skills" ? "800" : "600",
+                    transition: "all 0.2s ease"
+                  }}
+                >
+                  Skills
+                </span>
               </>
             ) : (
               <>
@@ -1013,7 +1027,7 @@ function App() {
                   Home
                 </span>
 
-                {/* KalamAI Chat */}
+                {/* KalamAI Chat (Guarded: Alerts if not signed in) */}
                 <span
                   onClick={() => handleNavClick("chat")}
                   style={{
@@ -1057,21 +1071,6 @@ function App() {
                   <span>⚡</span> Upgrade Pro
                 </button>
 
-                {/* Features */}
-                <span
-                  onClick={() => handleNavClick("features")}
-                  style={{
-                    cursor: "pointer",
-                    color: "#4B5563",
-                    borderBottom: "3px solid transparent",
-                    paddingBottom: "6px",
-                    fontWeight: "600",
-                    transition: "all 0.2s ease"
-                  }}
-                >
-                  Features
-                </span>
-
                 {/* Syllabus */}
                 <span
                   onClick={() => handleNavClick("syllabus")}
@@ -1085,6 +1084,21 @@ function App() {
                   }}
                 >
                   Syllabus
+                </span>
+
+                {/* Skills Tab (No Login needed, accessible to all) */}
+                <span
+                  onClick={() => setCurrentView("skills")}
+                  style={{
+                    cursor: "pointer",
+                    color: currentView === "skills" ? "#EA580C" : "#4B5563",
+                    borderBottom: currentView === "skills" ? "3px solid #EA580C" : "3px solid transparent",
+                    paddingBottom: "6px",
+                    fontWeight: currentView === "skills" ? "800" : "600",
+                    transition: "all 0.2s ease"
+                  }}
+                >
+                  Skills
                 </span>
 
                 {/* About Us */}
@@ -1284,6 +1298,10 @@ function App() {
         
       )}
 
+        {currentView === "skills" && (
+          <SkillsDirectory />
+        )}
+
 {(currentView === "home" || currentView === "features") && !isLoggedIn && (
             <>
               <div style={{ textAlign: 'center', marginBottom: '30px' }}>
@@ -1382,7 +1400,7 @@ function App() {
             </>
           )}
 
-          {currentView === "chat" && (
+          {currentView === "chat" && isLoggedIn && (
         <div style={{ display: "flex", maxWidth: "1260px", margin: "30px auto 80px", gap: "20px", padding: "0 16px", alignItems: "stretch" }}>
 
           {/* KalamAI Warm Aesthetic Sidebar */}
