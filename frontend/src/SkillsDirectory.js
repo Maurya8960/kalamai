@@ -4,7 +4,7 @@ const SkillsDirectory = () => {
   const [filter, setFilter] = useState("all");
 
   const skillBooks = [
-    // --- 1. CORE & LANGUAGES ---
+    // --- 1. CORE & SYSTEMS ---
     {
       id: "cpp",
       category: "core",
@@ -63,7 +63,45 @@ const SkillsDirectory = () => {
       filename: "Algorithms0.pdf"
     },
 
-    // --- 2. PYTHON & BACKEND ---
+    // --- 2. BACKEND, CLOUD & DATABASES ---
+    {
+      id: "spring",
+      category: "backend",
+      title: "Spring Framework & Boot",
+      subtitle: "Notes for Professionals",
+      pages: "50+ Pages",
+      edition: "Enterprise Java & Dependency Injection",
+      icon: "🌱",
+      color: "#16A34A",
+      bgGradient: "linear-gradient(135deg, #F0FDF4 0%, #DCFCE7 100%)",
+      badgeColor: "#15803D",
+      highlights: [
+        "Inversion of Control (IoC) & Application Context",
+        "Spring Beans, Annotations & Auto-wiring",
+        "Spring Data JPA, Hibernate & Transaction Mgmt",
+        "REST APIs, Security & Actuator Monitoring"
+      ],
+      filename: "SpringFramework.pdf"
+    },
+    {
+      id: "sql",
+      category: "backend",
+      title: "SQL & Relational Databases",
+      subtitle: "Notes for Professionals",
+      pages: "100+ Pages",
+      edition: "ANSI SQL, Joins & Query Tuning",
+      icon: "💾",
+      color: "#0284C7",
+      bgGradient: "linear-gradient(135deg, #F0F9FF 0%, #E0F2FE 100%)",
+      badgeColor: "#0369A1",
+      highlights: [
+        "Complex Joins (Inner, Left, Cross, Outer)",
+        "Subqueries, Window Functions & CTEs",
+        "Indexing, Primary/Foreign Keys & Constraints",
+        "Transactions, ACID Properties & Query Optimization"
+      ],
+      filename: "SQL.pdf"
+    },
     {
       id: "python",
       category: "backend",
@@ -101,6 +139,25 @@ const SkillsDirectory = () => {
         "Reflection, Dependency Injection & Interfaces"
       ],
       filename: "CSharp1.pdf"
+    },
+    {
+      id: "vb-net",
+      category: "backend",
+      title: "Visual Basic .NET",
+      subtitle: "Notes for Professionals",
+      pages: "100+ Pages",
+      edition: "VB.NET & Windows Application Development",
+      icon: "📑",
+      color: "#0284C7",
+      bgGradient: "linear-gradient(135deg, #F0F9FF 0%, #E0F2FE 100%)",
+      badgeColor: "#075985",
+      highlights: [
+        "Object Oriented Programming in VB.NET",
+        "Event-Driven Architecture & WinForms",
+        "Database Connections via ADO.NET",
+        "Exception Handling & Delegates Management"
+      ],
+      filename: "VisualBasic_NET.pdf"
     },
     {
       id: "dotnet",
@@ -202,6 +259,25 @@ const SkillsDirectory = () => {
 
     // --- 4. MOBILE DEVELOPMENT ---
     {
+      id: "xamarin",
+      category: "mobile",
+      title: "Xamarin.Forms Cross-Platform",
+      subtitle: "Notes for Professionals",
+      pages: "100+ Pages",
+      edition: "iOS & Android Unified Mobile C#",
+      icon: "📱",
+      color: "#2563EB",
+      bgGradient: "linear-gradient(135deg, #EFF6FF 0%, #DBEAFE 100%)",
+      badgeColor: "#1E40AF",
+      highlights: [
+        "XAML UI Layouts & ContentViews",
+        "MVVM Pattern & Data Binding in Mobile",
+        "Custom Renderers & Platform Specifics",
+        "Navigation, SQLite & DependencyService"
+      ],
+      filename: "XamarinForms.pdf"
+    },
+    {
       id: "android",
       category: "mobile",
       title: "Android Native Engineering",
@@ -240,7 +316,7 @@ const SkillsDirectory = () => {
       filename: "iOS0.pdf"
     },
 
-    // --- 5. DEVOPS, SCRIPTS & PRODUCTIVITY ---
+    // --- 5. DEVOPS, SCRIPTS & AUTOMATION ---
     {
       id: "git",
       category: "tools",
@@ -324,7 +400,7 @@ const SkillsDirectory = () => {
           border: "1px solid #FED7AA",
           textTransform: "uppercase"
         }}>
-          OFFICIAL DEVELOPER COMPILATIONS • 15 HIGH-IMPACT BOOKS • 5500+ PAGES
+          OFFICIAL DEVELOPER COMPILATIONS • 19 TECH BOOKS • 5800+ PAGES
         </span>
         <h1 style={{ fontSize: "34px", fontWeight: "900", color: "#0F172A", margin: "0 0 10px", letterSpacing: "-0.5px" }}>
           Engineering Skills & Career Vault ⚡
@@ -337,11 +413,11 @@ const SkillsDirectory = () => {
       {/* Domain Filters */}
       <div style={{ display: "flex", flexWrap: "wrap", gap: "10px", marginBottom: "32px" }}>
         {[
-          { id: "all", label: "All Tech Books (15)" },
+          { id: "all", label: "All Tech Books (19)" },
           { id: "core", label: "Core CS, C/C++ & Algorithms" },
-          { id: "backend", label: "Backend, Python & .NET" },
+          { id: "backend", label: "Backend, Python, SQL & .NET" },
           { id: "frontend", label: "Frontend, Angular & CSS" },
-          { id: "mobile", label: "Mobile (Android & iOS)" },
+          { id: "mobile", label: "Mobile (Android, iOS & Xamarin)" },
           { id: "tools", label: "Git, Bash & Automation" }
         ].map((tab) => (
           <button
