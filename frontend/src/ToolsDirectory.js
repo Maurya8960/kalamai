@@ -1133,8 +1133,11 @@ export default function ToolsDirectory({ onBackToChat }) {
 
           {/* 16+ Utility Tools Grid */}
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "20px" }}>
-            {utilityTools
-              .filter((t) => (selectedCat === "All Tools" || t.cat === selectedCat) && (t.title.toLowerCase().includes(searchQuery.toLowerCase()) || t.desc.toLowerCase().includes(searchQuery.toLowerCase())))
+            {utilityTools.filter((t) => {
+                const matchesCat = !selectedCat || selectedCat === "All Tools" || t.cat.toLowerCase().trim() === selectedCat.toLowerCase().trim();
+                const matchesSearch = !searchQuery || t.title.toLowerCase().includes(searchQuery.toLowerCase()) || t.desc.toLowerCase().includes(searchQuery.toLowerCase());
+                return matchesCat && matchesSearch;
+              })
               .map((tool) => (
                 <div
                   key={tool.id}
