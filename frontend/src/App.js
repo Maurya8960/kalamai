@@ -176,12 +176,45 @@ function App() {
   const currentUserEmail = getLoggedInUserEmail();
   const userInitial = currentUserName.charAt(0).toUpperCase();
 
-  const [currentView, setCurrentView] = useState("home");
+  const [currentView, setCurrentView] = useState(() => {
+    if (typeof window !== "undefined") {
+      const savedView = localStorage.getItem("kalamai_current_view");
+      const hash = window.location.hash.toLowerCase();
+      if (hash.includes("chat")) return "chat";
+      if (hash.includes("syllabus") || hash.includes("official-scheme-table")) return "syllabus";
+      if (hash.includes("pyq")) return "pyq";
+      if (hash.includes("cheatsheet")) return "cheatsheet";
+      if (hash.includes("skill")) return "skills";
+      if (savedView) return savedView;
+    }
+    return "chat";
+  });
   const [selectedYear, setSelectedYear] = useState(1); 
   const [authMode, setAuthMode] = useState('login'); 
   const [loginError, setLoginError] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+
+  // Sync currentView with localStorage and window hash on refresh
+  useEffect(() => {
+    if (currentView) {
+      localStorage.setItem("kalamai_current_view", currentView);
+    }
+  }, [currentView]);
+
+  useEffect(() => {
+    const handleHashChange = () => {
+      const hash = window.location.hash.toLowerCase();
+      if (hash.includes("chat")) setCurrentView("chat");
+      else if (hash.includes("syllabus") || hash.includes("official-scheme-table")) setCurrentView("syllabus");
+      else if (hash.includes("pyq")) setCurrentView("pyq");
+      else if (hash.includes("cheatsheet")) setCurrentView("cheatsheet");
+      else if (hash.includes("skill")) setCurrentView("skills");
+    };
+    window.addEventListener("hashchange", handleHashChange);
+    return () => window.removeEventListener("hashchange", handleHashChange);
+  }, []);
+
   const [name, setName] = useState('');
   const [activeTestimonial, setActiveTestimonial] = useState(1);
   const aboutUsRef = useRef(null);
