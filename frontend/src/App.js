@@ -1840,7 +1840,7 @@ function App() {
                   boxShadow: "0 4px 14px rgba(234, 88, 12, 0.3)"
                 }}
               >
-                <span>🔒</span> Open Notes Admin Portal
+                <span>🔒</span> Open Notes
               </button>
 
               <button
@@ -2047,7 +2047,7 @@ function App() {
 
           </div>
           <div style={{ textAlign: "center", marginTop: "60px", color: "#4B5563", fontSize: "14px", fontWeight: "600" }}>
-            © 2026 KalamAI. Developed by Ansh Maurya. All rights reserved. · <span onClick={() => navigateTo("admin")} style={{ cursor: "pointer", color: "#EA580C", fontWeight: "700" }}>Admin Portal</span>
+            © 2026 KalamAI. Developed by Ansh Maurya. All rights reserved. · <span onClick={() => navigateTo("admin")} style={{ cursor: "pointer", color: "#EA580C", fontWeight: "700" }}></span>
           </div>
         </footer>
     )}
