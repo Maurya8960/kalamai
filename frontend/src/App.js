@@ -1,3 +1,4 @@
+import ToolsDirectory from './ToolsDirectory';
 import SkillsDirectory from './SkillsDirectory';
 import PyqDirectory from './PyqDirectory';
 import CheatSheetDirectory from './CheatSheetDirectory';
@@ -185,6 +186,7 @@ function App() {
       if (hash.includes("pyq")) return "pyq";
       if (hash.includes("cheatsheet")) return "cheatsheet";
       if (hash.includes("skill")) return "skills";
+      if (hash.includes("tool")) return "tools";
     }
     return "chat";
   });
@@ -212,6 +214,7 @@ function App() {
       else if (hash.includes("pyq")) setCurrentView("pyq");
       else if (hash.includes("cheatsheet")) setCurrentView("cheatsheet");
       else if (hash.includes("skill")) setCurrentView("skills");
+      else if (hash.includes("tool")) setCurrentView("tools");
     };
     window.addEventListener("hashchange", handleHashChange);
     return () => window.removeEventListener("hashchange", handleHashChange);
