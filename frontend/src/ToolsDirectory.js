@@ -1,3 +1,4 @@
+import QRCode from "qrcode";
 import React, { useState, useRef, useEffect } from "react";
 
 // Standard Zero-Dependency Valid PDF Generator
@@ -177,44 +178,25 @@ export default function ToolsDirectory({ onBackToChat }) {
   const activeTool = utilityTools.find((t) => t.id === activeToolId);
 
   // Draw Dynamic QR Code on Canvas
-  useEffect(() => {
+    useEffect(() => {
     if (activeTool && activeTool.type === "qr" && qrCanvasRef.current) {
-      const canvas = qrCanvasRef.current;
-      const ctx = canvas.getContext("2d");
-      ctx.fillStyle = "#FFFFFF";
-      ctx.fillRect(0, 0, 240, 240);
-
-      // Simple QR Code Matrix generation simulation
-      ctx.fillStyle = "#0F172A";
-      const str = qrText || "KalamAI";
-      let hash = 0;
-      for (let i = 0; i < str.length; i++) hash = ((hash << 5) - hash) + str.charCodeAt(i);
-
-      const gridSize = 21;
-      const cellSize = 240 / gridSize;
-
-      // Draw finder corners
-      const drawFinder = (x, y) => {
-        ctx.fillRect(x * cellSize, y * cellSize, 7 * cellSize, 7 * cellSize);
-        ctx.fillStyle = "#FFFFFF";
-        ctx.fillRect((x + 1) * cellSize, (y + 1) * cellSize, 5 * cellSize, 5 * cellSize);
-        ctx.fillStyle = "#0F172A";
-        ctx.fillRect((x + 2) * cellSize, (y + 2) * cellSize, 3 * cellSize, 3 * cellSize);
-      };
-
-      drawFinder(0, 0);
-      drawFinder(14, 0);
-      drawFinder(0, 14);
-
-      // Data dots based on hash
-      for (let r = 0; r < gridSize; r++) {
-        for (let c = 0; c < gridSize; c++) {
-          if ((r < 7 && c < 7) || (r < 7 && c > 13) || (r > 13 && c < 7)) continue;
-          if (((hash + r * 13 + c * 7) % 3) === 0) {
-            ctx.fillRect(c * cellSize, r * cellSize, cellSize - 1, cellSize - 1);
-          }
+      const textToEncode = qrText.trim() || "https://kalamai.org";
+      QRCode.toCanvas(
+        qrCanvasRef.current,
+        textToEncode,
+        {
+          width: 250,
+          margin: 2,
+          color: {
+            dark: "#0F172A",
+            light: "#FFFFFF"
+          },
+          errorCorrectionLevel: "M"
+        },
+        (error) => {
+          if (error) console.error("QR Code generation error:", error);
         }
-      }
+      );
     }
   }, [activeTool, qrText, qrType]);
 
