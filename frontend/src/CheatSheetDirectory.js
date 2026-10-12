@@ -1,305 +1,384 @@
 import React, { useState } from "react";
 
+// Degrees Configuration
+const degreePrograms = [
+  { id: "btech", title: "B.Tech", icon: "⚙️", desc: "CSE, IT, ECE, EE, ME, CE, AI-DS", badge: "4 Years" },
+  { id: "bpharm", title: "B.Pharm", icon: "🧪", desc: "PCI Approved Curriculum", badge: "4 Years" },
+  { id: "mca", title: "MCA", icon: "💻", desc: "Master of Computer Applications", badge: "2 Years" },
+  { id: "mba", title: "MBA", icon: "📊", desc: "Dual Specializations & Finance", badge: "2 Years" },
+  { id: "bba", title: "BBA", icon: "📈", desc: "Bachelor of Business Administration", badge: "3 Years" },
+  { id: "bca", title: "BCA", icon: "🖥️", desc: "Bachelor of Computer Applications", badge: "3 Years" },
+  { id: "mtech", title: "M.Tech", icon: "🔬", desc: "Advanced Engineering Disciplines", badge: "2 Years" }
+];
+
+// Branches per Degree (Screenshot 15 reference)
+const disciplinesData = {
+  btech: [
+    { id: "cse", name: "CSE", files: "1,800+ Files" },
+    { id: "it", name: "IT", files: "1,200+ Files" },
+    { id: "ece", name: "ECE", files: "950+ Files" },
+    { id: "ee", name: "EE / EN", files: "850+ Files" },
+    { id: "me", name: "ME", files: "920+ Files" },
+    { id: "civil", name: "Civil", files: "780+ Files" },
+    { id: "aids", name: "AI & DS", files: "650+ Files" }
+  ],
+  bpharm: [
+    { id: "pceutics", name: "Pharmaceutics", files: "540+ Files" },
+    { id: "pcol", name: "Pharmacology", files: "610+ Files" },
+    { id: "medchem", name: "Medicinal Chemistry", files: "720+ Files" },
+    { id: "cognosy", name: "Pharmacognosy", files: "430+ Files" },
+    { id: "analysis", name: "Pharm Analysis", files: "390+ Files" }
+  ],
+  mca: [
+    { id: "core_cs", name: "Core Software", files: "620+ Files" },
+    { id: "cloud", name: "Cloud & DevOps", files: "480+ Files" },
+    { id: "ai_ml", name: "AI & Data Science", files: "510+ Files" },
+    { id: "security", name: "Cybersecurity", files: "340+ Files" }
+  ],
+  mba: [
+    { id: "finance", name: "Finance", files: "590+ Files" },
+    { id: "marketing", name: "Marketing", files: "640+ Files" },
+    { id: "hr", name: "Human Resource", files: "480+ Files" },
+    { id: "ops", name: "Operations & Supply", files: "390+ Files" },
+    { id: "analytics", name: "Business Analytics", files: "520+ Files" }
+  ],
+  bba: [
+    { id: "management", name: "General Management", files: "410+ Files" },
+    { id: "banking", name: "Banking & Finance", files: "380+ Files" },
+    { id: "sales", name: "Sales & Retail", files: "320+ Files" }
+  ],
+  bca: [
+    { id: "programming", name: "Coding & Algorithms", files: "710+ Files" },
+    { id: "web", name: "Full Stack Web", files: "630+ Files" },
+    { id: "dbms", name: "Database & SQL", files: "490+ Files" }
+  ],
+  mtech: [
+    { id: "vlsi", name: "VLSI Design", files: "290+ Files" },
+    { id: "thermal", name: "Thermal Engineering", files: "260+ Files" },
+    { id: "structures", name: "Structural Eng.", files: "310+ Files" },
+    { id: "comp_eng", name: "Computer Engineering", files: "380+ Files" }
+  ]
+};
+
+// Year Options
+const yearOptions = [
+  { id: "1", title: "1st Year", sem: "Semester 1 & 2", badge: "Common Subjects", icon: "🌱" },
+  { id: "2", title: "2nd Year", sem: "Semester 3 & 4", badge: "Core Branch Basics", icon: "🚀" },
+  { id: "3", title: "3rd Year", sem: "Semester 5 & 6", badge: "Advanced Technicals", icon: "⚙️" },
+  { id: "4", title: "4th Year", sem: "Semester 7 & 8", badge: "Electives & Systems", icon: "🎓" }
+];
+
+// Cheat Sheets Data
+const cheatSheetsLibrary = {
+  btech: [
+    { code: "BAS103", title: "Engineering Mathematics-I", type: "Formula Card", units: "5 Units Dense Summary", pdf: "#" },
+    { code: "BAS101", title: "Engineering Physics", type: "Formula Card", units: "Optics, Quantum & EM Waves", pdf: "#" },
+    { code: "BAS102", title: "Engineering Chemistry", type: "Derivations Card", units: "Spectroscopy, Polymers & Electrochemistry", pdf: "#" },
+    { code: "BCS101", title: "Programming for Problem Solving (C)", type: "Cheat Sheet", units: "Pointers, Recursion & Structures", pdf: "#" },
+    { code: "BEE101", title: "Basic Electrical Engineering", type: "Formula Card", units: "DC/AC Circuits & Transformers", pdf: "#" },
+    { code: "BCE101", title: "Engineering Mechanics", type: "Derivations Card", units: "Trusses, Equilibrium & Friction", pdf: "#" }
+  ],
+  bpharm: [
+    { code: "BP101T", title: "Human Anatomy & Physiology I", type: "Revision Card", units: "Histology, Skeleton & Cardiovascular", pdf: "#" },
+    { code: "BP102T", title: "Pharmaceutical Analysis I", type: "Formula Card", units: "Titrations, Redox & Potentiometry", pdf: "#" },
+    { code: "BP103T", title: "Pharmaceutics I", type: "Quick Formula", units: "Dosage Forms, Syrups & Emulsions", pdf: "#" },
+    { code: "BP104T", title: "Pharmaceutical Inorganic Chemistry", type: "Cheat Sheet", units: "Antacids, Expectorants & Radiopharma", pdf: "#" }
+  ],
+  mca: [
+    { code: "MCA101", title: "Advanced Data Structures & Algorithms", type: "Formula Card", units: "Trees, Graphs & Dynamic Programming", pdf: "#" },
+    { code: "MCA102", title: "Object Oriented Programming (Java/Python)", type: "Cheat Sheet", units: "Collections, Multithreading & Lambdas", pdf: "#" },
+    { code: "MCA103", title: "Operating Systems & System Architecture", type: "Revision Card", units: "Memory Management & Concurrency", pdf: "#" }
+  ],
+  mba: [
+    { code: "KMB101", title: "Management Concepts & Organizational Behavior", type: "Cheat Sheet", units: "Leadership, Motivation & Culture", pdf: "#" },
+    { code: "KMB102", title: "Managerial Economics", type: "Formula Card", units: "Elasticity, Cost Functions & Pricing", pdf: "#" },
+    { code: "KMB103", title: "Financial Accounting for Managers", type: "Formula Card", units: "Balance Sheets, Cash Flow & Ratio Analysis", pdf: "#" }
+  ],
+  bba: [
+    { code: "BBA101", title: "Business Organization & Ethics", type: "Cheat Sheet", units: "Corporate Forms & Governance", pdf: "#" },
+    { code: "BBA102", title: "Business Mathematics", type: "Formula Card", units: "Matrices, Calculus & Commercial Math", pdf: "#" }
+  ],
+  bca: [
+    { code: "BCA101", title: "Computer Fundamentals & Office Tools", type: "Quick Sheet", units: "Hardware, Logic Gates & MS Tools", pdf: "#" },
+    { code: "BCA102", title: "Programming Principles in C", type: "Formula Card", units: "Arrays, Functions & File Handling", pdf: "#" }
+  ],
+  mtech: [
+    { code: "MT101", title: "Advanced Engineering Mathematics", type: "Derivations Card", units: "Numerical Methods & PDE Solutions", pdf: "#" },
+    { code: "MT102", title: "Research Methodology & IPR", type: "Cheat Sheet", units: "Patents, Statistical Modeling & Ethics", pdf: "#" }
+  ]
+};
+
 const CheatSheetDirectory = () => {
-  const [selectedYear, setSelectedYear] = useState(1);
+  const [selectedDegree, setSelectedDegree] = useState("btech");
   const [selectedBranch, setSelectedBranch] = useState("cse");
+  const [selectedYear, setSelectedYear] = useState("1");
 
-  const yearBranches = {
-    1: [
-      { id: "common", label: "Common First Year (All Branches)" }
-    ],
-    2: [
-      { id: "cse", label: "Computer Science & Engg (CSE)" },
-      { id: "it", label: "Information Technology (IT)" },
-      { id: "ece", label: "Electronics & Comm. (ECE)" },
-      { id: "me", label: "Mechanical Engineering (ME)" },
-      { id: "ce", label: "Civil Engineering (CE)" }
-    ],
-    3: [
-      { id: "cse", label: "Computer Science & Engg (CSE)" },
-      { id: "it", label: "Information Technology (IT)" },
-      { id: "ece", label: "Electronics & Comm. (ECE)" },
-      { id: "me", label: "Mechanical Engineering (ME)" },
-      { id: "ce", label: "Civil Engineering (CE)" }
-    ],
-    4: [
-      { id: "cse", label: "Computer Science & Engg (CSE)" },
-      { id: "it", label: "Information Technology (IT)" },
-      { id: "ece", label: "Electronics & Comm. (ECE)" },
-      { id: "me", label: "Mechanical Engineering (ME)" },
-      { id: "ce", label: "Civil Engineering (CE)" }
-    ]
+  const currentDisciplines = disciplinesData[selectedDegree] || [];
+  const currentSheets = cheatSheetsLibrary[selectedDegree] || [];
+
+  const handleDegreeChange = (degId) => {
+    setSelectedDegree(degId);
+    const availableBranches = disciplinesData[degId];
+    if (availableBranches && availableBranches.length > 0) {
+      setSelectedBranch(availableBranches[0].id);
+    }
   };
-
-  // Branch & Year specific subject cheat sheets data with PDF placeholder links
-  const cheatSheetData = {
-    "1-common": [
-      { code: "BAS103", name: "Engineering Mathematics-I", highlights: "Calculus, Matrices, Vector Calculus Formulas", pdfUrl: "#" },
-      { code: "BAS101", name: "Engineering Physics", highlights: "Optics, Relativistic Mechanics, Quantum Wave Equations", pdfUrl: "#" },
-      { code: "BAS102", name: "Engineering Chemistry", highlights: "Molecular Orbital Theory, Water Treatment, Polymers", pdfUrl: "#" },
-      { code: "BEE101", name: "Basic Electrical Engineering", highlights: "DC Circuits, AC Analysis, Transformer Formulas", pdfUrl: "#" },
-      { code: "BCS101", name: "Programming for Problem Solving (C)", highlights: "Pointers, Memory allocation, Recursion Cheat Sheet", pdfUrl: "#" }
-    ],
-    "2-cse": [
-      { code: "BCS301", name: "Data Structures & Algorithms", highlights: "Trees, Graphs, Sorting Complexities & Quick Cheats", pdfUrl: "#" },
-      { code: "BCS302", name: "Computer Organization & Architecture", highlights: "Pipelining, Addressing Modes, Memory Hierarchy", pdfUrl: "#" },
-      { code: "BCS303", name: "Discrete Structures & Graph Theory", highlights: "Set Theory, Recurrence Relations, Graph Theorems", pdfUrl: "#" },
-      { code: "BCS401", name: "Operating Systems", highlights: "Scheduling, Semaphore, Deadlock Bankers Formulas", pdfUrl: "#" },
-      { code: "BCS402", name: "Theory of Automata & Formal Languages", highlights: "DFA/NFA, CFG, Pumping Lemma, Turing Machine Cheats", pdfUrl: "#" }
-    ],
-    "2-it": [
-      { code: "BIT301", name: "Data Structures Using C", highlights: "Linked Lists, Heaps, Hashing Quick Notes", pdfUrl: "#" },
-      { code: "BCS401", name: "Operating Systems", highlights: "CPU Scheduling, Virtual Memory, Inode System", pdfUrl: "#" },
-      { code: "BIT401", name: "Object Oriented Programming (Java)", highlights: "Inheritance, Polymorphism, Collections Framework", pdfUrl: "#" }
-    ],
-    "2-ece": [
-      { code: "BEC301", name: "Electronic Devices & Circuits", highlights: "BJT, MOSFET Biasing, Small Signal Models", pdfUrl: "#" },
-      { code: "BEC302", name: "Digital System Design", highlights: "K-Maps, Combinational & Sequential Circuits", pdfUrl: "#" },
-      { code: "BEC303", name: "Network Analysis & Synthesis", highlights: "Network Theorems, Two-Port Parameters, Filter Design", pdfUrl: "#" }
-    ],
-    "2-me": [
-      { code: "BME301", name: "Thermodynamics", highlights: "Carnot Cycles, Entropy, Steam Tables Quick Cheats", pdfUrl: "#" },
-      { code: "BME302", name: "Fluid Mechanics", highlights: "Bernoulli Equation, Boundary Layer Theory, Flow Meters", pdfUrl: "#" },
-      { code: "BME303", name: "Strength of Materials", highlights: "Stress-Strain, Bending Moment, Shear Force Diagrams", pdfUrl: "#" }
-    ],
-    "2-ce": [
-      { code: "BCE301", name: "Building Materials & Construction", highlights: "Cement, Concrete Mix Design, Brick Masonry", pdfUrl: "#" },
-      { code: "BCE302", name: "Surveying & Geomatics", highlights: "Traversing, Leveling, Tachometry Formulas", pdfUrl: "#" }
-    ],
-    "3-cse": [
-      { code: "BCS501", name: "Database Management Systems", highlights: "Normalization (1NF-BCNF), SQL Joins, B+ Trees, Transactions", pdfUrl: "#" },
-      { code: "BCS502", name: "Compiler Design", highlights: "Lexical Analysis, LL(1) / LR Parsers, Code Optimization", pdfUrl: "#" },
-      { code: "BCS503", name: "Design & Analysis of Algorithms", highlights: "Dynamic Programming, Greedy, Divide & Conquer Complexity", pdfUrl: "#" },
-      { code: "BCS601", name: "Computer Networks", highlights: "OSI vs TCP/IP, IP Subnetting, Routing Algorithms, Sliding Window", pdfUrl: "#" },
-      { code: "BCS602", name: "Software Engineering", highlights: "SDLC, Agile, Cocomo Model, UML Diagrams", pdfUrl: "#" }
-    ],
-    "3-it": [
-      { code: "BIT501", name: "Database Management Systems", highlights: "Relational Algebra, SQL Queries, Concurrency Control", pdfUrl: "#" },
-      { code: "BIT601", name: "Computer Networks", highlights: "TCP/UDP, Subnet Masking, HTTP/DNS Protocols", pdfUrl: "#" }
-    ],
-    "3-ece": [
-      { code: "BEC501", name: "Microprocessors & Microcontrollers", highlights: "8085/8051 Pin Diagrams, Addressing Modes, Timers", pdfUrl: "#" },
-      { code: "BEC601", name: "Digital Signal Processing", highlights: "DFT, FFT, FIR/IIR Filter Design Formulas", pdfUrl: "#" }
-    ],
-    "3-me": [
-      { code: "BME501", name: "Heat and Mass Transfer", highlights: "Conduction, Convection, Radiation, LMTD Formulas", pdfUrl: "#" },
-      { code: "BME601", name: "Theory of Machines", highlights: "Gears, Cams, Flywheels, Gyroscope Cheat Sheet", pdfUrl: "#" }
-    ],
-    "3-ce": [
-      { code: "BCE501", name: "Geotechnical Engineering", highlights: "Soil Mechanics, Permeability, Shear Strength", pdfUrl: "#" },
-      { code: "BCE601", name: "Design of Concrete Structures", highlights: "Limit State Method, Beam & Slab Design Code IS 456", pdfUrl: "#" }
-    ],
-    "4-cse": [
-      { code: "BCS701", name: "Artificial Intelligence & Machine Learning", highlights: "Search Algorithms (A*, Heuristics), Neural Networks, Regression", pdfUrl: "#" },
-      { code: "BCS702", name: "Cloud Computing", highlights: "SaaS, PaaS, IaaS, AWS/Azure Architecture, Virtualization", pdfUrl: "#" },
-      { code: "BCS801", name: "Information & Cyber Security", highlights: "RSA, AES Cryptography, Hash Functions, Firewalls", pdfUrl: "#" }
-    ],
-    "4-it": [
-      { code: "BIT701", name: "Machine Learning", highlights: "Supervised & Unsupervised Learning, Decision Trees", pdfUrl: "#" },
-      { code: "BIT801", name: "Mobile Computing", highlights: "GSM, CDMA, Android Architecture Cheat Sheet", pdfUrl: "#" }
-    ],
-    "4-ece": [
-      { code: "BEC701", name: "VLSI Design", highlights: "CMOS Inverter, Stick Diagrams, Layout Rules", pdfUrl: "#" },
-      { code: "BEC801", name: "Optical Communication", highlights: "Optical Fiber Modes, Dispersion, WDM Systems", pdfUrl: "#" }
-    ],
-    "4-me": [
-      { code: "BME701", name: "Automobile Engineering", highlights: "IC Engine, Transmission, Suspension, Braking", pdfUrl: "#" },
-      { code: "BME801", name: "Power Plant Engineering", highlights: "Thermal, Nuclear, Hydro Plants Efficiency Formulas", pdfUrl: "#" }
-    ],
-    "4-ce": [
-      { code: "BCE701", name: "Transportation Engineering", highlights: "Geometric Design of Highways, IRC Standards", pdfUrl: "#" },
-      { code: "BCE801", name: "Water Resources Engineering", highlights: "Hydrology, Dam Design, Irrigation Engineering", pdfUrl: "#" }
-    ]
-  };
-
-  const currentKey = selectedYear === 1 ? "1-common" : `${selectedYear}-${selectedBranch}`;
-  const subjectList = cheatSheetData[currentKey] || cheatSheetData["2-cse"];
 
   return (
-    <div style={{ maxWidth: "1280px", margin: "0 auto", padding: "24px 20px 80px", fontFamily: "inherit" }}>
-      {/* Breadcrumb */}
-      <div style={{ fontSize: "13px", color: "#64748B", marginBottom: "16px", fontWeight: "500" }}>
-        <span>Home</span> <span style={{ margin: "0 6px" }}>›</span> <span style={{ color: "#0F172A", fontWeight: "700" }}>AKTU Engineering Cheat Sheets</span>
+    <div style={{ maxWidth: "1280px", margin: "0 auto", padding: "20px 24px 60px", fontFamily: "system-ui, -apple-system, sans-serif" }}>
+      
+      {/* Top Breadcrumb & Badge */}
+      <div style={{ marginBottom: "16px" }}>
+        <span style={{ fontSize: "13px", color: "#64748B" }}>Home › </span>
+        <span style={{ fontSize: "13px", color: "#0F172A", fontWeight: "700" }}>AKTU Engineering & Degree Cheat Sheets</span>
       </div>
 
-      {/* Header Banner */}
-      <div style={{ marginBottom: "28px" }}>
-        <span style={{
+      <div style={{ marginBottom: "14px" }}>
+        <span style={{ 
+          background: "#FEF3C7", 
+          color: "#92400E", 
+          fontSize: "11px", 
+          fontWeight: "800", 
+          letterSpacing: "0.8px", 
+          padding: "6px 14px", 
+          borderRadius: "8px",
           display: "inline-block",
-          background: "#FFEDD5",
-          color: "#C2410C",
-          fontSize: "12px",
-          fontWeight: "800",
-          letterSpacing: "0.5px",
-          padding: "5px 14px",
-          borderRadius: "6px",
-          marginBottom: "12px",
           textTransform: "uppercase"
         }}>
           HIGH-YIELD 1-PAGE FORMULA SHEETS & DERIVATIONS
         </span>
-        <h1 style={{ fontSize: "34px", fontWeight: "900", color: "#0F172A", margin: "0 0 10px", letterSpacing: "-0.5px" }}>
+      </div>
+
+      {/* Hero Header */}
+      <div style={{ marginBottom: "34px" }}>
+        <h1 style={{ fontSize: "36px", fontWeight: "900", color: "#0F172A", margin: "0 0 10px", letterSpacing: "-0.8px" }}>
           AKTU Revision Cheat Sheets ⚡
         </h1>
-        <p style={{ color: "#475569", fontSize: "15px", margin: 0, lineHeight: "1.6" }}>
-          Instant, dense exam cheat sheets crafted specifically for AKTU B.Tech semesters. Select your academic year and branch to download crisp PDF revision cards.
+        <p style={{ color: "#64748B", fontSize: "15px", maxWidth: "800px", margin: 0, lineHeight: "1.6" }}>
+          Instant, dense exam cheat sheets crafted specifically for AKTU university examinations. Select your degree, engineering discipline, and academic year to access concise 1-page formula revisions.
         </p>
       </div>
 
-      {/* STEP 1: SELECT ACADEMIC YEAR (1st to 4th Year Cards) */}
-      <div style={{ marginBottom: "32px" }}>
-        <h3 style={{ fontSize: "16px", fontWeight: "800", color: "#0F172A", marginBottom: "14px", textTransform: "uppercase", letterSpacing: "0.5px" }}>
-          Step 1: Select Your B.Tech Year
-        </h3>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: "16px" }}>
-          {[
-            { year: 1, title: "1st Year", sems: "Semester 1 & 2", badge: "Common Subjects", icon: "🌱" },
-            { year: 2, title: "2nd Year", sems: "Semester 3 & 4", badge: "Core Branch Basics", icon: "🚀" },
-            { year: 3, title: "3rd Year", sems: "Semester 5 & 6", badge: "Advanced Technicals", icon: "⚙️" },
-            { year: 4, title: "4th Year", sems: "Semester 7 & 8", badge: "Electives & Systems", icon: "🎓" }
-          ].map((item) => (
-            <div
-              key={item.year}
-              onClick={() => {
-                setSelectedYear(item.year);
-                if (item.year === 1) setSelectedBranch("common");
-                else if (selectedBranch === "common") setSelectedBranch("cse");
-              }}
-              style={{
-                background: selectedYear === item.year ? "linear-gradient(135deg, #FFF7ED 0%, #FFEDD5 100%)" : "#FFFFFF",
-                border: selectedYear === item.year ? "2px solid #EA580C" : "1.5px solid #E2E8F0",
-                borderRadius: "14px",
-                padding: "20px",
-                cursor: "pointer",
-                boxShadow: selectedYear === item.year ? "0 8px 24px rgba(234, 88, 12, 0.15)" : "0 2px 8px rgba(0,0,0,0.03)",
-                transition: "all 0.2s ease"
-              }}
-            >
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "10px" }}>
-                <span style={{ fontSize: "28px" }}>{item.icon}</span>
-                <span style={{
-                  background: selectedYear === item.year ? "#EA580C" : "#F1F5F9",
-                  color: selectedYear === item.year ? "#FFFFFF" : "#475569",
-                  fontSize: "11px",
-                  fontWeight: "800",
-                  padding: "3px 8px",
-                  borderRadius: "6px"
-                }}>
-                  {item.badge}
-                </span>
+      {/* ================= STEP 1: ALL DEGREE PROGRAMS ================= */}
+      <div style={{ marginBottom: "36px" }}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "16px" }}>
+          <h2 style={{ fontSize: "14px", fontWeight: "800", color: "#0F172A", letterSpacing: "0.5px", textTransform: "uppercase", margin: 0 }}>
+            STEP 1: SELECT YOUR DEGREE PROGRAM
+          </h2>
+          <span style={{ fontSize: "12px", color: "#64748B", fontWeight: "600" }}>7 Programs Available</span>
+        </div>
+
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: "16px" }}>
+          {degreePrograms.map((deg) => {
+            const isSelected = selectedDegree === deg.id;
+            return (
+              <div
+                key={deg.id}
+                onClick={() => handleDegreeChange(deg.id)}
+                style={{
+                  background: isSelected ? "linear-gradient(180deg, #FFFFFF, #FFF7ED)" : "#FFFFFF",
+                  border: isSelected ? "2px solid #EA580C" : "1.5px solid #E2E8F0",
+                  borderRadius: "18px",
+                  padding: "20px 16px",
+                  textAlign: "center",
+                  cursor: "pointer",
+                  boxShadow: isSelected ? "0 12px 28px rgba(234, 88, 12, 0.16)" : "0 4px 12px rgba(0,0,0,0.03)",
+                  transition: "all 0.25s cubic-bezier(0.4, 0, 0.2, 1)",
+                  transform: isSelected ? "translateY(-3px)" : "none"
+                }}
+              >
+                <div style={{ width: "46px", height: "46px", margin: "0 auto 10px", borderRadius: "14px", background: isSelected ? "#FFF7ED" : "#F8FAFC", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "20px" }}>
+                  {deg.icon}
+                </div>
+                <div style={{ display: "inline-block", background: isSelected ? "#EA580C" : "#F1F5F9", color: isSelected ? "#FFF" : "#64748B", fontSize: "10px", fontWeight: "800", padding: "3px 8px", borderRadius: "6px", marginBottom: "6px" }}>
+                  {deg.badge}
+                </div>
+                <h3 style={{ fontSize: "18px", fontWeight: "800", color: "#0F172A", margin: "0 0 4px" }}>{deg.title}</h3>
+                <p style={{ fontSize: "11px", color: "#64748B", margin: "0 0 14px", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{deg.desc}</p>
+                <button
+                  style={{
+                    width: "100%",
+                    background: isSelected ? "#EA580C" : "#FFFFFF",
+                    border: isSelected ? "1.5px solid #EA580C" : "1px solid #CBD5E1",
+                    color: isSelected ? "#FFFFFF" : "#475569",
+                    padding: "7px 12px",
+                    borderRadius: "10px",
+                    fontSize: "12px",
+                    fontWeight: "800",
+                    cursor: "pointer",
+                    transition: "all 0.2s ease"
+                  }}
+                >
+                  {isSelected ? "Selected ✓" : "Select Degree →"}
+                </button>
               </div>
-              <h4 style={{ fontSize: "18px", fontWeight: "900", color: "#0F172A", margin: "0 0 4px" }}>{item.title}</h4>
-              <p style={{ fontSize: "13px", color: "#64748B", margin: 0 }}>{item.sems}</p>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </div>
 
-      {/* STEP 2: SELECT BRANCH */}
-      {selectedYear > 1 && (
-        <div style={{ marginBottom: "36px" }}>
-          <h3 style={{ fontSize: "16px", fontWeight: "800", color: "#0F172A", marginBottom: "12px", textTransform: "uppercase", letterSpacing: "0.5px" }}>
-            Step 2: Choose Your Branch
-          </h3>
-          <div style={{ display: "flex", flexWrap: "wrap", gap: "10px" }}>
-            {yearBranches[selectedYear].map((b) => (
-              <button
-                key={b.id}
-                onClick={() => setSelectedBranch(b.id)}
-                style={{
-                  padding: "10px 20px",
-                  borderRadius: "8px",
-                  border: selectedBranch === b.id ? "1.5px solid #EA580C" : "1.5px solid #CBD5E1",
-                  background: selectedBranch === b.id ? "#EA580C" : "#FFFFFF",
-                  color: selectedBranch === b.id ? "#FFFFFF" : "#1E293B",
-                  fontWeight: "800",
-                  fontSize: "14px",
-                  cursor: "pointer",
-                  transition: "all 0.2s ease"
-                }}
-              >
-                {b.label}
-              </button>
-            ))}
+      {/* ================= STEP 2: BRANCHES / DISCIPLINES (Screenshot 15 reference) ================= */}
+      {currentDisciplines.length > 0 && (
+        <div style={{ marginBottom: "36px", animation: "fadeIn 0.3s ease" }}>
+          <div style={{ textAlign: "center", marginBottom: "18px" }}>
+            <span style={{ fontSize: "11px", fontWeight: "800", color: "#2563EB", letterSpacing: "1px", textTransform: "uppercase" }}>
+              BRANCHES SUPPORTED
+            </span>
+            <h2 style={{ fontSize: "26px", fontWeight: "900", color: "#0F172A", margin: "4px 0 0" }}>
+              {selectedDegree === "btech" ? "Engineering Disciplines" : selectedDegree.toUpperCase() + " Specializations & Streams"}
+            </h2>
+          </div>
+
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))", gap: "14px" }}>
+            {currentDisciplines.map((branch) => {
+              const isBranchActive = selectedBranch === branch.id;
+              return (
+                <div
+                  key={branch.id}
+                  onClick={() => setSelectedBranch(branch.id)}
+                  style={{
+                    background: isBranchActive ? "linear-gradient(180deg, #FFFFFF, #FFF7ED)" : "#FFFFFF",
+                    border: isBranchActive ? "2px solid #EA580C" : "1.5px solid #E2E8F0",
+                    borderRadius: "16px",
+                    padding: "18px 14px",
+                    textAlign: "center",
+                    cursor: "pointer",
+                    boxShadow: isBranchActive ? "0 10px 24px rgba(234, 88, 12, 0.15)" : "0 2px 8px rgba(0,0,0,0.02)",
+                    transition: "all 0.2s ease",
+                    transform: isBranchActive ? "translateY(-2px)" : "none"
+                  }}
+                >
+                  <h4 style={{ fontSize: "17px", fontWeight: "800", color: "#0F172A", margin: "0 0 6px" }}>
+                    {branch.name}
+                  </h4>
+                  <span style={{ fontSize: "12px", color: isBranchActive ? "#EA580C" : "#059669", fontWeight: "700" }}>
+                    {branch.files}
+                  </span>
+                </div>
+              );
+            })}
           </div>
         </div>
       )}
 
-      {/* STEP 3: SUBJECT CHEAT SHEET LIST */}
-      <div>
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "18px", borderBottom: "2px solid #E2E8F0", paddingBottom: "10px" }}>
-          <h3 style={{ fontSize: "18px", fontWeight: "900", color: "#0F172A", margin: 0 }}>
-            {selectedYear}st Year • Available Cheat Sheets
-          </h3>
-          <span style={{ fontSize: "13px", color: "#64748B", fontWeight: "700" }}>
-            {subjectList.length} Subjects Ready
+      {/* ================= STEP 3: ACADEMIC YEAR SELECTION ================= */}
+      <div style={{ marginBottom: "36px" }}>
+        <h2 style={{ fontSize: "14px", fontWeight: "800", color: "#0F172A", letterSpacing: "0.5px", textTransform: "uppercase", marginBottom: "16px" }}>
+          STEP 2: SELECT YOUR ACADEMIC YEAR
+        </h2>
+
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: "18px" }}>
+          {yearOptions.map((yr) => {
+            const isYearActive = selectedYear === yr.id;
+            return (
+              <div
+                key={yr.id}
+                onClick={() => setSelectedYear(yr.id)}
+                style={{
+                  background: isYearActive ? "linear-gradient(180deg, #FFFFFF, #FFF7ED)" : "#FFFFFF",
+                  border: isYearActive ? "2px solid #EA580C" : "1.5px solid #E2E8F0",
+                  borderRadius: "20px",
+                  padding: "22px 20px",
+                  cursor: "pointer",
+                  boxShadow: isYearActive ? "0 12px 26px rgba(234, 88, 12, 0.14)" : "0 4px 12px rgba(0,0,0,0.03)",
+                  transition: "all 0.25s ease",
+                  transform: isYearActive ? "translateY(-2px)" : "none"
+                }}
+              >
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "10px" }}>
+                  <span style={{ fontSize: "24px" }}>{yr.icon}</span>
+                  <span style={{ background: isYearActive ? "#EA580C" : "#F1F5F9", color: isYearActive ? "#FFFFFF" : "#475569", fontSize: "11px", fontWeight: "800", padding: "4px 10px", borderRadius: "8px" }}>
+                    {yr.badge}
+                  </span>
+                </div>
+                <h3 style={{ fontSize: "19px", fontWeight: "800", color: "#0F172A", margin: "0 0 4px" }}>{yr.title}</h3>
+                <p style={{ fontSize: "12px", color: "#64748B", margin: 0, fontWeight: "600" }}>{yr.sem}</p>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* ================= STEP 4: SUBJECT REVISION CHEAT SHEETS ================= */}
+      <div style={{ animation: "fadeIn 0.3s ease" }}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "18px", flexWrap: "wrap", gap: "10px" }}>
+          <h2 style={{ fontSize: "20px", fontWeight: "900", color: "#0F172A", margin: 0 }}>
+            {selectedDegree.toUpperCase()} ({yearOptions.find(y => y.id === selectedYear)?.title}) • Available Cheat Sheets
+          </h2>
+          <span style={{ fontSize: "13px", color: "#2563EB", fontWeight: "800", background: "#EFF6FF", padding: "6px 14px", borderRadius: "10px", border: "1px solid #DBEAFE" }}>
+            {currentSheets.length} Subjects Ready for Download
           </span>
         </div>
 
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))", gap: "20px" }}>
-          {subjectList.map((sub, idx) => (
+          {currentSheets.map((sheet, sIdx) => (
             <div
-              key={idx}
+              key={sIdx}
               style={{
                 background: "#FFFFFF",
-                borderRadius: "14px",
-                border: "1.5px solid #FED7AA",
+                border: "1.5px solid #E2E8F0",
+                borderRadius: "18px",
                 padding: "22px",
+                boxShadow: "0 4px 16px rgba(0,0,0,0.03)",
                 display: "flex",
                 flexDirection: "column",
                 justifyContent: "space-between",
-                boxShadow: "0 6px 18px rgba(234, 88, 12, 0.05)"
+                gap: "14px",
+                transition: "all 0.2s ease"
               }}
             >
               <div>
-                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "8px" }}>
-                  <span style={{ background: "#EFF6FF", color: "#1D4ED8", fontSize: "11px", fontWeight: "800", padding: "3px 8px", borderRadius: "5px", border: "1px solid #BFDBFE" }}>
-                    {sub.code}
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "12px" }}>
+                  <span style={{ background: "#EFF6FF", color: "#2563EB", fontWeight: "800", fontSize: "11px", padding: "5px 10px", borderRadius: "8px", border: "1px solid #BFDBFE" }}>
+                    {sheet.code}
                   </span>
-                  <span style={{ background: "#ECFDF5", color: "#047857", fontSize: "11px", fontWeight: "800", padding: "3px 8px", borderRadius: "5px" }}>
-                    Formula Card
+                  <span style={{ background: "#ECFDF5", color: "#059669", fontWeight: "800", fontSize: "11px", padding: "5px 10px", borderRadius: "8px", border: "1px solid #A7F3D0" }}>
+                    {sheet.type}
                   </span>
                 </div>
-                <h4 style={{ fontSize: "16px", fontWeight: "900", color: "#0F172A", margin: "6px 0 10px" }}>
-                  {sub.name}
-                </h4>
-                <p style={{ fontSize: "13px", color: "#64748B", lineHeight: "1.5", margin: "0 0 16px" }}>
-                  <strong>Key Highlights:</strong> {sub.highlights}
-                </p>
+                <h3 style={{ fontSize: "17px", fontWeight: "800", color: "#0F172A", margin: "0 0 6px" }}>{sheet.title}</h3>
+                <p style={{ fontSize: "12px", color: "#64748B", margin: 0, lineHeight: "1.5" }}>{sheet.units}</p>
               </div>
 
-              {/* Download PDF Button with link placeholder */}
-              <a
-                href={sub.pdfUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                onClick={(e) => {
-                  if (sub.pdfUrl === "#") {
-                    e.preventDefault();
-                    alert(`${sub.name} (${sub.code}) ka PDF Cheat Sheet jald hi direct link ke sath update hoga!`);
-                  }
-                }}
-                style={{
-                  display: "inline-flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  gap: "8px",
-                  background: "linear-gradient(135deg, #EA580C 0%, #C2410C 100%)",
-                  color: "#FFFFFF",
-                  padding: "10px 16px",
-                  borderRadius: "8px",
-                  textDecoration: "none",
-                  fontWeight: "800",
-                  fontSize: "13px",
-                  boxShadow: "0 4px 12px rgba(234, 88, 12, 0.25)"
-                }}
-              >
-                <span>📥</span> Download PDF Sheet
-              </a>
+              <div style={{ display: "flex", gap: "10px", marginTop: "6px" }}>
+                <a
+                  href={sheet.pdf}
+                  download
+                  style={{
+                    flex: 1,
+                    textAlign: "center",
+                    background: "linear-gradient(135deg, #2563EB 0%, #1D4ED8 100%)",
+                    color: "#FFFFFF",
+                    padding: "9px 16px",
+                    borderRadius: "10px",
+                    fontWeight: "700",
+                    fontSize: "12px",
+                    textDecoration: "none",
+                    boxShadow: "0 4px 12px rgba(37,99,235,0.25)"
+                  }}
+                >
+                  📥 Download PDF
+                </a>
+                <button
+                  style={{
+                    background: "#F8FAFC",
+                    border: "1px solid #CBD5E1",
+                    color: "#0F172A",
+                    padding: "9px 14px",
+                    borderRadius: "10px",
+                    fontWeight: "700",
+                    fontSize: "12px",
+                    cursor: "pointer"
+                  }}
+                >
+                  👁️ Preview
+                </button>
+              </div>
             </div>
           ))}
         </div>
       </div>
+
     </div>
   );
 };
