@@ -1087,20 +1087,9 @@ function App() {
                   Tools
                 </span>
 
-                {/* Tools Tab */}
-<span
-                  onClick={() => setCurrentView("tools")}
-                  style={{
-                    cursor: "pointer",
-                    color: currentView === "tools" ? "#EA580C" : "#4B5563",
-                    borderBottom: currentView === "tools" ? "3px solid #EA580C" : "3px solid transparent",
-                    paddingBottom: "6px",
-                    fontWeight: currentView === "tools" ? "800" : "600",
-                    transition: "all 0.2s ease"
-                  }}
-                >
-                  Tools
-                </span>
+                
+
+                
               </>
             ) : (
               <>
@@ -1193,35 +1182,9 @@ function App() {
                   Skills
                 </span>
 
-                {/* Tools Tab */}
-<span
-                  onClick={() => setCurrentView("tools")}
-                  style={{
-                    cursor: "pointer",
-                    color: currentView === "tools" ? "#EA580C" : "#4B5563",
-                    borderBottom: currentView === "tools" ? "3px solid #EA580C" : "3px solid transparent",
-                    paddingBottom: "6px",
-                    fontWeight: currentView === "tools" ? "800" : "600",
-                    transition: "all 0.2s ease"
-                  }}
-                >
-                  Tools
-                </span>
+                
 
-                {/* Tools Tab */}
-<span
-                  onClick={() => setCurrentView("tools")}
-                  style={{
-                    cursor: "pointer",
-                    color: currentView === "tools" ? "#EA580C" : "#4B5563",
-                    borderBottom: currentView === "tools" ? "3px solid #EA580C" : "3px solid transparent",
-                    paddingBottom: "6px",
-                    fontWeight: currentView === "tools" ? "800" : "600",
-                    transition: "all 0.2s ease"
-                  }}
-                >
-                  Tools
-                </span>
+                
 
                 {/* About Us */}
                 <span
