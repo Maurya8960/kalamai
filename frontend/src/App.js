@@ -1364,6 +1364,10 @@ function App() {
           <SkillsDirectory />
         )}
 
+        {currentView === "tools" && (
+          <ToolsDirectory onBackToChat={() => setCurrentView("chat")} />
+        )}
+
 {(currentView === "home" || currentView === "features") && !isLoggedIn && (
             <>
               <div style={{ textAlign: 'center', marginBottom: '30px' }}>
