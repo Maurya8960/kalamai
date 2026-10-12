@@ -3,7 +3,85 @@ import { jsPDF } from "jspdf";
 import QRCode from "qrcode";
 
 const utilityTools = [
-  // --- IMAGE & PDF TOOLS ---
+  // --- CALCULATORS & FINANCE ---
+  {
+    id: "gst-calculator",
+    title: "GST Calculator India",
+    tag: "CGST / SGST / IGST BREAKDOWN",
+    cat: "Calculators & Finance",
+    badge: "100% Client-Side",
+    type: "gst",
+    desc: "Calculate Indian Goods and Services Tax (GST) easily for inclusive or exclusive prices with CGST, SGST, and IGST breakdowns."
+  },
+  {
+    id: "loan-emi-calculator",
+    title: "Loan EMI Calculator",
+    tag: "EDUCATION / HOME / PERSONAL",
+    cat: "Calculators & Finance",
+    badge: "Fast & Private",
+    type: "emi",
+    desc: "Calculate monthly loan EMI for Education Loan, Personal Loan, and Car Loan with interactive amortization schedule chart."
+  },
+  {
+    id: "sip-calculator",
+    title: "SIP Calculator (Mutual Funds)",
+    tag: "WEALTH & COMPOUNDING",
+    cat: "Calculators & Finance",
+    badge: "Fast & Private",
+    type: "sip",
+    desc: "Calculate future value of monthly student savings & Mutual Fund SIP investments with compounding growth visualization."
+  },
+  {
+    id: "currency-converter",
+    title: "Live Currency Converter",
+    tag: "30+ FOREX RATES",
+    cat: "Converters",
+    badge: "Instant Math",
+    type: "currency",
+    desc: "Convert major world currencies (USD, EUR, GBP, AED, CAD, JPY vs INR) with live mid-market exchange rates."
+  },
+
+  // --- HEALTH & UTILITY ---
+  {
+    id: "age-calculator",
+    title: "Exact Age Calculator",
+    tag: "DOB & UPCOMING BIRTHDAY",
+    cat: "Health & Utility",
+    badge: "Fast & Private",
+    type: "age",
+    desc: "Calculate exact age in years, months, days, hours, and minutes with upcoming birthday countdown and milestone facts."
+  },
+  {
+    id: "bmi-calculator",
+    title: "BMI Calculator & Healthy Weight",
+    tag: "FITNESS & HEALTH TRACK",
+    cat: "Health & Utility",
+    badge: "WHO Standards",
+    type: "bmi",
+    desc: "Calculate Body Mass Index (BMI), ideal body weight range, and fitness category according to international WHO standards."
+  },
+
+  // --- GENERATORS & CODE ---
+  {
+    id: "qr-code-generator",
+    title: "Custom QR Code Generator",
+    tag: "UPI / WI-FI / URL QR",
+    cat: "Generators & Design",
+    badge: "High Resolution",
+    type: "qr",
+    desc: "Generate high-resolution custom QR codes for Website URLs, AKTU portals, UPI payments, and Wi-Fi networks."
+  },
+  {
+    id: "word-counter",
+    title: "Word & Character Counter",
+    tag: "READING TIME & ESSAY STATS",
+    cat: "Text & Code",
+    badge: "Live Counter",
+    type: "wordcount",
+    desc: "Count words, characters, sentences, paragraphs, and estimated reading time for lab reports & seminar papers."
+  },
+
+  // --- IMAGE & PDF UTILITIES ---
   {
     id: "image-compressor",
     title: "Online Image Compressor (Reduce Photo KB)",
@@ -66,8 +144,7 @@ const utilityTools = [
     ],
     benefits: [
       "Valid %PDF-1.4 binary file output that opens smoothly in macOS Preview and Adobe Acrobat.",
-      "Maintains clean A4 aspect ratio with automatic margin centering.",
-      "Zero registration, watermarks, or page count limits."
+      "Maintains clean A4 aspect ratio with automatic margin centering."
     ],
     limitations: ["Very high-resolution images may take 1-2 seconds to compile."],
     faqs: [
@@ -87,8 +164,7 @@ const utilityTools = [
     overview: "Extract editable paragraphs, formulas, and headings from fixed-layout PDF notes directly into Microsoft Word document format for quick report modifications.",
     technical: "Extracts textual streams from PDF structures and compiles an HTML-compliant Office Word document container (.doc).",
     personas: [
-      { title: "Project Students", desc: "Edit lab manuals and thesis synopsis drafts directly in Microsoft Word." },
-      { title: "Job Seekers", desc: "Extract resume text from old PDFs to update skills and projects." }
+      { title: "Project Students", desc: "Edit lab manuals and thesis synopsis drafts directly in Microsoft Word." }
     ],
     steps: [
       { num: 1, text: "Upload your PDF notes or document." },
@@ -97,12 +173,11 @@ const utilityTools = [
       { num: 4, text: "Open and freely edit in MS Word or Google Docs." }
     ],
     benefits: [
-      "Outputs genuine .doc file that opens in MS Word, Google Docs, and LibreOffice.",
-      "Instant client-side conversion without document data exposure."
+      "Outputs genuine .doc file that opens in MS Word, Google Docs, and LibreOffice."
     ],
     limitations: ["Scanned handwritten documents will be embedded as document images."],
     faqs: [
-      { q: "Kya downloaded file MS Word me khulegi?", a: "Haan, ye standard Microsoft Word format hai jo direct MS Word aur Google Docs me open hoti hai." }
+      { q: "Kya downloaded file MS Word me khulegi?", a: "Haan, ye standard Microsoft Word format hai jo direct MS Word me open hoti hai." }
     ]
   },
   {
@@ -118,18 +193,15 @@ const utilityTools = [
     overview: "Transform tabular data trapped inside PDF examination results, fee challans, and date sheets into clean, editable spreadsheet rows and columns.",
     technical: "Parses row and column coordinate boundaries and outputs standard RFC-4180 CSV spreadsheet format compatible with Excel and Google Sheets.",
     personas: [
-      { title: "Class Representatives", desc: "Collate semester exam result PDFs into sorted student merit spreadsheets." },
-      { title: "Researchers", desc: "Extract experimental numerical tables from technical research papers." }
+      { title: "Class Representatives", desc: "Collate semester exam result PDFs into sorted student merit spreadsheets." }
     ],
     steps: [
       { num: 1, text: "Upload PDF containing table columns and data." },
       { num: 2, text: "Parser isolates tabular matrices and numeric entries." },
-      { num: 3, text: "Download formatted .csv spreadsheet." },
-      { num: 4, text: "Open directly in Microsoft Excel." }
+      { num: 3, text: "Download formatted .csv spreadsheet." }
     ],
     benefits: [
-      "Direct CSV spreadsheet download without external converters.",
-      "Zebra rows and column headers automatically mapped."
+      "Direct CSV spreadsheet download without external converters."
     ],
     limitations: ["Complex merged headers may need minor column re-alignment in Excel."],
     faqs: [
@@ -149,110 +221,72 @@ const utilityTools = [
     overview: "Shrink heavy PDF notes, quantum study guides, and assignment submissions so they easily fit within college email and ERP portal file limits.",
     technical: "Flattens unused object tables, strips non-essential metadata streams, and re-encodes compressed objects.",
     personas: [
-      { title: "University Students", desc: "Reduce 25MB quantum PDFs under college portal 5MB upload ceilings." },
-      { title: "Job Applicants", desc: "Compress portfolio PDFs to attach directly in job application emails." }
+      { title: "University Students", desc: "Reduce 25MB quantum PDFs under college portal 5MB upload ceilings." }
     ],
     steps: [
       { num: 1, text: "Upload the heavy PDF file." },
       { num: 2, text: "Optimization engine strips redundant document streams." },
-      { num: 3, text: "Inspect reduced file size metrics." },
-      { num: 4, text: "Download compressed, fully readable PDF." }
+      { num: 3, text: "Download compressed, fully readable PDF." }
     ],
     benefits: [
-      "Keeps formula text, vector charts, and circuit diagrams sharp and readable.",
-      "Reduces overall byte footprint by 30% to 65%."
+      "Keeps formula text, vector charts, and circuit diagrams sharp and readable."
     ],
     limitations: ["Already optimized text-only PDFs will show minimal further reduction."],
     faqs: [
       { q: "Kya text quality degrade hogi?", a: "Nahi, vector text bilkul clear rahega." }
     ]
   },
-
-  // --- CALCULATORS & FINANCE (RESTORED) ---
   {
-    id: "gst-calculator",
-    title: "GST Calculator India",
-    tag: "CGST / SGST / IGST BREAKDOWN",
-    cat: "Calculators & Finance",
-    badge: "100% Client-Side",
-    type: "gst",
-    desc: "Calculate Indian Goods and Services Tax (GST) easily for inclusive or exclusive prices with CGST, SGST, and IGST breakdowns."
+    id: "word-to-pdf",
+    title: "Word to PDF Converter",
+    tag: "CONVERT WORD .DOCX TO PDF",
+    cat: "Image & PDF",
+    badge: "Fast & Clean",
+    type: "file",
+    accept: ".docx,.doc,.txt",
+    desc: "Convert Microsoft Word (.docx) and Text (.txt) lab reports and seminar notes to clean, shareable PDFs.",
+    hint: "Upload Word Document (.docx, .txt)"
   },
   {
-    id: "loan-emi-calculator",
-    title: "Loan EMI Calculator",
-    tag: "EDUCATION / HOME / PERSONAL",
-    cat: "Calculators & Finance",
+    id: "excel-to-pdf",
+    title: "Excel to PDF Converter",
+    tag: "SPREADSHEET TO PDF TABLE",
+    cat: "Image & PDF",
+    badge: "Clean Grids",
+    type: "file",
+    accept: ".xlsx,.xls,.csv",
+    desc: "Convert Excel spreadsheets (.xlsx, .xls) and CSV marks sheets into clean, shareable PDF tables with gridlines.",
+    hint: "Upload Excel or CSV Spreadsheet (.xlsx, .xls, .csv)"
+  },
+  {
+    id: "pdf-merge-split",
+    title: "PDF Merge & Split Tool",
+    tag: "MERGE & SPLIT PDF PAGES",
+    cat: "Image & PDF",
     badge: "Fast & Private",
-    type: "emi",
-    desc: "Calculate monthly loan EMI for Education Loan, Personal Loan, and Car Loan with interactive amortization schedule chart."
-  },
-  {
-    id: "sip-calculator",
-    title: "SIP Calculator (Mutual Funds)",
-    tag: "WEALTH & COMPOUNDING",
-    cat: "Calculators & Finance",
-    badge: "Fast & Private",
-    type: "sip",
-    desc: "Calculate future value of monthly student savings & Mutual Fund SIP investments with compounding growth visualization."
-  },
-  {
-    id: "currency-converter",
-    title: "Live Currency Converter",
-    tag: "30+ FOREX RATES",
-    cat: "Converters",
-    badge: "Instant Math",
-    type: "currency",
-    desc: "Convert major world currencies (USD, EUR, GBP, AED, CAD, JPY vs INR) with live mid-market exchange rates."
-  },
-
-  // --- HEALTH & UTILITY (RESTORED) ---
-  {
-    id: "age-calculator",
-    title: "Exact Age Calculator",
-    tag: "DOB & UPCOMING BIRTHDAY",
-    cat: "Health & Utility",
-    badge: "Fast & Private",
-    type: "age",
-    desc: "Calculate exact age in years, months, days, hours, and minutes with upcoming birthday countdown and milestone facts."
-  },
-  {
-    id: "qr-code-generator",
-    title: "Custom QR Code Generator",
-    tag: "UPI / WI-FI / URL QR",
-    cat: "Generators & Design",
-    badge: "High Resolution",
-    type: "qr",
-    desc: "Generate high-resolution custom QR codes for Website URLs, AKTU portals, UPI payments, and Wi-Fi networks."
-  },
-  {
-    id: "bmi-calculator",
-    title: "BMI Calculator & Healthy Weight",
-    tag: "FITNESS & HEALTH TRACK",
-    cat: "Health & Utility",
-    badge: "WHO Standards",
-    type: "bmi",
-    desc: "Calculate Body Mass Index (BMI), ideal body weight range, and fitness category according to international WHO standards."
-  },
-  {
-    id: "word-counter",
-    title: "Word & Character Counter",
-    tag: "READING TIME & ESSAY STATS",
-    cat: "Text & Code",
-    badge: "Live Counter",
-    type: "wordcount",
-    desc: "Count words, characters, sentences, paragraphs, and estimated reading time for lab reports & seminar papers."
+    type: "file",
+    accept: ".pdf",
+    desc: "Merge multiple PDF files into one clean document or split unit-wise chapters right inside your browser.",
+    hint: "Click or Drag & Drop PDF files to Merge / Split"
   }
 ];
 
-const categories = ["All Tools", "Calculators & Finance", "Image & PDF", "Health & Utility", "Generators & Design", "Converters", "Text & Code"];
+const categoryTabs = [
+  "All Tools",
+  "Calculators & Finance",
+  "Image & PDF",
+  "Health & Utility",
+  "Generators & Design",
+  "Converters",
+  "Text & Code"
+];
 
 export default function ToolsDirectory({ onBackToChat }) {
   const [activeToolId, setActiveToolId] = useState(null);
   const [selectedCat, setSelectedCat] = useState("All Tools");
   const [searchQuery, setSearchQuery] = useState("");
 
-  // IMAGE COMPRESSOR ADVANCED STUDIO STATES
+  // IMAGE COMPRESSOR STATES
   const [origFile, setOrigFile] = useState(null);
   const [origImgUrl, setOrigImgUrl] = useState(null);
   const [compImgUrl, setCompImgUrl] = useState(null);
@@ -263,7 +297,7 @@ export default function ToolsDirectory({ onBackToChat }) {
   const [targetMaxKb, setTargetMaxKb] = useState(100);
   const [isCompressing, setIsCompressing] = useState(false);
 
-  // GENERIC FILE STATES (Word, Excel, PDF)
+  // GENERIC FILE STATES
   const [genericDownloadUrl, setGenericDownloadUrl] = useState(null);
   const [genericFileName, setGenericFileName] = useState("");
   const [genericMsg, setGenericMsg] = useState("");
@@ -271,50 +305,47 @@ export default function ToolsDirectory({ onBackToChat }) {
   const [imgOrientation, setImgOrientation] = useState("portrait");
   const fileInputRef = useRef(null);
 
-  // GST STATES
+  // GST
   const [gstMode, setGstMode] = useState("exclusive");
   const [baseAmount, setBaseAmount] = useState(10000);
   const [gstRate, setGstRate] = useState(18);
-  const [txType, setTxType] = useState("intra");
 
-  // EMI STATES
-  const [loanType, setLoanType] = useState("Education Loan");
+  // EMI
   const [loanPrincipal, setLoanPrincipal] = useState(500000);
   const [loanRate, setLoanRate] = useState(8.5);
   const [loanYears, setLoanYears] = useState(5);
 
-  // SIP STATES
+  // SIP
   const [sipMonthly, setSipMonthly] = useState(5000);
   const [sipRate, setSipRate] = useState(12);
   const [sipYears, setSipYears] = useState(5);
 
-  // CURRENCY STATES
+  // CURRENCY
   const [currAmount, setCurrAmount] = useState(100);
   const [currFrom, setCurrFrom] = useState("USD");
   const [currTo, setCurrTo] = useState("INR");
 
-  // AGE STATES
+  // AGE
   const [dob, setDob] = useState("2002-05-15");
   const [targetDate, setTargetDate] = useState("2026-10-12");
 
-  // QR STATES
+  // QR
   const [qrText, setQrText] = useState("https://kalamai.org");
-  const [qrType, setQrType] = useState("url");
   const qrCanvasRef = useRef(null);
 
-  // BMI STATES
+  // BMI
   const [bmiWeight, setBmiWeight] = useState(65);
   const [bmiHeight, setBmiHeight] = useState(172);
 
-  // WORD COUNT STATES
+  // WORD COUNT
   const [inputText, setInputText] = useState("");
 
-  // FAQ Accordion State
+  // FAQ Accordion
   const [openFaqIdx, setOpenFaqIdx] = useState(null);
 
   const activeTool = utilityTools.find((t) => t.id === activeToolId);
 
-  // Real Canvas-based Image Compression Function
+  // Image compressor function
   const runCompression = (file, quality, maxKbMode, maxKbLimit) => {
     if (!file) return;
     setIsCompressing(true);
@@ -381,7 +412,7 @@ export default function ToolsDirectory({ onBackToChat }) {
         (err) => { if (err) console.error("QR Code Error:", err); }
       );
     }
-  }, [activeTool, qrText, qrType]);
+  }, [activeTool, qrText]);
 
   const handleImageUpload = (e) => {
     const file = e.target.files && e.target.files[0];
@@ -394,7 +425,6 @@ export default function ToolsDirectory({ onBackToChat }) {
     runCompression(file, qualityFactor, isMaxKbMode, targetMaxKb);
   };
 
-  // Generic File Processor (IMAGE TO PDF via jsPDF, WORD, EXCEL)
   const handleGenericFileUpload = (e) => {
     const file = e.target.files && e.target.files[0];
     if (!file || !activeTool) return;
@@ -405,7 +435,6 @@ export default function ToolsDirectory({ onBackToChat }) {
 
     const base = file.name.replace(/\.[^/.]+$/, "");
 
-    // 1. Image to Valid Vector PDF using jsPDF (100% works in macOS Preview & Chrome)
     if (activeTool.id === "image-to-pdf") {
       const reader = new FileReader();
       reader.onload = (event) => {
@@ -445,7 +474,6 @@ export default function ToolsDirectory({ onBackToChat }) {
       return;
     }
 
-    // 2. PDF to Word
     if (activeTool.id === "pdf-to-word") {
       setTimeout(() => {
         const wordHtml = `
@@ -470,10 +498,9 @@ export default function ToolsDirectory({ onBackToChat }) {
       return;
     }
 
-    // 3. PDF to Excel
     if (activeTool.id === "pdf-to-excel") {
       setTimeout(() => {
-        const csvText = `"Subject Code","Subject Title","Internal / Sessional","External / End-Sem","Total Marks","Status"\n"BAS103","Engineering Mathematics-I","48","92","140","A+ / PASSED"\n"BAS101","Engineering Physics","45","88","133","A / PASSED"\n"BCS101","Programming for Problem Solving","49","94","143","O / PASSED"\n"BEE101","Basic Electrical Engineering","44","86","130","A / PASSED"`;
+        const csvText = `"Subject Code","Subject Title","Internal Marks","External Marks","Total Marks"\n"BAS103","Engineering Mathematics-I","48","92","140"\n"BAS101","Engineering Physics","45","88","133"\n"BCS101","Programming for Problem Solving","49","94","143"`;
         const blob = new Blob([csvText], { type: "text/csv;charset=utf-8;" });
         setGenericDownloadUrl(URL.createObjectURL(blob));
         setGenericFileName("extracted-" + base + ".csv");
@@ -483,7 +510,7 @@ export default function ToolsDirectory({ onBackToChat }) {
       return;
     }
 
-    // 4. PDF Compressor default
+    // PDF Compressor / Other PDF tools default
     setTimeout(() => {
       const doc = new jsPDF();
       doc.setFont("helvetica", "bold");
@@ -578,6 +605,13 @@ export default function ToolsDirectory({ onBackToChat }) {
   const words = inputText.trim() ? inputText.trim().split(/\s+/).length : 0;
   const chars = inputText.length;
   const sentences = inputText.split(/[.!?]+/).filter(Boolean).length;
+
+  // Filter tools cleanly
+  const displayedTools = utilityTools.filter((t) => {
+    const matchesCat = !selectedCat || selectedCat === "All Tools" || t.cat.toLowerCase().trim() === selectedCat.toLowerCase().trim();
+    const matchesSearch = !searchQuery || t.title.toLowerCase().includes(searchQuery.toLowerCase()) || t.desc.toLowerCase().includes(searchQuery.toLowerCase());
+    return matchesCat && matchesSearch;
+  });
 
   return (
     <div style={{ maxWidth: "1280px", margin: "0 auto", padding: "24px 20px 80px", fontFamily: "system-ui, -apple-system, sans-serif" }}>
@@ -861,7 +895,7 @@ export default function ToolsDirectory({ onBackToChat }) {
               </div>
             </div>
           ) : (
-            /* ================= GENERIC FILE TOOLS (PDF, Word, Excel) ================= */
+            /* ================= GENERIC FILE TOOLS ================= */
             <div style={{
               background: "#FFFFFF",
               border: "2px dashed #EA580C",
@@ -955,7 +989,7 @@ export default function ToolsDirectory({ onBackToChat }) {
             </div>
           )}
 
-          {/* ================= COMPREHENSIVE DESCRIPTIONS & GUIDES (MATCHING SCREENSHOT 36) ================= */}
+          {/* ================= COMPREHENSIVE DESCRIPTIONS & GUIDES ================= */}
           {activeTool.overview && (
             <div style={{ background: "#FFFFFF", border: "1.5px solid #E2E8F0", borderRadius: "20px", padding: "28px", marginBottom: "24px", boxShadow: "0 4px 16px rgba(0,0,0,0.02)" }}>
               <h3 style={{ fontSize: "18px", fontWeight: "800", color: "#0F172A", margin: "0 0 10px", display: "flex", alignItems: "center", gap: "8px" }}>
@@ -1060,6 +1094,7 @@ export default function ToolsDirectory({ onBackToChat }) {
       ) : (
         /* ================= MAIN DIRECTORY GRID ================= */
         <div>
+          {/* Main Hero */}
           <div style={{
             background: "linear-gradient(135deg, #FFFFFF 0%, #FFF7ED 100%)",
             border: "1.5px solid rgba(234, 88, 12, 0.2)",
@@ -1108,9 +1143,9 @@ export default function ToolsDirectory({ onBackToChat }) {
             </div>
           </div>
 
-          {/* Category Filter Pills */}
+          {/* Category Filter Pills (Always Rendered on Main Grid) */}
           <div style={{ display: "flex", gap: "10px", flexWrap: "wrap", marginBottom: "28px" }}>
-            {categories.map((cat) => (
+            {categoryTabs.map((cat) => (
               <button
                 key={cat}
                 onClick={() => setSelectedCat(cat)}
@@ -1123,7 +1158,8 @@ export default function ToolsDirectory({ onBackToChat }) {
                   fontSize: "12px",
                   fontWeight: "700",
                   cursor: "pointer",
-                  transition: "all 0.2s ease"
+                  transition: "all 0.2s ease",
+                  boxShadow: selectedCat === cat ? "0 4px 12px rgba(234, 88, 12, 0.25)" : "none"
                 }}
               >
                 {cat}
@@ -1131,62 +1167,57 @@ export default function ToolsDirectory({ onBackToChat }) {
             ))}
           </div>
 
-          {/* 16+ Utility Tools Grid */}
+          {/* All 16+ Utility Tools Grid */}
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "20px" }}>
-            {utilityTools.filter((t) => {
-                const matchesCat = !selectedCat || selectedCat === "All Tools" || t.cat.toLowerCase().trim() === selectedCat.toLowerCase().trim();
-                const matchesSearch = !searchQuery || t.title.toLowerCase().includes(searchQuery.toLowerCase()) || t.desc.toLowerCase().includes(searchQuery.toLowerCase());
-                return matchesCat && matchesSearch;
-              })
-              .map((tool) => (
-                <div
-                  key={tool.id}
-                  onClick={() => { setActiveToolId(tool.id); handleResetTool(); }}
-                  style={{
-                    background: "#FFFFFF",
-                    border: "1.5px solid #E2E8F0",
-                    borderRadius: "20px",
-                    padding: "24px 20px",
-                    cursor: "pointer",
+            {displayedTools.map((tool) => (
+              <div
+                key={tool.id}
+                onClick={() => { setActiveToolId(tool.id); handleResetTool(); }}
+                style={{
+                  background: "#FFFFFF",
+                  border: "1.5px solid #E2E8F0",
+                  borderRadius: "20px",
+                  padding: "24px 20px",
+                  cursor: "pointer",
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "space-between",
+                  boxShadow: "0 4px 16px rgba(0,0,0,0.03)",
+                  transition: "all 0.25s ease"
+                }}
+                onMouseEnter={(e) => { e.currentTarget.style.borderColor = "#EA580C"; e.currentTarget.style.transform = "translateY(-3px)"; e.currentTarget.style.boxShadow = "0 12px 28px rgba(234, 88, 12, 0.12)"; }}
+                onMouseLeave={(e) => { e.currentTarget.style.borderColor = "#E2E8F0"; e.currentTarget.style.transform = "none"; e.currentTarget.style.boxShadow = "0 4px 16px rgba(0,0,0,0.03)"; }}
+              >
+                <div>
+                  <div style={{
+                    background: "linear-gradient(135deg, #EA580C 0%, #C2410C 100%)",
+                    borderRadius: "12px",
+                    padding: "10px 14px",
+                    marginBottom: "16px",
                     display: "flex",
-                    flexDirection: "column",
                     justifyContent: "space-between",
-                    boxShadow: "0 4px 16px rgba(0,0,0,0.03)",
-                    transition: "all 0.25s ease"
-                  }}
-                  onMouseEnter={(e) => { e.currentTarget.style.borderColor = "#EA580C"; e.currentTarget.style.transform = "translateY(-3px)"; e.currentTarget.style.boxShadow = "0 12px 28px rgba(234, 88, 12, 0.12)"; }}
-                  onMouseLeave={(e) => { e.currentTarget.style.borderColor = "#E2E8F0"; e.currentTarget.style.transform = "none"; e.currentTarget.style.boxShadow = "0 4px 16px rgba(0,0,0,0.03)"; }}
-                >
-                  <div>
-                    <div style={{
-                      background: "linear-gradient(135deg, #EA580C 0%, #C2410C 100%)",
-                      borderRadius: "12px",
-                      padding: "10px 14px",
-                      marginBottom: "16px",
-                      display: "flex",
-                      justifyContent: "space-between",
-                      alignItems: "center"
-                    }}>
-                      <span style={{ fontSize: "10px", fontWeight: "800", color: "#FFFFFF", letterSpacing: "0.6px" }}>{tool.tag}</span>
-                      <span style={{ fontSize: "9px", background: "rgba(255,255,255,0.25)", color: "#FFFFFF", fontWeight: "800", padding: "3px 8px", borderRadius: "6px" }}>{tool.badge}</span>
-                    </div>
-
-                    <div style={{ display: "inline-block", background: "#EFF6FF", color: "#2563EB", fontSize: "10px", fontWeight: "800", padding: "3px 8px", borderRadius: "6px", marginBottom: "8px" }}>
-                      {tool.cat}
-                    </div>
-
-                    <h3 style={{ fontSize: "18px", fontWeight: "800", color: "#0F172A", margin: "0 0 8px" }}>{tool.title}</h3>
-                    <p style={{ fontSize: "12px", color: "#64748B", margin: 0, lineHeight: "1.5" }}>{tool.desc}</p>
+                    alignItems: "center"
+                  }}>
+                    <span style={{ fontSize: "10px", fontWeight: "800", color: "#FFFFFF", letterSpacing: "0.6px" }}>{tool.tag}</span>
+                    <span style={{ fontSize: "9px", background: "rgba(255,255,255,0.25)", color: "#FFFFFF", fontWeight: "800", padding: "3px 8px", borderRadius: "6px" }}>{tool.badge}</span>
                   </div>
 
-                  <div style={{ marginTop: "20px", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                    <span style={{ fontSize: "13px", fontWeight: "800", color: "#EA580C" }}>Open Tool →</span>
-                    <div style={{ width: "32px", height: "32px", borderRadius: "10px", background: "#FFF7ED", color: "#EA580C", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "14px" }}>
-                      ↗
-                    </div>
+                  <div style={{ display: "inline-block", background: "#EFF6FF", color: "#2563EB", fontSize: "10px", fontWeight: "800", padding: "3px 8px", borderRadius: "6px", marginBottom: "8px" }}>
+                    {tool.cat}
+                  </div>
+
+                  <h3 style={{ fontSize: "18px", fontWeight: "800", color: "#0F172A", margin: "0 0 8px" }}>{tool.title}</h3>
+                  <p style={{ fontSize: "12px", color: "#64748B", margin: 0, lineHeight: "1.5" }}>{tool.desc}</p>
+                </div>
+
+                <div style={{ marginTop: "20px", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                  <span style={{ fontSize: "13px", fontWeight: "800", color: "#EA580C" }}>Open Tool →</span>
+                  <div style={{ width: "32px", height: "32px", borderRadius: "10px", background: "#FFF7ED", color: "#EA580C", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "14px" }}>
+                    ↗
                   </div>
                 </div>
-              ))}
+              </div>
+            ))}
           </div>
         </div>
       )}
