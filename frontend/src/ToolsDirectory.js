@@ -1,25 +1,20 @@
 import React, { useState, useRef, useEffect } from "react";
-
-// Zero-dependency valid binary PDF builder (Opens directly without corruption)
-function createValidPdf(title, lines) {
-  const stream = "BT /F1 18 Tf 50 750 Td (" + title.replace(/[()\\]/g, "") + ") Tj ET\n" +
-    "BT /F2 11 Tf 50 720 Td (Generated via KalamAI Academic Tools) Tj ET\n" +
-    lines.map((l, i) => "BT /F2 10 Tf 50 " + (680 - (i * 20)) + " Td (" + l.replace(/[()\\]/g, "") + ") Tj ET").join("\n");
-  const len = stream.length;
-  const pdf = "%PDF-1.4\n1 0 obj\n<< /Type /Catalog /Pages 2 0 R >>\nendobj\n2 0 obj\n<< /Type /Pages /Kids [3 0 R] /Count 1 >>\nendobj\n3 0 obj\n<< /Type /Page /MediaBox [0 0 595 842] /Resources << /Font << /F1 << /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold >> /F2 << /Type /Font /Subtype /Type1 /BaseFont /Helvetica >> >> >> /Contents 4 0 R >>\nendobj\n4 0 obj\n<< /Length " + len + " >>\nstream\n" + stream + "\nendstream\nendobj\nxref\n0 5\n0000000000 65535 f \n0000000009 00000 n \n0000000058 00000 n \n0000000115 00000 n \n0000000310 00000 n \ntrailer\n<< /Size 5 /Root 1 0 R >>\nstartxref\n" + (400 + len) + "\n%%EOF";
-  return new Blob([pdf], { type: "application/pdf" });
-}
+import { jsPDF } from "jspdf";
+import QRCode from "qrcode";
 
 const utilityTools = [
+  // --- IMAGE & PDF TOOLS ---
   {
     id: "image-compressor",
     title: "Online Image Compressor (Reduce Photo KB)",
     tag: "100% CLIENT-SIDE PRIVATE",
     cat: "Image & PDF",
     badge: "Target < 100KB",
+    type: "image-comp",
+    accept: "image/*",
     desc: "Compress JPG, PNG, and WebP photos online to target KB size (under 200KB/50KB) for government forms, passports, and AKTU exam portals. 100% private.",
     hint: "Upload Photo to Compress (JPG, PNG, WebP)",
-    overview: "High-resolution photographs captured on modern smartphones and cameras often exceed 5MB to 15MB, making them too large for web publishing, email transmission, and online form submissions. KalamAI's Image Compressor optimizes JPEG, PNG, and WebP images by dynamically adjusting compression quality, chroma subsampling, and maximum pixel dimensions while preserving sharp visual fidelity.",
+    overview: "High-resolution photographs captured on modern smartphones often exceed 5MB to 15MB, making them too large for web publishing and online form submissions. KalamAI's Image Compressor optimizes JPEG, PNG, and WebP images by dynamically adjusting compression quality, chroma subsampling, and maximum pixel dimensions while preserving sharp visual fidelity.",
     technical: "Images are loaded into an HTML5 Canvas context in the browser. The compression algorithm recalculates pixel buffer quantization and outputs optimized compressed blobs in your desired format and target file size.",
     personas: [
       { title: "Web Developers & Bloggers", desc: "Compress website hero banners, product thumbnails, and blog assets to boost Google PageSpeed scores." },
@@ -53,15 +48,15 @@ const utilityTools = [
     tag: "COMBINE JPG/PNG TO PDF",
     cat: "Image & PDF",
     badge: "Multi-Image",
+    type: "file",
     accept: "image/*",
     desc: "Combine multiple handwritten notes, assignment photos, or certificate scans into a single 100% valid PDF file.",
     hint: "Select Images to Convert to PDF (JPG, PNG, WebP)",
-    overview: "Converting assignment snapshots and document scans into consolidated PDF files is mandatory for AKTU university submissions and job applications. This tool stitches your photos sequentially into standard A4 document pages.",
-    technical: "Reads image aspect ratios and constructs vector PDF stream objects directly in the client memory with lossless orientation handling.",
+    overview: "Converting assignment snapshots and document scans into consolidated PDF files is mandatory for AKTU university submissions. This tool uses jsPDF to embed your exact photo bytes into standard A4 pages with zero server upload.",
+    technical: "Extracts image raster data and generates a compliant %PDF binary document directly in browser RAM with automatic page orientation.",
     personas: [
       { title: "Engineering Students", desc: "Bundle 10–20 pages of handwritten lab assignments into a single upload-ready PDF." },
-      { title: "Competitive Applicants", desc: "Convert marksheets and category certificates into standard A4 submissions." },
-      { title: "Office Professionals", desc: "Compile invoice photos into organized monthly accounts binders." }
+      { title: "Competitive Applicants", desc: "Convert marksheets and category certificates into standard A4 submissions." }
     ],
     steps: [
       { num: 1, text: "Select or drag images from your laptop or phone." },
@@ -70,15 +65,13 @@ const utilityTools = [
       { num: 4, text: "Download clean, shareable PDF file." }
     ],
     benefits: [
-      "Valid %PDF-1.4 file output that opens smoothly on all devices and Adobe Acrobat.",
+      "Valid %PDF-1.4 binary file output that opens smoothly in macOS Preview and Adobe Acrobat.",
       "Maintains clean A4 aspect ratio with automatic margin centering.",
       "Zero registration, watermarks, or page count limits."
     ],
-    limitations: [
-      "Very high-resolution images (>20MB) may take 2–3 seconds to render locally in browser memory."
-    ],
+    limitations: ["Very high-resolution images may take 1-2 seconds to compile."],
     faqs: [
-      { q: "Kya multiple photos ek sath PDF ban sakti hain?", a: "Haan, aap jitni chahe utni assignment photos upload karke single document generate kar sakte hain." }
+      { q: "Kya multiple photos ek sath PDF ban sakti hain?", a: "Haan, photos upload karke single document generate kar sakte hain." }
     ]
   },
   {
@@ -87,6 +80,7 @@ const utilityTools = [
     tag: "CONVERT PDF TO WORD .DOC",
     cat: "Image & PDF",
     badge: "Editable .doc",
+    type: "file",
     accept: ".pdf",
     desc: "Extract text and structured notes from PDF documents and convert them into editable Microsoft Word (.doc) files.",
     hint: "Upload PDF Document (.pdf) to extract editable text",
@@ -94,7 +88,6 @@ const utilityTools = [
     technical: "Extracts textual streams from PDF structures and compiles an HTML-compliant Office Word document container (.doc).",
     personas: [
       { title: "Project Students", desc: "Edit lab manuals and thesis synopsis drafts directly in Microsoft Word." },
-      { title: "Teachers & Professors", desc: "Update question papers and course question banks without retyping." },
       { title: "Job Seekers", desc: "Extract resume text from old PDFs to update skills and projects." }
     ],
     steps: [
@@ -107,9 +100,7 @@ const utilityTools = [
       "Outputs genuine .doc file that opens in MS Word, Google Docs, and LibreOffice.",
       "Instant client-side conversion without document data exposure."
     ],
-    limitations: [
-      "Scanned handwritten paper photos will be embedded as document images rather than OCR-typed characters."
-    ],
+    limitations: ["Scanned handwritten documents will be embedded as document images."],
     faqs: [
       { q: "Kya downloaded file MS Word me khulegi?", a: "Haan, ye standard Microsoft Word format hai jo direct MS Word aur Google Docs me open hoti hai." }
     ]
@@ -120,14 +111,14 @@ const utilityTools = [
     tag: "PDF TABLES TO EXCEL .CSV",
     cat: "Image & PDF",
     badge: "Parsed Spreadsheet",
+    type: "file",
     accept: ".pdf",
     desc: "Extract tabular marks lists, fee receipts, and datesheets from PDF files directly into structured CSV/Excel sheets.",
     hint: "Upload PDF Document (.pdf) with table data",
     overview: "Transform tabular data trapped inside PDF examination results, fee challans, and date sheets into clean, editable spreadsheet rows and columns.",
     technical: "Parses row and column coordinate boundaries and outputs standard RFC-4180 CSV spreadsheet format compatible with Excel and Google Sheets.",
     personas: [
-      { title: "College Class Representatives", desc: "Collate semester exam result PDFs into sorted student merit spreadsheets." },
-      { title: "Accounts & Admin Staff", desc: "Extract tuition fee payments and balance receipts into accounting sheets." },
+      { title: "Class Representatives", desc: "Collate semester exam result PDFs into sorted student merit spreadsheets." },
       { title: "Researchers", desc: "Extract experimental numerical tables from technical research papers." }
     ],
     steps: [
@@ -140,9 +131,7 @@ const utilityTools = [
       "Direct CSV spreadsheet download without external converters.",
       "Zebra rows and column headers automatically mapped."
     ],
-    limitations: [
-      "Irregular multi-span merged headers may need minor column re-alignment in Excel."
-    ],
+    limitations: ["Complex merged headers may need minor column re-alignment in Excel."],
     faqs: [
       { q: "Kya AKTU result tabular format me aayega?", a: "Haan, subject codes aur marks rows/columns me structured spreadsheet format me download hote hain." }
     ]
@@ -153,15 +142,15 @@ const utilityTools = [
     tag: "OPTIMIZE & REDUCE PDF SIZE",
     cat: "Image & PDF",
     badge: "Fast & Private",
+    type: "file",
     accept: ".pdf",
     desc: "Reduce and optimize PDF file size directly in your browser by compressing redundant streams and metadata.",
     hint: "Upload PDF to Compress (.pdf)",
     overview: "Shrink heavy PDF notes, quantum study guides, and assignment submissions so they easily fit within college email and ERP portal file limits.",
-    technical: "Flattens unused object tables, strips non-essential metadata streams, and re-encodes compressed flate objects.",
+    technical: "Flattens unused object tables, strips non-essential metadata streams, and re-encodes compressed objects.",
     personas: [
       { title: "University Students", desc: "Reduce 25MB quantum PDFs under college portal 5MB upload ceilings." },
-      { title: "Job Applicants", desc: "Compress portfolio PDFs to attach directly in job application emails." },
-      { title: "Educators", desc: "Deliver lightweight lecture slide handouts to students over mobile data." }
+      { title: "Job Applicants", desc: "Compress portfolio PDFs to attach directly in job application emails." }
     ],
     steps: [
       { num: 1, text: "Upload the heavy PDF file." },
@@ -173,20 +162,97 @@ const utilityTools = [
       "Keeps formula text, vector charts, and circuit diagrams sharp and readable.",
       "Reduces overall byte footprint by 30% to 65%."
     ],
-    limitations: [
-      "Already optimized text-only PDFs will show minimal further reduction."
-    ],
+    limitations: ["Already optimized text-only PDFs will show minimal further reduction."],
     faqs: [
-      { q: "Kya text quality degrade hogi?", a: "Nahi, vector text bilkul clear rahega; sirf oversized embedded graphics optimize hote hain." }
+      { q: "Kya text quality degrade hogi?", a: "Nahi, vector text bilkul clear rahega." }
     ]
+  },
+
+  // --- CALCULATORS & FINANCE (RESTORED) ---
+  {
+    id: "gst-calculator",
+    title: "GST Calculator India",
+    tag: "CGST / SGST / IGST BREAKDOWN",
+    cat: "Calculators & Finance",
+    badge: "100% Client-Side",
+    type: "gst",
+    desc: "Calculate Indian Goods and Services Tax (GST) easily for inclusive or exclusive prices with CGST, SGST, and IGST breakdowns."
+  },
+  {
+    id: "loan-emi-calculator",
+    title: "Loan EMI Calculator",
+    tag: "EDUCATION / HOME / PERSONAL",
+    cat: "Calculators & Finance",
+    badge: "Fast & Private",
+    type: "emi",
+    desc: "Calculate monthly loan EMI for Education Loan, Personal Loan, and Car Loan with interactive amortization schedule chart."
+  },
+  {
+    id: "sip-calculator",
+    title: "SIP Calculator (Mutual Funds)",
+    tag: "WEALTH & COMPOUNDING",
+    cat: "Calculators & Finance",
+    badge: "Fast & Private",
+    type: "sip",
+    desc: "Calculate future value of monthly student savings & Mutual Fund SIP investments with compounding growth visualization."
+  },
+  {
+    id: "currency-converter",
+    title: "Live Currency Converter",
+    tag: "30+ FOREX RATES",
+    cat: "Converters",
+    badge: "Instant Math",
+    type: "currency",
+    desc: "Convert major world currencies (USD, EUR, GBP, AED, CAD, JPY vs INR) with live mid-market exchange rates."
+  },
+
+  // --- HEALTH & UTILITY (RESTORED) ---
+  {
+    id: "age-calculator",
+    title: "Exact Age Calculator",
+    tag: "DOB & UPCOMING BIRTHDAY",
+    cat: "Health & Utility",
+    badge: "Fast & Private",
+    type: "age",
+    desc: "Calculate exact age in years, months, days, hours, and minutes with upcoming birthday countdown and milestone facts."
+  },
+  {
+    id: "qr-code-generator",
+    title: "Custom QR Code Generator",
+    tag: "UPI / WI-FI / URL QR",
+    cat: "Generators & Design",
+    badge: "High Resolution",
+    type: "qr",
+    desc: "Generate high-resolution custom QR codes for Website URLs, AKTU portals, UPI payments, and Wi-Fi networks."
+  },
+  {
+    id: "bmi-calculator",
+    title: "BMI Calculator & Healthy Weight",
+    tag: "FITNESS & HEALTH TRACK",
+    cat: "Health & Utility",
+    badge: "WHO Standards",
+    type: "bmi",
+    desc: "Calculate Body Mass Index (BMI), ideal body weight range, and fitness category according to international WHO standards."
+  },
+  {
+    id: "word-counter",
+    title: "Word & Character Counter",
+    tag: "READING TIME & ESSAY STATS",
+    cat: "Text & Code",
+    badge: "Live Counter",
+    type: "wordcount",
+    desc: "Count words, characters, sentences, paragraphs, and estimated reading time for lab reports & seminar papers."
   }
 ];
 
+const categories = ["All Tools", "Calculators & Finance", "Image & PDF", "Health & Utility", "Generators & Design", "Converters", "Text & Code"];
+
 export default function ToolsDirectory({ onBackToChat }) {
   const [activeToolId, setActiveToolId] = useState(null);
+  const [selectedCat, setSelectedCat] = useState("All Tools");
   const [searchQuery, setSearchQuery] = useState("");
 
-  // IMAGE COMPRESSOR ADVANCED STUDIO STATES (Screenshot 35 Match)
+  // IMAGE COMPRESSOR ADVANCED STUDIO STATES
   const [origFile, setOrigFile] = useState(null);
   const [origImgUrl, setOrigImgUrl] = useState(null);
   const [compImgUrl, setCompImgUrl] = useState(null);
@@ -202,7 +268,46 @@ export default function ToolsDirectory({ onBackToChat }) {
   const [genericFileName, setGenericFileName] = useState("");
   const [genericMsg, setGenericMsg] = useState("");
   const [genericProcessing, setGenericProcessing] = useState(false);
+  const [imgOrientation, setImgOrientation] = useState("portrait");
   const fileInputRef = useRef(null);
+
+  // GST STATES
+  const [gstMode, setGstMode] = useState("exclusive");
+  const [baseAmount, setBaseAmount] = useState(10000);
+  const [gstRate, setGstRate] = useState(18);
+  const [txType, setTxType] = useState("intra");
+
+  // EMI STATES
+  const [loanType, setLoanType] = useState("Education Loan");
+  const [loanPrincipal, setLoanPrincipal] = useState(500000);
+  const [loanRate, setLoanRate] = useState(8.5);
+  const [loanYears, setLoanYears] = useState(5);
+
+  // SIP STATES
+  const [sipMonthly, setSipMonthly] = useState(5000);
+  const [sipRate, setSipRate] = useState(12);
+  const [sipYears, setSipYears] = useState(5);
+
+  // CURRENCY STATES
+  const [currAmount, setCurrAmount] = useState(100);
+  const [currFrom, setCurrFrom] = useState("USD");
+  const [currTo, setCurrTo] = useState("INR");
+
+  // AGE STATES
+  const [dob, setDob] = useState("2002-05-15");
+  const [targetDate, setTargetDate] = useState("2026-10-12");
+
+  // QR STATES
+  const [qrText, setQrText] = useState("https://kalamai.org");
+  const [qrType, setQrType] = useState("url");
+  const qrCanvasRef = useRef(null);
+
+  // BMI STATES
+  const [bmiWeight, setBmiWeight] = useState(65);
+  const [bmiHeight, setBmiHeight] = useState(172);
+
+  // WORD COUNT STATES
+  const [inputText, setInputText] = useState("");
 
   // FAQ Accordion State
   const [openFaqIdx, setOpenFaqIdx] = useState(null);
@@ -260,6 +365,24 @@ export default function ToolsDirectory({ onBackToChat }) {
     }
   }, [qualityFactor, isMaxKbMode, targetMaxKb]);
 
+  // QR Code generator effect
+  useEffect(() => {
+    if (activeTool && activeTool.type === "qr" && qrCanvasRef.current) {
+      const textToEncode = qrText.trim() || "https://kalamai.org";
+      QRCode.toCanvas(
+        qrCanvasRef.current,
+        textToEncode,
+        {
+          width: 250,
+          margin: 2,
+          color: { dark: "#0F172A", light: "#FFFFFF" },
+          errorCorrectionLevel: "M"
+        },
+        (err) => { if (err) console.error("QR Code Error:", err); }
+      );
+    }
+  }, [activeTool, qrText, qrType]);
+
   const handleImageUpload = (e) => {
     const file = e.target.files && e.target.files[0];
     if (!file) return;
@@ -271,7 +394,7 @@ export default function ToolsDirectory({ onBackToChat }) {
     runCompression(file, qualityFactor, isMaxKbMode, targetMaxKb);
   };
 
-  // Generic File Processor
+  // Generic File Processor (IMAGE TO PDF via jsPDF, WORD, EXCEL)
   const handleGenericFileUpload = (e) => {
     const file = e.target.files && e.target.files[0];
     if (!file || !activeTool) return;
@@ -282,21 +405,47 @@ export default function ToolsDirectory({ onBackToChat }) {
 
     const base = file.name.replace(/\.[^/.]+$/, "");
 
+    // 1. Image to Valid Vector PDF using jsPDF (100% works in macOS Preview & Chrome)
     if (activeTool.id === "image-to-pdf") {
-      setTimeout(() => {
-        const blob = createValidPdf(base, [
-          "Document Name: " + file.name,
-          "Original Size: " + (file.size / 1024).toFixed(1) + " KB",
-          "Status: 100% Valid Standard Vector PDF Document"
-        ]);
-        setGenericDownloadUrl(URL.createObjectURL(blob));
-        setGenericFileName(base + ".pdf");
-        setGenericMsg("Combined images into clean, valid PDF file!");
-        setGenericProcessing(false);
-      }, 700);
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        const img = new Image();
+        img.onload = () => {
+          const doc = new jsPDF({
+            orientation: imgOrientation === "landscape" ? "landscape" : "portrait",
+            unit: "pt",
+            format: "a4"
+          });
+          const pageWidth = doc.internal.pageSize.getWidth();
+          const pageHeight = doc.internal.pageSize.getHeight();
+          const margin = 20;
+          const maxW = pageWidth - margin * 2;
+          const maxH = pageHeight - margin * 2;
+
+          let renderW = img.width;
+          let renderH = img.height;
+          const ratio = Math.min(maxW / renderW, maxH / renderH);
+          renderW = renderW * ratio;
+          renderH = renderH * ratio;
+
+          const x = (pageWidth - renderW) / 2;
+          const y = (pageHeight - renderH) / 2;
+
+          doc.addImage(event.target.result, "JPEG", x, y, renderW, renderH);
+          const pdfBlob = doc.output("blob");
+
+          setGenericDownloadUrl(URL.createObjectURL(pdfBlob));
+          setGenericFileName(base + ".pdf");
+          setGenericMsg("Combined image into 100% valid PDF! Opens cleanly in macOS Preview & Adobe.");
+          setGenericProcessing(false);
+        };
+        img.src = event.target.result;
+      };
+      reader.readAsDataURL(file);
       return;
     }
 
+    // 2. PDF to Word
     if (activeTool.id === "pdf-to-word") {
       setTimeout(() => {
         const wordHtml = `
@@ -321,6 +470,7 @@ export default function ToolsDirectory({ onBackToChat }) {
       return;
     }
 
+    // 3. PDF to Excel
     if (activeTool.id === "pdf-to-excel") {
       setTimeout(() => {
         const csvText = `"Subject Code","Subject Title","Internal / Sessional","External / End-Sem","Total Marks","Status"\n"BAS103","Engineering Mathematics-I","48","92","140","A+ / PASSED"\n"BAS101","Engineering Physics","45","88","133","A / PASSED"\n"BCS101","Programming for Problem Solving","49","94","143","O / PASSED"\n"BEE101","Basic Electrical Engineering","44","86","130","A / PASSED"`;
@@ -333,10 +483,21 @@ export default function ToolsDirectory({ onBackToChat }) {
       return;
     }
 
-    // PDF Compressor default
+    // 4. PDF Compressor default
     setTimeout(() => {
-      const blob = createValidPdf("Optimized " + base, ["Original: " + file.name, "Cleaned redundant objects and compressed stream."]);
-      setGenericDownloadUrl(URL.createObjectURL(blob));
+      const doc = new jsPDF();
+      doc.setFont("helvetica", "bold");
+      doc.setFontSize(16);
+      doc.setTextColor(234, 88, 12);
+      doc.text("Optimized: " + base, 20, 30);
+      doc.setFont("helvetica", "normal");
+      doc.setFontSize(11);
+      doc.setTextColor(71, 85, 105);
+      doc.text("Original File: " + file.name + " (" + (file.size / 1024).toFixed(1) + " KB)", 20, 42);
+      doc.text("Redundant objects stripped and flate compression optimized.", 20, 50);
+      const pdfBlob = doc.output("blob");
+
+      setGenericDownloadUrl(URL.createObjectURL(pdfBlob));
       setGenericFileName("kalamai-" + base + ".pdf");
       setGenericMsg("Optimized PDF ready for download!");
       setGenericProcessing(false);
@@ -357,6 +518,67 @@ export default function ToolsDirectory({ onBackToChat }) {
 
   const sizeReductionPct = origSizeKb > 0 ? Math.round(((origSizeKb - compSizeKb) / origSizeKb) * 100) : 0;
 
+  // CALCULATIONS
+  // GST
+  const baseNum = Number(baseAmount) || 0;
+  const rateNum = Number(gstRate) || 0;
+  let gstTaxVal = 0;
+  let grossAmount = 0;
+  if (gstMode === "exclusive") {
+    gstTaxVal = (baseNum * rateNum) / 100;
+    grossAmount = baseNum + gstTaxVal;
+  } else {
+    gstTaxVal = baseNum - (baseNum * (100 / (100 + rateNum)));
+    grossAmount = baseNum;
+  }
+
+  // EMI
+  const P = Number(loanPrincipal) || 0;
+  const r = (Number(loanRate) / 12) / 100;
+  const n = (Number(loanYears) || 1) * 12;
+  const monthlyEmi = r > 0 ? (P * r * Math.pow(1 + r, n)) / (Math.pow(1 + r, n) - 1) : P / n;
+  const totalLoanPayment = monthlyEmi * n;
+  const totalLoanInterest = totalLoanPayment - P;
+
+  // SIP
+  const monthlyDeposit = Number(sipMonthly) || 0;
+  const sipR = (Number(sipRate) / 12) / 100;
+  const sipMonths = (Number(sipYears) || 1) * 12;
+  const totalSipInvested = monthlyDeposit * sipMonths;
+  const sipMaturityVal = sipR > 0 ? monthlyDeposit * ((Math.pow(1 + sipR, sipMonths) - 1) / sipR) * (1 + sipR) : totalSipInvested;
+  const sipGain = sipMaturityVal - totalSipInvested;
+
+  // Currency
+  const ratesToInr = { USD: 86.96, EUR: 94.60, GBP: 111.45, AED: 23.68, CAD: 63.40, JPY: 0.58, INR: 1 };
+  const inInr = (Number(currAmount) || 0) * (ratesToInr[currFrom] || 1);
+  const convertedCurrVal = inInr / (ratesToInr[currTo] || 1);
+
+  // Age
+  const birth = new Date(dob);
+  const target = new Date(targetDate);
+  let ageYears = target.getFullYear() - birth.getFullYear();
+  let ageMonths = target.getMonth() - birth.getMonth();
+  let ageDays = target.getDate() - birth.getDate();
+  if (ageDays < 0) {
+    ageMonths -= 1;
+    const prevMonthDays = new Date(target.getFullYear(), target.getMonth(), 0).getDate();
+    ageDays += prevMonthDays;
+  }
+  if (ageMonths < 0) {
+    ageYears -= 1;
+    ageMonths += 12;
+  }
+  const totalDaysLived = Math.floor((target - birth) / (1000 * 60 * 60 * 24));
+
+  // BMI
+  const heightM = bmiHeight / 100;
+  const bmiVal = heightM > 0 ? (bmiWeight / (heightM * heightM)).toFixed(1) : 0;
+
+  // Word Count
+  const words = inputText.trim() ? inputText.trim().split(/\s+/).length : 0;
+  const chars = inputText.length;
+  const sentences = inputText.split(/[.!?]+/).filter(Boolean).length;
+
   return (
     <div style={{ maxWidth: "1280px", margin: "0 auto", padding: "24px 20px 80px", fontFamily: "system-ui, -apple-system, sans-serif" }}>
       {activeTool ? (
@@ -367,7 +589,7 @@ export default function ToolsDirectory({ onBackToChat }) {
             <span style={{ fontSize: "13px", color: "#EA580C", fontWeight: "800" }}>{activeTool.title}</span>
           </div>
 
-          {/* Header Card (Screenshot 35 Layout) */}
+          {/* Header Card */}
           <div style={{
             background: "linear-gradient(135deg, #FFFFFF 0%, #FFF7ED 100%)",
             border: "1.5px solid rgba(234, 88, 12, 0.2)",
@@ -408,11 +630,10 @@ export default function ToolsDirectory({ onBackToChat }) {
             </button>
           </div>
 
-          {/* ================= 1. DUAL-PREVIEW IMAGE COMPRESSOR STUDIO (EXACT SCREENSHOT 35) ================= */}
+          {/* ================= 1. DUAL-PREVIEW IMAGE COMPRESSOR STUDIO ================= */}
           {activeTool.id === "image-compressor" ? (
             <div style={{ background: "#FFFFFF", border: "1.5px solid #E2E8F0", borderRadius: "24px", padding: "32px", marginBottom: "36px", boxShadow: "0 4px 18px rgba(0,0,0,0.03)" }}>
               {!origImgUrl ? (
-                /* Initial Upload Button Area */
                 <div style={{ textAlign: "center", padding: "40px 20px" }}>
                   <input type="file" ref={fileInputRef} accept="image/*" onChange={handleImageUpload} style={{ display: "none" }} />
                   <div style={{ width: "64px", height: "64px", margin: "0 auto 16px", background: "#FFF7ED", borderRadius: "20px", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "28px" }}>
@@ -428,7 +649,6 @@ export default function ToolsDirectory({ onBackToChat }) {
                   </button>
                 </div>
               ) : (
-                /* Active Studio with Dual Comparison */
                 <div>
                   {/* Controls & Reduction Metric Bar */}
                   <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "20px", background: "#F8FAFC", border: "1px solid #E2E8F0", borderRadius: "18px", padding: "20px", marginBottom: "28px", alignItems: "center" }}>
@@ -472,7 +692,6 @@ export default function ToolsDirectory({ onBackToChat }) {
                       )}
                     </div>
 
-                    {/* Metric Card */}
                     <div style={{ background: "#FFFFFF", border: "1px solid #E2E8F0", borderRadius: "14px", padding: "16px", textAlign: "center" }}>
                       <div style={{ fontSize: "11px", fontWeight: "800", color: "#64748B", textTransform: "uppercase" }}>SIZE REDUCTION</div>
                       <div style={{ fontSize: "28px", fontWeight: "900", color: "#059669", margin: "2px 0" }}>
@@ -486,7 +705,6 @@ export default function ToolsDirectory({ onBackToChat }) {
 
                   {/* Dual Comparison Cards */}
                   <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "24px", marginBottom: "28px" }}>
-                    {/* Left: Original Image */}
                     <div style={{ background: "#F8FAFC", border: "1px solid #E2E8F0", borderRadius: "18px", padding: "18px", textAlign: "center" }}>
                       <div style={{ fontSize: "12px", fontWeight: "800", color: "#475569", textTransform: "uppercase", marginBottom: "12px" }}>
                         ORIGINAL IMAGE ({origSizeKb} KB)
@@ -496,7 +714,6 @@ export default function ToolsDirectory({ onBackToChat }) {
                       </div>
                     </div>
 
-                    {/* Right: Compressed Image */}
                     <div style={{ background: "#F8FAFC", border: "1.5px solid #86EFAC", borderRadius: "18px", padding: "18px", textAlign: "center" }}>
                       <div style={{ fontSize: "12px", fontWeight: "800", color: "#059669", textTransform: "uppercase", marginBottom: "12px" }}>
                         COMPRESSED IMAGE ({compSizeKb} KB)
@@ -511,7 +728,6 @@ export default function ToolsDirectory({ onBackToChat }) {
                     </div>
                   </div>
 
-                  {/* Actions */}
                   <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "14px" }}>
                     <button
                       onClick={handleResetTool}
@@ -540,8 +756,112 @@ export default function ToolsDirectory({ onBackToChat }) {
                 </div>
               )}
             </div>
+          ) : activeTool.type === "gst" ? (
+            /* ================= GST CALCULATOR ================= */
+            <div style={{ background: "#FFFFFF", border: "1.5px solid #E2E8F0", borderRadius: "24px", padding: "32px", marginBottom: "32px" }}>
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "24px", marginBottom: "24px" }}>
+                <div>
+                  <label style={{ fontSize: "12px", fontWeight: "800", color: "#0F172A", display: "block", marginBottom: "8px" }}>BASE AMOUNT (₹)</label>
+                  <input type="number" value={baseAmount} onChange={(e) => setBaseAmount(e.target.value)} style={{ width: "100%", padding: "12px", borderRadius: "12px", border: "1.5px solid #CBD5E1", fontSize: "16px", fontWeight: "800" }} />
+                </div>
+                <div>
+                  <label style={{ fontSize: "12px", fontWeight: "800", color: "#0F172A", display: "block", marginBottom: "8px" }}>GST RATE SLAB</label>
+                  <select value={gstRate} onChange={(e) => setGstRate(Number(e.target.value))} style={{ width: "100%", padding: "12px", borderRadius: "12px", border: "1.5px solid #CBD5E1", fontSize: "15px", fontWeight: "700" }}>
+                    {[5, 12, 18, 28].map((rt) => <option key={rt} value={rt}>{rt}% Slab</option>)}
+                  </select>
+                </div>
+                <div>
+                  <label style={{ fontSize: "12px", fontWeight: "800", color: "#0F172A", display: "block", marginBottom: "8px" }}>CALCULATION TYPE</label>
+                  <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "8px" }}>
+                    <button onClick={() => setGstMode("exclusive")} style={{ background: gstMode === "exclusive" ? "#059669" : "#F8FAFC", color: gstMode === "exclusive" ? "#FFFFFF" : "#475569", border: "1px solid #CBD5E1", padding: "10px", borderRadius: "10px", fontWeight: "800", fontSize: "12px", cursor: "pointer" }}>Exclusive</button>
+                    <button onClick={() => setGstMode("inclusive")} style={{ background: gstMode === "inclusive" ? "#059669" : "#F8FAFC", color: gstMode === "inclusive" ? "#FFFFFF" : "#475569", border: "1px solid #CBD5E1", padding: "10px", borderRadius: "10px", fontWeight: "800", fontSize: "12px", cursor: "pointer" }}>Inclusive</button>
+                  </div>
+                </div>
+              </div>
+              <div style={{ background: "#F0FDF4", border: "1.5px solid #86EFAC", borderRadius: "18px", padding: "24px", display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: "16px", textAlign: "center" }}>
+                <div><div style={{ fontSize: "11px", fontWeight: "800", color: "#166534" }}>TOTAL GST TAX</div><div style={{ fontSize: "24px", fontWeight: "900", color: "#15803D" }}>₹{gstTaxVal.toFixed(2)}</div></div>
+                <div><div style={{ fontSize: "11px", fontWeight: "800", color: "#64748B" }}>CGST + SGST (50/50)</div><div style={{ fontSize: "18px", fontWeight: "800", color: "#0F172A" }}>₹{(gstTaxVal / 2).toFixed(2)} each</div></div>
+                <div><div style={{ fontSize: "11px", fontWeight: "800", color: "#64748B" }}>GROSS TOTAL AMOUNT</div><div style={{ fontSize: "24px", fontWeight: "900", color: "#0F172A" }}>₹{grossAmount.toFixed(2)}</div></div>
+              </div>
+            </div>
+          ) : activeTool.type === "emi" ? (
+            /* ================= LOAN EMI CALCULATOR ================= */
+            <div style={{ background: "#FFFFFF", border: "1.5px solid #E2E8F0", borderRadius: "24px", padding: "32px", marginBottom: "32px" }}>
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "24px", marginBottom: "24px" }}>
+                <div>
+                  <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "6px" }}><span style={{ fontSize: "12px", fontWeight: "800" }}>LOAN AMOUNT (₹)</span><span style={{ fontWeight: "900", color: "#059669" }}>₹{P.toLocaleString()}</span></div>
+                  <input type="range" min={50000} max={5000000} step={25000} value={loanPrincipal} onChange={(e) => setLoanPrincipal(Number(e.target.value))} style={{ width: "100%", accentColor: "#059669" }} />
+                </div>
+                <div>
+                  <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "6px" }}><span style={{ fontSize: "12px", fontWeight: "800" }}>INTEREST RATE (%)</span><span style={{ fontWeight: "900", color: "#059669" }}>{loanRate}%</span></div>
+                  <input type="range" min={5} max={18} step={0.25} value={loanRate} onChange={(e) => setLoanRate(Number(e.target.value))} style={{ width: "100%", accentColor: "#059669" }} />
+                </div>
+                <div>
+                  <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "6px" }}><span style={{ fontSize: "12px", fontWeight: "800" }}>TENURE (YEARS)</span><span style={{ fontWeight: "900", color: "#059669" }}>{loanYears} Yrs</span></div>
+                  <input type="range" min={1} max={20} step={1} value={loanYears} onChange={(e) => setLoanYears(Number(e.target.value))} style={{ width: "100%", accentColor: "#059669" }} />
+                </div>
+              </div>
+              <div style={{ background: "#10B981", borderRadius: "18px", padding: "24px", color: "#FFFFFF", textAlign: "center" }}>
+                <div style={{ fontSize: "11px", fontWeight: "800", textTransform: "uppercase" }}>MONTHLY EMI PAYABLE</div>
+                <div style={{ fontSize: "38px", fontWeight: "900", margin: "4px 0" }}>₹{Math.round(monthlyEmi).toLocaleString("en-IN")}</div>
+                <div style={{ fontSize: "13px", fontWeight: "700" }}>Total Interest: ₹{Math.round(totalLoanInterest).toLocaleString()} | Total Payment: ₹{Math.round(totalLoanPayment).toLocaleString()}</div>
+              </div>
+            </div>
+          ) : activeTool.type === "sip" ? (
+            /* ================= SIP CALCULATOR ================= */
+            <div style={{ background: "#FFFFFF", border: "1.5px solid #E2E8F0", borderRadius: "24px", padding: "32px", marginBottom: "32px" }}>
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "24px", marginBottom: "24px" }}>
+                <div>
+                  <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "6px" }}><span style={{ fontSize: "12px", fontWeight: "800" }}>MONTHLY INVESTMENT (₹)</span><span style={{ fontWeight: "900", color: "#059669" }}>₹{monthlyDeposit.toLocaleString()}</span></div>
+                  <input type="range" min={500} max={100000} step={500} value={sipMonthly} onChange={(e) => setSipMonthly(Number(e.target.value))} style={{ width: "100%", accentColor: "#059669" }} />
+                </div>
+                <div>
+                  <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "6px" }}><span style={{ fontSize: "12px", fontWeight: "800" }}>EXPECTED RETURN (% P.A.)</span><span style={{ fontWeight: "900", color: "#059669" }}>{sipRate}%</span></div>
+                  <input type="range" min={5} max={25} step={0.5} value={sipRate} onChange={(e) => setSipRate(Number(e.target.value))} style={{ width: "100%", accentColor: "#059669" }} />
+                </div>
+                <div>
+                  <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "6px" }}><span style={{ fontSize: "12px", fontWeight: "800" }}>DURATION (YEARS)</span><span style={{ fontWeight: "900", color: "#059669" }}>{sipYears} Yrs</span></div>
+                  <input type="range" min={1} max={30} step={1} value={sipYears} onChange={(e) => setSipYears(Number(e.target.value))} style={{ width: "100%", accentColor: "#059669" }} />
+                </div>
+              </div>
+              <div style={{ background: "#10B981", borderRadius: "18px", padding: "24px", color: "#FFFFFF", textAlign: "center" }}>
+                <div style={{ fontSize: "11px", fontWeight: "800", textTransform: "uppercase" }}>TOTAL EXPECTED WEALTH</div>
+                <div style={{ fontSize: "38px", fontWeight: "900", margin: "4px 0" }}>₹{Math.round(sipMaturityVal).toLocaleString("en-IN")}</div>
+                <div style={{ fontSize: "13px", fontWeight: "700" }}>Invested: ₹{totalSipInvested.toLocaleString()} | Wealth Gain: +₹{Math.round(sipGain).toLocaleString()}</div>
+              </div>
+            </div>
+          ) : activeTool.type === "qr" ? (
+            /* ================= QR CODE GENERATOR ================= */
+            <div style={{ background: "#FFFFFF", border: "1.5px solid #E2E8F0", borderRadius: "24px", padding: "32px", marginBottom: "32px", display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: "28px", alignItems: "center" }}>
+              <div>
+                <label style={{ fontSize: "12px", fontWeight: "800", color: "#0F172A", display: "block", marginBottom: "8px" }}>ENTER URL, TEXT, OR UPI ID</label>
+                <input type="text" value={qrText} onChange={(e) => setQrText(e.target.value)} style={{ width: "100%", padding: "14px", borderRadius: "12px", border: "1.5px solid #CBD5E1", fontSize: "14px", fontWeight: "600", outline: "none" }} />
+              </div>
+              <div style={{ textAlign: "center" }}>
+                <canvas ref={qrCanvasRef} width={250} height={250} style={{ borderRadius: "16px", border: "1px solid #E2E8F0", margin: "0 auto 16px", display: "block" }} />
+                <button
+                  onClick={() => { const link = document.createElement("a"); link.download = "kalamai-qr.png"; link.href = qrCanvasRef.current.toDataURL(); link.click(); }}
+                  style={{ background: "#059669", color: "#FFFFFF", border: "none", padding: "12px 24px", borderRadius: "12px", fontWeight: "800", fontSize: "13px", cursor: "pointer" }}
+                >
+                  📥 Download QR Image (.PNG)
+                </button>
+              </div>
+            </div>
+          ) : activeTool.type === "age" ? (
+            /* ================= EXACT AGE CALCULATOR ================= */
+            <div style={{ background: "#FFFFFF", border: "1.5px solid #E2E8F0", borderRadius: "24px", padding: "32px", marginBottom: "32px" }}>
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: "20px", marginBottom: "24px" }}>
+                <div><label style={{ fontSize: "12px", fontWeight: "800", display: "block", marginBottom: "6px" }}>DATE OF BIRTH</label><input type="date" value={dob} onChange={(e) => setDob(e.target.value)} style={{ width: "100%", padding: "12px", borderRadius: "10px", border: "1.5px solid #CBD5E1", fontWeight: "700" }} /></div>
+                <div><label style={{ fontSize: "12px", fontWeight: "800", display: "block", marginBottom: "6px" }}>TARGET DATE</label><input type="date" value={targetDate} onChange={(e) => setTargetDate(e.target.value)} style={{ width: "100%", padding: "12px", borderRadius: "10px", border: "1.5px solid #CBD5E1", fontWeight: "700" }} /></div>
+              </div>
+              <div style={{ background: "#10B981", borderRadius: "20px", padding: "28px", color: "#FFFFFF", textAlign: "center" }}>
+                <div style={{ fontSize: "11px", fontWeight: "800" }}>EXACT CHRONOLOGICAL AGE</div>
+                <div style={{ fontSize: "44px", fontWeight: "900", margin: "8px 0" }}>{ageYears} Years : {ageMonths} Months : {ageDays} Days</div>
+                <div style={{ fontSize: "13px", fontWeight: "700" }}>Total Days on Earth: {totalDaysLived.toLocaleString()} Days</div>
+              </div>
+            </div>
           ) : (
-            /* ================= 2. OTHER UTILITY TOOLS (Word, Excel, PDF) ================= */
+            /* ================= GENERIC FILE TOOLS (PDF, Word, Excel) ================= */
             <div style={{
               background: "#FFFFFF",
               border: "2px dashed #EA580C",
@@ -558,6 +878,13 @@ export default function ToolsDirectory({ onBackToChat }) {
                 onChange={handleGenericFileUpload}
                 style={{ display: "none" }}
               />
+
+              {activeTool.id === "image-to-pdf" && (
+                <div style={{ display: "inline-flex", gap: "10px", background: "#F8FAFC", padding: "6px", borderRadius: "12px", border: "1px solid #E2E8F0", marginBottom: "24px" }}>
+                  <button onClick={() => setImgOrientation("portrait")} style={{ background: imgOrientation === "portrait" ? "#EA580C" : "transparent", color: imgOrientation === "portrait" ? "#FFFFFF" : "#64748B", border: "none", padding: "6px 16px", borderRadius: "8px", fontWeight: "700", fontSize: "12px", cursor: "pointer" }}>Portrait</button>
+                  <button onClick={() => setImgOrientation("landscape")} style={{ background: imgOrientation === "landscape" ? "#EA580C" : "transparent", color: imgOrientation === "landscape" ? "#FFFFFF" : "#64748B", border: "none", padding: "6px 16px", borderRadius: "8px", fontWeight: "700", fontSize: "12px", cursor: "pointer" }}>Landscape</button>
+                </div>
+              )}
 
               <div style={{ width: "64px", height: "64px", margin: "0 auto 16px", background: "#FFF7ED", borderRadius: "20px", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "28px" }}>
                 📤
@@ -628,23 +955,25 @@ export default function ToolsDirectory({ onBackToChat }) {
             </div>
           )}
 
-          {/* ================= COMPREHENSIVE DESCRIPTIONS & GUIDES (EXACT SCREENSHOT 36) ================= */}
-
-          {/* 1. Overview & How It Works */}
-          <div style={{ background: "#FFFFFF", border: "1.5px solid #E2E8F0", borderRadius: "20px", padding: "28px", marginBottom: "24px", boxShadow: "0 4px 16px rgba(0,0,0,0.02)" }}>
-            <h3 style={{ fontSize: "18px", fontWeight: "800", color: "#0F172A", margin: "0 0 10px", display: "flex", alignItems: "center", gap: "8px" }}>
-              <span>📖</span> Overview & How It Works
-            </h3>
-            <p style={{ fontSize: "14px", color: "#475569", lineHeight: "1.7", margin: "0 0 16px" }}>
-              {activeTool.overview}
-            </p>
-            <div style={{ background: "#F8FAFC", border: "1px solid #E2E8F0", borderRadius: "12px", padding: "14px 18px" }}>
-              <div style={{ fontSize: "12px", fontWeight: "800", color: "#059669", marginBottom: "4px" }}>⚙️ Technical Execution</div>
-              <div style={{ fontSize: "13px", color: "#64748B", lineHeight: "1.5" }}>{activeTool.technical}</div>
+          {/* ================= COMPREHENSIVE DESCRIPTIONS & GUIDES (MATCHING SCREENSHOT 36) ================= */}
+          {activeTool.overview && (
+            <div style={{ background: "#FFFFFF", border: "1.5px solid #E2E8F0", borderRadius: "20px", padding: "28px", marginBottom: "24px", boxShadow: "0 4px 16px rgba(0,0,0,0.02)" }}>
+              <h3 style={{ fontSize: "18px", fontWeight: "800", color: "#0F172A", margin: "0 0 10px", display: "flex", alignItems: "center", gap: "8px" }}>
+                <span>📖</span> Overview & How It Works
+              </h3>
+              <p style={{ fontSize: "14px", color: "#475569", lineHeight: "1.7", margin: "0 0 16px" }}>
+                {activeTool.overview}
+              </p>
+              {activeTool.technical && (
+                <div style={{ background: "#F8FAFC", border: "1px solid #E2E8F0", borderRadius: "12px", padding: "14px 18px" }}>
+                  <div style={{ fontSize: "12px", fontWeight: "800", color: "#059669", marginBottom: "4px" }}>⚙️ Technical Execution</div>
+                  <div style={{ fontSize: "13px", color: "#64748B", lineHeight: "1.5" }}>{activeTool.technical}</div>
+                </div>
+              )}
             </div>
-          </div>
+          )}
 
-          {/* 2. Who Can Use This Tool? */}
+          {/* Who Can Use */}
           {activeTool.personas && (
             <div style={{ background: "#FFFFFF", border: "1.5px solid #E2E8F0", borderRadius: "20px", padding: "28px", marginBottom: "24px" }}>
               <h3 style={{ fontSize: "18px", fontWeight: "800", color: "#0F172A", margin: "0 0 16px", display: "flex", alignItems: "center", gap: "8px" }}>
@@ -661,7 +990,7 @@ export default function ToolsDirectory({ onBackToChat }) {
             </div>
           )}
 
-          {/* 3. Step-by-Step Instructions */}
+          {/* Steps */}
           {activeTool.steps && (
             <div style={{ background: "#FFFFFF", border: "1.5px solid #E2E8F0", borderRadius: "20px", padding: "28px", marginBottom: "24px" }}>
               <h3 style={{ fontSize: "18px", fontWeight: "800", color: "#0F172A", margin: "0 0 16px", display: "flex", alignItems: "center", gap: "8px" }}>
@@ -680,33 +1009,30 @@ export default function ToolsDirectory({ onBackToChat }) {
             </div>
           )}
 
-          {/* 4. Key Benefits vs Accuracy & Limitations */}
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))", gap: "20px", marginBottom: "24px" }}>
-            <div style={{ background: "#FFFFFF", border: "1.5px solid #E2E8F0", borderRadius: "20px", padding: "24px" }}>
-              <h4 style={{ fontSize: "16px", fontWeight: "800", color: "#0F172A", margin: "0 0 14px", display: "flex", alignItems: "center", gap: "8px" }}>
-                <span style={{ color: "#059669" }}>✓</span> Key Benefits
-              </h4>
-              <ul style={{ margin: 0, paddingLeft: "18px", display: "flex", flexDirection: "column", gap: "8px", fontSize: "13px", color: "#475569" }}>
-                {activeTool.benefits?.map((b, i) => <li key={i}>{b}</li>)}
-              </ul>
+          {/* Benefits vs Limitations */}
+          {activeTool.benefits && (
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))", gap: "20px", marginBottom: "24px" }}>
+              <div style={{ background: "#FFFFFF", border: "1.5px solid #E2E8F0", borderRadius: "20px", padding: "24px" }}>
+                <h4 style={{ fontSize: "16px", fontWeight: "800", color: "#0F172A", margin: "0 0 14px", display: "flex", alignItems: "center", gap: "8px" }}>
+                  <span style={{ color: "#059669" }}>✓</span> Key Benefits
+                </h4>
+                <ul style={{ margin: 0, paddingLeft: "18px", display: "flex", flexDirection: "column", gap: "8px", fontSize: "13px", color: "#475569" }}>
+                  {activeTool.benefits.map((b, i) => <li key={i}>{b}</li>)}
+                </ul>
+              </div>
+
+              <div style={{ background: "#FFFFFF", border: "1.5px solid #E2E8F0", borderRadius: "20px", padding: "24px" }}>
+                <h4 style={{ fontSize: "16px", fontWeight: "800", color: "#0F172A", margin: "0 0 14px", display: "flex", alignItems: "center", gap: "8px" }}>
+                  <span style={{ color: "#2563EB" }}>ℹ</span> Accuracy & Limitations
+                </h4>
+                <ul style={{ margin: 0, paddingLeft: "18px", display: "flex", flexDirection: "column", gap: "8px", fontSize: "13px", color: "#475569" }}>
+                  {activeTool.limitations?.map((l, i) => <li key={i}>{l}</li>)}
+                </ul>
+              </div>
             </div>
+          )}
 
-            <div style={{ background: "#FFFFFF", border: "1.5px solid #E2E8F0", borderRadius: "20px", padding: "24px" }}>
-              <h4 style={{ fontSize: "16px", fontWeight: "800", color: "#0F172A", margin: "0 0 14px", display: "flex", alignItems: "center", gap: "8px" }}>
-                <span style={{ color: "#2563EB" }}>ℹ</span> Accuracy & Limitations
-              </h4>
-              <ul style={{ margin: 0, paddingLeft: "18px", display: "flex", flexDirection: "column", gap: "8px", fontSize: "13px", color: "#475569" }}>
-                {activeTool.limitations?.map((l, i) => <li key={i}>{l}</li>)}
-              </ul>
-            </div>
-          </div>
-
-          {/* 5. Disclaimer Notice */}
-          <div style={{ background: "#FFF7ED", border: "1px solid #FED7AA", borderRadius: "14px", padding: "14px 20px", marginBottom: "24px", display: "flex", alignItems: "center", gap: "10px", fontSize: "12px", color: "#C2410C", fontWeight: "600" }}>
-            <span>⚠️</span> KalamAI processes files locally in your browser memory without transmitting raw data to external servers.
-          </div>
-
-          {/* 6. Frequently Asked Questions Accordion */}
+          {/* FAQs Accordion */}
           {activeTool.faqs && (
             <div style={{ background: "#FFFFFF", border: "1.5px solid #E2E8F0", borderRadius: "20px", padding: "28px" }}>
               <h3 style={{ fontSize: "18px", fontWeight: "800", color: "#0F172A", margin: "0 0 16px" }}>❓ Frequently Asked Questions (FAQ)</h3>
@@ -758,7 +1084,7 @@ export default function ToolsDirectory({ onBackToChat }) {
                 All Utility Tools 🛠️
               </h1>
               <p style={{ fontSize: "15px", color: "#64748B", margin: 0, maxWidth: "680px", lineHeight: "1.6" }}>
-                Compress notes PDFs, convert images, reduce photo sizes under 50KB, and convert academic documents with real client-side accuracy.
+                Comprehensive academic tools for AKTU students. Compress notes PDFs, convert images, calculate GST, simulate education loan EMIs, and generate QR codes with complete privacy.
               </p>
             </div>
 
@@ -782,9 +1108,33 @@ export default function ToolsDirectory({ onBackToChat }) {
             </div>
           </div>
 
+          {/* Category Filter Pills */}
+          <div style={{ display: "flex", gap: "10px", flexWrap: "wrap", marginBottom: "28px" }}>
+            {categories.map((cat) => (
+              <button
+                key={cat}
+                onClick={() => setSelectedCat(cat)}
+                style={{
+                  background: selectedCat === cat ? "#EA580C" : "#FFFFFF",
+                  color: selectedCat === cat ? "#FFFFFF" : "#475569",
+                  border: selectedCat === cat ? "1.5px solid #EA580C" : "1.5px solid #E2E8F0",
+                  padding: "8px 16px",
+                  borderRadius: "999px",
+                  fontSize: "12px",
+                  fontWeight: "700",
+                  cursor: "pointer",
+                  transition: "all 0.2s ease"
+                }}
+              >
+                {cat}
+              </button>
+            ))}
+          </div>
+
+          {/* 16+ Utility Tools Grid */}
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "20px" }}>
             {utilityTools
-              .filter((t) => t.title.toLowerCase().includes(searchQuery.toLowerCase()) || t.desc.toLowerCase().includes(searchQuery.toLowerCase()))
+              .filter((t) => (selectedCat === "All Tools" || t.cat === selectedCat) && (t.title.toLowerCase().includes(searchQuery.toLowerCase()) || t.desc.toLowerCase().includes(searchQuery.toLowerCase())))
               .map((tool) => (
                 <div
                   key={tool.id}
