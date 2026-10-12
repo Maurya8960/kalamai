@@ -1900,7 +1900,12 @@ function App() {
             <div style={{ maxWidth: '300px' }}>
               <h2 style={{ margin: '0 0 20px 0', color: '#EA580C', fontSize: '28px', fontWeight: '900' }}>KalamAI</h2>
               <p style={{ color: '#4B5563', fontSize: '15px', lineHeight: '1.6', marginBottom: '30px' }}>
-                Empowering the next generation of innovators through interactive STEM education and AI-driven personalized learning.
+            <p style={{ fontSize: "13px", color: "#64748B", maxWidth: "300px", lineHeight: "1.6", margin: "0 0 10px", fontStyle: "italic" }}>
+              "Dream is not that which you see while sleeping, it is something that does not let you sleep."
+            </p>
+            <p style={{ fontSize: "12px", color: "#475569", maxWidth: "300px", lineHeight: "1.5", margin: "0 0 16px", fontWeight: "500" }}>
+              Crafting intelligent revision companions, formula cheat sheets, and academic clarity for engineering students.
+            </p>
               </p>
               <div style={{ fontWeight: '800', color: '#EA580C', fontSize: '13px', letterSpacing: '1px', marginBottom: '15px', textTransform: 'uppercase' }}>GET IN TOUCH</div>
               <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 38px)", gap: "10px", alignItems: "center" }}>
@@ -1941,7 +1946,7 @@ function App() {
               <button onClick={() => navigateTo('privacy')} className="footer-link">Terms of Service</button>
             </div>
 
-            <div style={{ flex: 1, minWidth: "260px" }}>
+            <div style={{ minWidth: "260px", maxWidth: "290px" }}>
               <h3 style={{ fontSize: "20px", fontWeight: "800", color: "#0F172A", marginBottom: "20px" }}>
                 Contact Info
               </h3>
@@ -1974,7 +1979,7 @@ function App() {
                 </div>
                 <div>
                   <div style={{ fontSize: "10px", fontWeight: "800", color: "#EA580C", letterSpacing: "1px" }}>EMAIL US</div>
-                  <a href="mailto:maurya1.ansh@gmail.com" style={{ fontSize: "14px", fontWeight: "bold", color: "#111827", textDecoration: "none" }}>
+                  <a href="mailto:maurya1.ansh@gmail.com" target="_blank" rel="noreferrer" style={{ fontSize: "12px", fontWeight: "bold", color: "#EA580C", textDecoration: "none" }}>
                     maurya1.ansh@gmail.com
                   </a>
                 </div>
@@ -2008,7 +2013,7 @@ function App() {
                 </div>
                 <div>
                   <div style={{ fontSize: "10px", fontWeight: "800", color: "#EA580C", letterSpacing: "1px" }}>WHATSAPP</div>
-                  <div style={{ fontSize: "14px", fontWeight: "bold", color: "#111827" }}>+91 94542 47006</div>
+                  <a href="tel:+919454247006" style={{ fontSize: "12px", fontWeight: "bold", color: "#EA580C", textDecoration: "none" }}>+91 94542 47006</a>
                 </div>
               </div>
 
@@ -2040,14 +2045,14 @@ function App() {
                 </div>
                 <div>
                   <div style={{ fontSize: "10px", fontWeight: "800", color: "#EA580C", letterSpacing: "1px" }}>PHONE</div>
-                  <div style={{ fontSize: "14px", fontWeight: "bold", color: "#111827" }}>+91 94542 47006</div>
+                  <a href="tel:+919454247006" style={{ fontSize: "12px", fontWeight: "bold", color: "#EA580C", textDecoration: "none" }}>+91 94542 47006</a>
                 </div>
               </div>
             </div>
 
           </div>
           <div style={{ textAlign: "center", marginTop: "60px", color: "#4B5563", fontSize: "14px", fontWeight: "600" }}>
-            © 2026 KalamAI. Developed by Ansh Maurya. All rights reserved. · <span onClick={() => navigateTo("admin")} style={{ cursor: "pointer", color: "#EA580C", fontWeight: "700" }}></span>
+            © 2026 KalamAI. Developed by Ansh Maurya. All rights reserved. <span onClick={() => navigateTo("admin")} style={{ cursor: "pointer", color: "#EA580C", fontWeight: "700" }}></span>
           </div>
         </footer>
     )}
