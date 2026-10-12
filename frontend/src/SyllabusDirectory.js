@@ -103,6 +103,54 @@ const SyllabusDirectory = () => {
   return (
     <div style={{ maxWidth: "1280px", margin: "0 auto", padding: "20px 24px 60px", fontFamily: "system-ui, -apple-system, sans-serif" }}>
       
+      {/* Aesthetic Dr. Kalam Inspiration & Welcome Hero */}
+      <div id="official-scheme-table" style={{
+        background: 'linear-gradient(135deg, #FFFFFF 0%, #FFF7ED 100%)',
+        border: '1.5px solid rgba(234, 88, 12, 0.2)',
+        borderRadius: '24px',
+        padding: '28px 32px',
+        marginBottom: '32px',
+        boxShadow: '0 12px 32px rgba(234, 88, 12, 0.08), 0 2px 8px rgba(0,0,0,0.02)',
+        display: 'flex',
+        flexWrap: 'wrap',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        gap: '20px',
+        position: 'relative',
+        overflow: 'hidden'
+      }}>
+        <div style={{ flex: '1 1 500px' }}>
+          <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', background: '#FFF7ED', border: '1px solid #FFEDD5', padding: '5px 14px', borderRadius: '999px', marginBottom: '12px' }}>
+            <span style={{ fontSize: '14px' }}>✨</span>
+            <span style={{ fontSize: '11px', fontWeight: '800', color: '#EA580C', letterSpacing: '0.6px', textTransform: 'uppercase' }}>
+              DR. A.P.J. ABDUL KALAM AI WORKSPACE
+            </span>
+          </div>
+          <h2 style={{ fontSize: '24px', fontWeight: '900', color: '#0F172A', margin: '0 0 8px', letterSpacing: '-0.5px' }}>
+            "You have to dream before your dreams can come true."
+          </h2>
+          <p style={{ fontSize: '13px', color: '#64748B', margin: 0, lineHeight: '1.6' }}>
+            Instant access to verified AKTU syllabus schemes, credit distributions, and official curriculum PDFs. Select your degree below to get started.
+          </p>
+        </div>
+
+        {/* Quick Highlights Counter Badges */}
+        <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
+          <div style={{ background: '#FFFFFF', border: '1px solid #E2E8F0', padding: '10px 18px', borderRadius: '14px', textAlign: 'center', boxShadow: '0 2px 6px rgba(0,0,0,0.02)' }}>
+            <div style={{ fontSize: '16px', fontWeight: '900', color: '#EA580C' }}>100%</div>
+            <div style={{ fontSize: '10px', fontWeight: '700', color: '#64748B', textTransform: 'uppercase' }}>Official Syllabus</div>
+          </div>
+          <div style={{ background: '#FFFFFF', border: '1px solid #E2E8F0', padding: '10px 18px', borderRadius: '14px', textAlign: 'center', boxShadow: '0 2px 6px rgba(0,0,0,0.02)' }}>
+            <div style={{ fontSize: '16px', fontWeight: '900', color: '#2563EB' }}>2026–27</div>
+            <div style={{ fontSize: '10px', fontWeight: '700', color: '#64748B', textTransform: 'uppercase' }}>Updated Session</div>
+          </div>
+          <div style={{ background: '#FFFFFF', border: '1px solid #E2E8F0', padding: '10px 18px', borderRadius: '14px', textAlign: 'center', boxShadow: '0 2px 6px rgba(0,0,0,0.02)' }}>
+            <div style={{ fontSize: '16px', fontWeight: '900', color: '#059669' }}>Instant</div>
+            <div style={{ fontSize: '10px', fontWeight: '700', color: '#64748B', textTransform: 'uppercase' }}>PDF Downloads</div>
+          </div>
+        </div>
+      </div>
+
       {/* Top Banner Tag */}
       <div style={{ textAlign: "center", marginBottom: "20px" }}>
         <span style={{ 
