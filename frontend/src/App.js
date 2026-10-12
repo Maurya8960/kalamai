@@ -1073,12 +1073,12 @@ function App() {
                 </span>
 
                 {/* Tools Tab */}
-<span
+                <span
                   onClick={() => setCurrentView("tools")}
                   style={{
                     cursor: "pointer",
                     color: currentView === "tools" ? "#EA580C" : "#4B5563",
-                    borderBottom: currentView === "tools" ? "3px solid #EA580C" : "3px solid transparent",
+                    borderBottom: currentView === "tools" ? "2px solid #EA580C" : "none",
                     paddingBottom: "6px",
                     fontWeight: currentView === "tools" ? "800" : "600",
                     transition: "all 0.2s ease"
@@ -1086,6 +1086,8 @@ function App() {
                 >
                   Tools
                 </span>
+
+                
 
                 
 
