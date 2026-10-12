@@ -179,13 +179,12 @@ function App() {
   const [currentView, setCurrentView] = useState(() => {
     if (typeof window !== "undefined") {
       const savedView = localStorage.getItem("kalamai_current_view");
+      if (savedView) return savedView;
       const hash = window.location.hash.toLowerCase();
-      if (hash.includes("chat")) return "chat";
       if (hash.includes("syllabus") || hash.includes("official-scheme-table")) return "syllabus";
       if (hash.includes("pyq")) return "pyq";
       if (hash.includes("cheatsheet")) return "cheatsheet";
       if (hash.includes("skill")) return "skills";
-      if (savedView) return savedView;
     }
     return "chat";
   });
@@ -195,10 +194,13 @@ function App() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  // Sync currentView with localStorage and window hash on refresh
+  // Sync currentView with localStorage and clean hash
   useEffect(() => {
     if (currentView) {
       localStorage.setItem("kalamai_current_view", currentView);
+      if (currentView === "chat" && window.location.hash) {
+        window.history.replaceState(null, "", window.location.pathname);
+      }
     }
   }, [currentView]);
 
