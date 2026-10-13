@@ -1097,7 +1097,7 @@ function App() {
               <>
                 {/* Home */}
                 <span
-                  onClick={() => handleNavClick("home")}
+                  onClick={() => (isLoggedIn ? setCurrentView("chat") : handleNavClick("home"))}
                   style={{
                     cursor: "pointer",
                     color: currentView === "home" ? "#EA580C" : "#4B5563",
@@ -1393,7 +1393,12 @@ function App() {
           <ToolsDirectory onBackToChat={() => setCurrentView("chat")} />
         )}
 
-{(currentView === "home" || currentView === "features") && !isLoggedIn && (
+{isLoggedIn && (currentView === "home" || currentView === "features") && (
+          /* Auto-route logged in user to chat */
+          goToChatWorkspace ? goToChatWorkspace() : setCurrentView("chat")
+        )}
+
+        {(currentView === "home" || currentView === "features") && !isLoggedIn && (
             <>
               <div style={{ textAlign: 'center', marginBottom: '30px' }}>
                 <h1 style={{ fontSize: '48px', fontWeight: '900', margin: '0 0 10px 0' }}>The Future of Learning <span style={{ color: '#EA580C' }}>Starts with You</span></h1>
