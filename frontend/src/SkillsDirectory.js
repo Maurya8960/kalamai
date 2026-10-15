@@ -1,737 +1,557 @@
 import React, { useState } from "react";
 
-const booksData = [
-  // --- CORE CS, C/C++ & ALGORITHMS ---
-  {
-    id: "cpp",
-    title: "C++ Programming Notes",
-    subtitle: "Notes for Professionals",
-    tagline: "Standard ISO C++98 to C++20",
-    cat: "Core CS, C/C++ & Algorithms",
-    pages: "600+ Pages",
-    icon: "⚙️",
-    fileName: "C++NotesForProfessionals.pdf",
-    topics: [
-      "Object Oriented Programming & Polymorphism",
-      "Pointers, Smart Pointers & Memory Management",
-      "std::string, std::array, std::vector & Containers",
-      "Multithreading, Mutexes & RAII Patterns"
-    ]
-  },
-  {
-    id: "c-lang",
-    title: "C Language Mastery",
-    subtitle: "Notes for Professionals",
-    tagline: "ANSI C / C99 / C11 Foundations",
-    cat: "Core CS, C/C++ & Algorithms",
-    pages: "300+ Pages",
-    icon: "🧱",
-    fileName: "CNotesForProfessionals.pdf",
-    topics: [
-      "Pointers Arithmetic & Memory Pointers",
-      "Structs, Unions & Low-level System I/O",
-      "Preprocessor Directives & Compilation Workflow",
-      "Dynamic Memory Allocation (malloc, free)"
-    ]
-  },
-  {
-    id: "dsa",
-    title: "Algorithms & Data Structures",
-    subtitle: "Notes for Professionals",
-    tagline: "Competitive Programming & Problem Solving",
-    cat: "Core CS, C/C++ & Algorithms",
-    pages: "200+ Pages",
-    icon: "🧠",
-    fileName: "AlgorithmsNotesForProfessionals.pdf",
-    topics: [
-      "Big-O, Big-Omega & Asymptotic Complexity",
-      "Binary Trees, BST, Heaps & Graphs (DFS/BFS)",
-      "Dynamic Programming (LCS, Knapsack, Edit Distance)",
-      "Sorting Algorithms: Quick, Merge, Bubble & Prim's"
-    ]
-  },
-  {
-    id: "java",
-    title: "Java Programming Master",
-    subtitle: "Notes for Professionals",
-    tagline: "Core Java, Multithreading & Streams",
-    cat: "Core CS, C/C++ & Algorithms",
-    pages: "1000+ Pages",
-    icon: "☕",
-    fileName: "Java1 2.pdf",
-    topics: [
-      "OOP Encapsulation, Inheritance & Interfaces",
-      "Java Collections Framework (List, Map, Set)",
-      "Multithreading, Concurrency & JVM Internals",
-      "Java 8+ Lambdas, Functional Interfaces & Streams"
-    ]
-  },
-  {
-    id: "kotlin",
-    title: "Kotlin Notes for Professionals",
-    subtitle: "Notes for Professionals",
-    tagline: "Modern Android & Backend JVM Language",
-    cat: "Core CS, C/C++ & Algorithms",
-    pages: "100+ Pages",
-    icon: "🎯",
-    fileName: "Kotlin1.pdf",
-    topics: [
-      "Null Safety & Type Inference",
-      "Coroutines & Asynchronous Flow",
-      "Extension Functions & Higher Order Lambdas",
-      "Kotlin Multiplatform & Android Integration"
-    ]
-  },
-  {
-    id: "haskell",
-    title: "Haskell Functional Programming",
-    subtitle: "Notes for Professionals",
-    tagline: "Pure Functional, Monads & Typeclasses",
-    cat: "Core CS, C/C++ & Algorithms",
-    pages: "150+ Pages",
-    icon: "λ",
-    fileName: "Haskell1.pdf",
-    topics: [
-      "Pure Functions, Immutability & Laziness",
-      "Functors, Applicatives & Monads",
-      "Pattern Matching & Algebraic Data Types",
-      "Typeclasses and Category Theory Basics"
-    ]
-  },
+const SkillsDirectory = () => {
+  const [filter, setFilter] = useState("all");
 
-  // --- FRONTEND & JAVASCRIPT ECOSYSTEM ---
-  {
-    id: "javascript",
-    title: "JavaScript Notes for Professionals",
-    subtitle: "Notes for Professionals",
-    tagline: "Modern ES6+ to ESNext Specification",
-    cat: "Frontend, Angular & CSS",
-    pages: "450+ Pages",
-    icon: "💛",
-    fileName: "JavaScript1 2.pdf",
-    topics: [
-      "Event Loop, Callbacks & Promises (async/await)",
-      "Prototypes, Closures & Scope Chain Execution",
-      "DOM Traversal, Event Bubbling & Web APIs",
-      "ES6 Modules, Destructuring & Generators"
-    ]
-  },
-  {
-    id: "react",
-    title: "React JS Notes for Professionals",
-    subtitle: "Notes for Professionals",
-    tagline: "Hooks, Context API, Redux & Virtual DOM",
-    cat: "Frontend, Angular & CSS",
-    pages: "250+ Pages",
-    icon: "⚛️",
-    fileName: "ReactJS1.pdf",
-    topics: [
-      "JSX, Component Lifecycle & Virtual DOM Diffing",
-      "React Hooks (useState, useEffect, useMemo, useRef)",
-      "State Management with Context API & Redux Toolkit",
-      "Server Side Rendering & Performance Optimization"
-    ]
-  },
-  {
-    id: "typescript",
-    title: "TypeScript Notes for Professionals",
-    subtitle: "Notes for Professionals",
-    tagline: "Typed JavaScript at Any Scale",
-    cat: "Frontend, Angular & CSS",
-    pages: "150+ Pages",
-    icon: "🔷",
-    fileName: "TypeScript1.pdf",
-    topics: [
-      "Static Typing, Interfaces & Type Aliases",
-      "Generics, Utility Types & Type Guards",
-      "Decorators, Namespaces & tsconfig Compiler Options",
-      "Integrating with React, Node & Express"
-    ]
-  },
-  {
-    id: "html5",
-    title: "HTML5 Web Architecture",
-    subtitle: "Notes for Professionals",
-    tagline: "Modern Semantic Web & Storage Standards",
-    cat: "Frontend, Angular & CSS",
-    pages: "120+ Pages",
-    icon: "🌐",
-    fileName: "HTML51.pdf",
-    topics: [
-      "Semantic Tags (header, nav, article, section)",
-      "Web Storage (localStorage, sessionStorage, IndexedDB)",
-      "Audio, Video & Media Streaming APIs",
-      "Accessibility (ARIA) & Responsive Meta Viewports"
-    ]
-  },
-  {
-    id: "html5-canvas",
-    title: "HTML5 Canvas 2D Graphics",
-    subtitle: "Notes for Professionals",
-    tagline: "Interactive 2D Rendering & Game Physics",
-    cat: "Frontend, Angular & CSS",
-    pages: "180+ Pages",
-    icon: "🎨",
-    fileName: "HTML5Canvas1.pdf",
-    topics: [
-      "2D Context Drawing Paths, Rectangles & Arcs",
-      "Image Transformations, Scaling & Matrix Rotation",
-      "Pixel Manipulation (getImageData, putImageData)",
-      "requestAnimationFrame Game Loops & Collision"
-    ]
-  },
-  {
-    id: "jquery",
-    title: "jQuery Library Notes",
-    subtitle: "Notes for Professionals",
-    tagline: "DOM Manipulation & AJAX Handling",
-    cat: "Frontend, Angular & CSS",
-    pages: "100+ Pages",
-    icon: "⚡",
-    fileName: "jQuery1.pdf",
-    topics: [
-      "Selectors, Traversing & Chaining Syntax",
-      "Event Listeners & Animation Queues",
-      "AJAX Requests ($.ajax, $.get, $.post)",
-      "Custom Plugin Development & DOM Shims"
-    ]
-  },
+  const skillBooks = [
+    // --- 1. CORE & SYSTEMS ---
+    {
+      id: "cpp",
+      category: "core",
+      title: "C++ Programming Notes",
+      subtitle: "Notes for Professionals",
+      pages: "600+ Pages",
+      edition: "Standard ISO C++98 to C++20",
+      icon: "⚙️",
+      color: "#2563EB",
+      bgGradient: "linear-gradient(135deg, #EFF6FF 0%, #DBEAFE 100%)",
+      badgeColor: "#1D4ED8",
+      highlights: [
+        "Object Oriented Programming & Polymorphism",
+        "Pointers, Smart Pointers & Memory Management",
+        "std::string, std::array, std::vector & Containers",
+        "Multithreading, Mutexes & RAII Patterns"
+      ],
+      filename: "CPlusPlus0.pdf"
+    },
+    {
+      id: "c-lang",
+      category: "core",
+      title: "C Language Mastery",
+      subtitle: "Notes for Professionals",
+      pages: "300+ Pages",
+      edition: "ANSI C / C99 / C11 Foundations",
+      icon: "🧱",
+      color: "#0284C7",
+      bgGradient: "linear-gradient(135deg, #F0F9FF 0%, #E0F2FE 100%)",
+      badgeColor: "#0369A1",
+      highlights: [
+        "Pointers Arithmetic & Memory Pointers",
+        "Structs, Unions & Low-level System I/O",
+        "Preprocessor Directives & Compilation Workflow",
+        "Dynamic Memory Allocation (malloc, free)"
+      ],
+      filename: "C1.pdf"
+    },
+    {
+      id: "algo",
+      category: "core",
+      title: "Algorithms & Data Structures",
+      subtitle: "Notes for Professionals",
+      pages: "200+ Pages",
+      edition: "Competitive Programming & Problem Solving",
+      icon: "🧠",
+      color: "#7C3AED",
+      bgGradient: "linear-gradient(135deg, #F5F3FF 0%, #EDE9FE 100%)",
+      badgeColor: "#6D28D9",
+      highlights: [
+        "Big-O, Big-Omega & Asymptotic Complexity",
+        "Binary Trees, BST, Heaps & Graphs (DFS/BFS)",
+        "Dynamic Programming (LCS, Knapsack, Edit Distance)",
+        "Sorting Algorithms: Quick, Merge, Bubble & Prim's"
+      ],
+      filename: "Algorithms0.pdf"
+    },
 
-  // --- BACKEND, PYTHON, SQL & DATABASES ---
-  {
-    id: "nodejs",
-    title: "Node.js Server Runtime",
-    subtitle: "Notes for Professionals",
-    tagline: "Asynchronous Event-Driven Backend Services",
-    cat: "Backend, Python, SQL & .NET",
-    pages: "300+ Pages",
-    icon: "🟢",
-    fileName: "NodeJS1 2.pdf",
-    topics: [
-      "Event-Driven Architecture & libuv Event Loop",
-      "Streams, Buffers & File System (fs) Modules",
-      "RESTful API Development with Express.js",
-      "Clustering, Worker Threads & Microservices"
-    ]
-  },
-  {
-    id: "python",
-    title: "Python 3 & 2 Core Mastery",
-    subtitle: "Notes for Professionals",
-    tagline: "Object-Oriented, Scripting & Data Engineering",
-    cat: "Backend, Python, SQL & .NET",
-    pages: "800+ Pages",
-    icon: "🐍",
-    fileName: "PythonNotesForProfessionals.pdf",
-    topics: [
-      "Data Structures: Lists, Tuples, Dictionaries & Sets",
-      "Decorators, Generators & Context Managers",
-      "OOP, Metaclasses & Magic Dunder Methods",
-      "Asyncio & Fast Data Processing Pipelines"
-    ]
-  },
-  {
-    id: "php",
-    title: "PHP Web Development Notes",
-    subtitle: "Notes for Professionals",
-    tagline: "Modern PHP 7/8 Object-Oriented Backend",
-    cat: "Backend, Python, SQL & .NET",
-    pages: "400+ Pages",
-    icon: "🐘",
-    fileName: "PHP1 2.pdf",
-    topics: [
-      "OOP Classes, Namespaces & Autoloading (Composer)",
-      "Database Connections with PDO & Prepared Statements",
-      "Session Handling, Cookies & Authentication Security",
-      "Building REST APIs & Error Handling"
-    ]
-  },
-  {
-    id: "ruby",
-    title: "Ruby Programming Notes",
-    subtitle: "Notes for Professionals",
-    tagline: "Object-Oriented & Scripting Language",
-    cat: "Backend, Python, SQL & .NET",
-    pages: "200+ Pages",
-    icon: "💎",
-    fileName: "Ruby1.pdf",
-    topics: [
-      "Blocks, Procs, Lambdas & Closures",
-      "Object Model, Mixins & Metaprogramming",
-      "Gems, Bundler & Package Management",
-      "File I/O, Enumerable Modules & Regex"
-    ]
-  },
-  {
-    id: "rubyonrails",
-    title: "Ruby on Rails Framework",
-    subtitle: "Notes for Professionals",
-    tagline: "Convention Over Configuration MVC Web",
-    cat: "Backend, Python, SQL & .NET",
-    pages: "220+ Pages",
-    icon: "🚂",
-    fileName: "RubyOnRails1.pdf",
-    topics: [
-      "MVC Architecture: Models, Views & Controllers",
-      "ActiveRecord ORM, Migrations & Associations",
-      "Routing, Middleware & RESTful Resources",
-      "Authentication, ActionMailer & Background Jobs"
-    ]
-  },
-  {
-    id: "sql",
-    title: "SQL & Relational Databases",
-    subtitle: "Notes for Professionals",
-    tagline: "Queries, Joins, Indexing & Transactions",
-    cat: "Backend, Python, SQL & .NET",
-    pages: "250+ Pages",
-    icon: "🗄️",
-    fileName: "SQL1 2.pdf",
-    topics: [
-      "SELECT Queries, Aggregations & Window Functions",
-      "INNER, LEFT, RIGHT & FULL OUTER JOINS",
-      "ACID Properties, Indexes & Execution Plans",
-      "Subqueries, Common Table Expressions (CTEs)"
-    ]
-  },
-  {
-    id: "mysql",
-    title: "MySQL Server Architecture",
-    subtitle: "Notes for Professionals",
-    tagline: "High-Performance Relational Storage Engine",
-    cat: "Backend, Python, SQL & .NET",
-    pages: "300+ Pages",
-    icon: "🐬",
-    fileName: "MySQL1 2.pdf",
-    topics: [
-      "InnoDB Engine, Foreign Keys & Constraints",
-      "Stored Procedures, Triggers & Views",
-      "Query Optimization, EXPLAIN & Index Tuning",
-      "Replication, Backup (mysqldump) & Security"
-    ]
-  },
-  {
-    id: "postgresql",
-    title: "PostgreSQL Advanced Notes",
-    subtitle: "Notes for Professionals",
-    tagline: "Enterprise-Grade Object-Relational Database",
-    cat: "Backend, Python, SQL & .NET",
-    pages: "200+ Pages",
-    icon: "🐘",
-    fileName: "PostgreSQL1 2.pdf",
-    topics: [
-      "JSONB Data Types & Document Storage",
-      "Partitioning, Connection Pooling & Vacuuming",
-      "Full-Text Search & Complex Recursive CTEs",
-      "PL/pgSQL Functions & Concurrency MVCC"
-    ]
-  },
-  {
-    id: "mongodb",
-    title: "MongoDB NoSQL Database",
-    subtitle: "Notes for Professionals",
-    tagline: "Document Database, Mongoose & Sharding",
-    cat: "Backend, Python, SQL & .NET",
-    pages: "150+ Pages",
-    icon: "🍃",
-    fileName: "MongoDB1 2.pdf",
-    topics: [
-      "BSON Documents, Collections & CRUD Operations",
-      "Aggregation Pipeline ($match, $group,$project)",
-      "Indexing Strategies (Compound, TTL, Text)",
-      "Replica Sets, High Availability & Sharding"
-    ]
-  },
-  {
-    id: "mssql",
-    title: "Microsoft SQL Server (T-SQL)",
-    subtitle: "Notes for Professionals",
-    tagline: "Enterprise Relational Database System",
-    cat: "Backend, Python, SQL & .NET",
-    pages: "350+ Pages",
-    icon: "🏛️",
-    fileName: "MicrosoftSQLServer1 2.pdf",
-    topics: [
-      "T-SQL Queries, Variables & Control-of-Flow",
-      "Clustered vs Non-Clustered Indexes",
-      "SSMS Administration & Backup Schedules",
-      "Transactions, Deadlocks & Isolation Levels"
-    ]
-  },
-  {
-    id: "hibernate",
-    title: "Hibernate ORM Framework",
-    subtitle: "Notes for Professionals",
-    tagline: "Java Persistence API (JPA) & Mapping",
-    cat: "Backend, Python, SQL & .NET",
-    pages: "100+ Pages",
-    icon: "🔄",
-    fileName: "Hibernate1.pdf",
-    topics: [
-      "Entity Mapping, Annotations & XML Configs",
-      "HQL (Hibernate Query Language) & Criteria API",
-      "First & Second Level Caching Mechanisms",
-      "Lazy vs Eager Loading & N+1 Problem Fixes"
-    ]
-  },
+    // --- 2. BACKEND, CLOUD & DATABASES ---
+    {
+      id: "spring",
+      category: "backend",
+      title: "Spring Framework & Boot",
+      subtitle: "Notes for Professionals",
+      pages: "50+ Pages",
+      edition: "Enterprise Java & Dependency Injection",
+      icon: "🌱",
+      color: "#16A34A",
+      bgGradient: "linear-gradient(135deg, #F0FDF4 0%, #DCFCE7 100%)",
+      badgeColor: "#15803D",
+      highlights: [
+        "Inversion of Control (IoC) & Application Context",
+        "Spring Beans, Annotations & Auto-wiring",
+        "Spring Data JPA, Hibernate & Transaction Mgmt",
+        "REST APIs, Security & Actuator Monitoring"
+      ],
+      filename: "SpringFramework.pdf"
+    },
+    {
+      id: "sql",
+      category: "backend",
+      title: "SQL & Relational Databases",
+      subtitle: "Notes for Professionals",
+      pages: "100+ Pages",
+      edition: "ANSI SQL, Joins & Query Tuning",
+      icon: "💾",
+      color: "#0284C7",
+      bgGradient: "linear-gradient(135deg, #F0F9FF 0%, #E0F2FE 100%)",
+      badgeColor: "#0369A1",
+      highlights: [
+        "Complex Joins (Inner, Left, Cross, Outer)",
+        "Subqueries, Window Functions & CTEs",
+        "Indexing, Primary/Foreign Keys & Constraints",
+        "Transactions, ACID Properties & Query Optimization"
+      ],
+      filename: "SQL.pdf"
+    },
+    {
+      id: "python",
+      category: "backend",
+      title: "Python 3 & 2 Architecture",
+      subtitle: "Notes for Professionals",
+      pages: "800+ Pages",
+      edition: "Pythonic Best Practices & PEP8",
+      icon: "🐍",
+      color: "#059669",
+      bgGradient: "linear-gradient(135deg, #ECFDF5 0%, #D1FAE5 100%)",
+      badgeColor: "#047857",
+      highlights: [
+        "Core Data Types, Comprehensions & Generators",
+        "Decorators, Metaclasses & Context Managers",
+        "Multiprocessing, Threading & Asyncio",
+        "Data Science Foundations & File I/O Workflows"
+      ],
+      filename: "Python0.pdf"
+    },
+    {
+      id: "csharp",
+      category: "backend",
+      title: "C# Programming Handbook",
+      subtitle: "Notes for Professionals",
+      pages: "700+ Pages",
+      edition: "C# 6.0 to C# 10 & CLR Runtimes",
+      icon: "🔷",
+      color: "#4338CA",
+      bgGradient: "linear-gradient(135deg, #EEF2FF 0%, #E0E7FF 100%)",
+      badgeColor: "#3730A3",
+      highlights: [
+        "LINQ Queries, Expressions & Lambdas",
+        "Async / Await Task Parallel Library",
+        "Delegates, Events & Generic Collections",
+        "Reflection, Dependency Injection & Interfaces"
+      ],
+      filename: "CSharp1.pdf"
+    },
+    {
+      id: "vb-net",
+      category: "backend",
+      title: "Visual Basic .NET",
+      subtitle: "Notes for Professionals",
+      pages: "100+ Pages",
+      edition: "VB.NET & Windows Application Development",
+      icon: "📑",
+      color: "#0284C7",
+      bgGradient: "linear-gradient(135deg, #F0F9FF 0%, #E0F2FE 100%)",
+      badgeColor: "#075985",
+      highlights: [
+        "Object Oriented Programming in VB.NET",
+        "Event-Driven Architecture & WinForms",
+        "Database Connections via ADO.NET",
+        "Exception Handling & Delegates Management"
+      ],
+      filename: "VisualBasic_NET.pdf"
+    },
+    {
+      id: "dotnet",
+      category: "backend",
+      title: ".NET Framework Architecture",
+      subtitle: "Notes for Professionals",
+      pages: "100+ Pages",
+      edition: "Enterprise .NET & Web API Frameworks",
+      icon: "🌐",
+      color: "#1E40AF",
+      bgGradient: "linear-gradient(135deg, #EFF6FF 0%, #DBEAFE 100%)",
+      badgeColor: "#1E3A8A",
+      highlights: [
+        "Common Language Runtime (CLR) & Assemblies",
+        "Memory Management & Garbage Collector",
+        "ASP.NET Web API & RESTful Services",
+        "Configuration, AppDomains & Windows Services"
+      ],
+      filename: "DotNETFramework1.pdf"
+    },
+    {
+      id: "entity-framework",
+      category: "backend",
+      title: "Entity Framework ORM",
+      subtitle: "Notes for Professionals",
+      pages: "80+ Pages",
+      edition: "Database First & Code First Systems",
+      icon: "🗄️",
+      color: "#047857",
+      bgGradient: "linear-gradient(135deg, #ECFDF5 0%, #D1FAE5 100%)",
+      badgeColor: "#065F46",
+      highlights: [
+        "Code-First Migrations & Fluent API",
+        "LINQ to Entities & Eager/Lazy Loading",
+        "Relationships, Foreign Keys & Cascades",
+        "Stored Procedures & Performance Profiling"
+      ],
+      filename: "EntityFramework1.pdf"
+    },
 
-  // --- MOBILE & CROSS-PLATFORM ---
-  {
-    id: "react-native",
-    title: "React Native Mobile Dev",
-    subtitle: "Notes for Professionals",
-    tagline: "Native iOS & Android Apps with React",
-    cat: "Mobile (Android, iOS & Xamarin)",
-    pages: "180+ Pages",
-    icon: "📱",
-    fileName: "ReactNative1 2.pdf",
-    topics: [
-      "Native Bridge & New Architecture (Fabric/TurboModules)",
-      "Core Components (View, Text, FlatList, ScrollView)",
-      "React Navigation (Stack, Tab & Drawer)",
-      "Native Device APIs (Camera, GPS, Storage)"
-    ]
-  },
-  {
-    id: "swift",
-    title: "Swift iOS Programming",
-    subtitle: "Notes for Professionals",
-    tagline: "Modern Apple iOS, iPadOS & macOS Dev",
-    cat: "Mobile (Android, iOS & Xamarin)",
-    pages: "300+ Pages",
-    icon: "🕊️",
-    fileName: "Swift1.pdf",
-    topics: [
-      "Optionals, Unwrapping & Guard Statements",
-      "Protocols, Extensions & Generics",
-      "ARC (Automatic Reference Counting) & Memory Leaks",
-      "SwiftUI & UIKit Integration Paradigms"
-    ]
-  },
-  {
-    id: "objective-c",
-    title: "Objective-C Apple Programming",
-    subtitle: "Notes for Professionals",
-    tagline: "Apple Foundation & Legacy Codebases",
-    cat: "Mobile (Android, iOS & Xamarin)",
-    pages: "150+ Pages",
-    icon: "🍏",
-    fileName: "ObjectiveC1.pdf",
-    topics: [
-      "Message Passing Syntax & Runtime Dispatch",
-      "Manual Retain-Release (MRR) & ARC",
-      "Protocols, Delegates & Categories",
-      "Bridging Objective-C with Modern Swift"
-    ]
-  },
+    // --- 3. FRONTEND & WEB ---
+    {
+      id: "angular",
+      category: "frontend",
+      title: "Angular Modern Framework",
+      subtitle: "Notes for Professionals",
+      pages: "200+ Pages",
+      edition: "Angular 2+ Components & TypeScript",
+      icon: "🅰️",
+      color: "#DC2626",
+      bgGradient: "linear-gradient(135deg, #FEF2F2 0%, #FEE2E2 100%)",
+      badgeColor: "#991B1B",
+      highlights: [
+        "Directives, Pipes, Components & Data Binding",
+        "RxJS Observables & Reactive Forms",
+        "Services, Dependency Injection & Routing Guards",
+        "HTTP Client & State Management Systems"
+      ],
+      filename: "Angular0.pdf"
+    },
+    {
+      id: "angularjs",
+      category: "frontend",
+      title: "AngularJS Legacy Notes",
+      subtitle: "Notes for Professionals",
+      pages: "100+ Pages",
+      edition: "AngularJS 1.x Architecture",
+      icon: "🛡️",
+      color: "#B91C1C",
+      bgGradient: "linear-gradient(135deg, #FFF1F2 0%, #FFE4E6 100%)",
+      badgeColor: "#881337",
+      highlights: [
+        "Controllers, Scopes ($scope) & Digest Cycles",
+        "Two-Way Data Binding & Custom Directives",
+        "Filters, Factories & Providers Architecture",
+        "$http Service & Module Injection"
+      ],
+      filename: "AngularJS1.pdf"
+    },
+    {
+      id: "css",
+      category: "frontend",
+      title: "CSS & Web Styling",
+      subtitle: "Notes for Professionals",
+      pages: "200+ Pages",
+      edition: "CSS3, Flexbox & Modern Grid",
+      icon: "🎨",
+      color: "#0891B2",
+      bgGradient: "linear-gradient(135deg, #ECFEFF 0%, #CFFAFE 100%)",
+      badgeColor: "#0E7490",
+      highlights: [
+        "Flexbox Layouts & Responsive CSS Grid",
+        "Keyframe Animations, Transitions & Transforms",
+        "Media Queries, Viewport & Mobile-First Styling",
+        "Pseudo-classes, Variables & Modern Selectors"
+      ],
+      filename: "CSS1.pdf"
+    },
 
-  // --- GIT, BASH, AUTOMATION & DATA SCIENCE ---
-  {
-    id: "linux",
-    title: "Linux Command Line & Kernel",
-    subtitle: "Notes for Professionals",
-    tagline: "System Administration, Bash & POSIX",
-    cat: "Git, Bash & Automation",
-    pages: "250+ Pages",
-    icon: "🐧",
-    fileName: "Linux1 2.pdf",
-    topics: [
-      "File System Hierarchy, Permissions (chmod/chown)",
-      "Process Management (ps, top, kill, systemctl)",
-      "Bash Shell Scripting, Pipes & Redirections",
-      "Networking Tools (ssh, scp, netstat, iptables)"
-    ]
-  },
-  {
-    id: "powershell",
-    title: "PowerShell Automation",
-    subtitle: "Notes for Professionals",
-    tagline: "Object-Oriented Windows & Cross-Platform Shell",
-    cat: "Git, Bash & Automation",
-    pages: "180+ Pages",
-    icon: "💻",
-    fileName: "PowerShell1.pdf",
-    topics: [
-      "Cmdlets, Pipelines & Object Streams",
-      "PowerShell Scripting (.ps1) & Error Handling",
-      "Active Directory & Windows Administration",
-      "PowerShell Core (Cross-Platform on Linux/macOS)"
-    ]
-  },
-  {
-    id: "perl",
-    title: "Perl Scripting Language",
-    subtitle: "Notes for Professionals",
-    tagline: "Text Processing, System Admin & Regex",
-    cat: "Git, Bash & Automation",
-    pages: "180+ Pages",
-    icon: "🐪",
-    fileName: "Perl1.pdf",
-    topics: [
-      "Scalars, Arrays, Hashes & Context Evaluation",
-      "Advanced Regular Expression Engine",
-      "File Handles, Directory Parsing & System Calls",
-      "CPAN Modules & Practical Automation Scripts"
-    ]
-  },
-  {
-    id: "r-lang",
-    title: "R for Data Science & Stats",
-    subtitle: "Notes for Professionals",
-    tagline: "Statistical Computing, Visuals & Modeling",
-    cat: "Git, Bash & Automation",
-    pages: "250+ Pages",
-    icon: "📊",
-    fileName: "R1.pdf",
-    topics: [
-      "Vectors, Matrices, DataFrames & Factors",
-      "Data Manipulation with dplyr & tidyverse",
-      "Data Visualization with ggplot2",
-      "Statistical Hypothesis Testing & Regression"
-    ]
-  },
-  {
-    id: "matlab",
-    title: "MATLAB Scientific Computing",
-    subtitle: "Notes for Professionals",
-    tagline: "Engineering Mathematics, Matrix & Signals",
-    cat: "Git, Bash & Automation",
-    pages: "200+ Pages",
-    icon: "🔬",
-    fileName: "MATLAB1.pdf",
-    topics: [
-      "Matrix Algebra, Vectors & Linear Systems",
-      "2D/3D Plotting & Graphical Engineering Displays",
-      "Signal Processing, FFT & Filter Design",
-      "Differential Equations & Numerical Solvers"
-    ]
-  },
-  {
-    id: "latex",
-    title: "LaTeX Document Preparation",
-    subtitle: "Notes for Professionals",
-    tagline: "Typesetting Papers, Theses & Math Equations",
-    cat: "Git, Bash & Automation",
-    pages: "150+ Pages",
-    icon: "📄",
-    fileName: "LaTeX1.pdf",
-    topics: [
-      "Document Classes (article, report, book)",
-      "Mathematical Formulas, Matrices & Greek Symbols",
-      "BibTeX Bibliography & Citation Management",
-      "Tables, Multi-column Layouts & Figure Floats"
-    ]
-  },
-  {
-    id: "vba",
-    title: "VBA for Microsoft Office",
-    subtitle: "Notes for Professionals",
-    tagline: "Excel Macros, Automations & Office APIs",
-    cat: "Git, Bash & Automation",
-    pages: "200+ Pages",
-    icon: "📈",
-    fileName: "VBA1.pdf",
-    topics: [
-      "Excel Object Model (Workbooks, Sheets, Ranges)",
-      "Subroutines, Functions & Event Listeners",
-      "UserForms, Custom Controls & Dialog Boxes",
-      "Automating Repetitive Corporate Spreadsheets"
-    ]
-  }
-];
+    // --- 4. MOBILE DEVELOPMENT ---
+    {
+      id: "xamarin",
+      category: "mobile",
+      title: "Xamarin.Forms Cross-Platform",
+      subtitle: "Notes for Professionals",
+      pages: "100+ Pages",
+      edition: "iOS & Android Unified Mobile C#",
+      icon: "📱",
+      color: "#2563EB",
+      bgGradient: "linear-gradient(135deg, #EFF6FF 0%, #DBEAFE 100%)",
+      badgeColor: "#1E40AF",
+      highlights: [
+        "XAML UI Layouts & ContentViews",
+        "MVVM Pattern & Data Binding in Mobile",
+        "Custom Renderers & Platform Specifics",
+        "Navigation, SQLite & DependencyService"
+      ],
+      filename: "XamarinForms.pdf"
+    },
+    {
+      id: "android",
+      category: "mobile",
+      title: "Android Native Engineering",
+      subtitle: "Notes for Professionals",
+      pages: "1000+ Pages",
+      edition: "Android Studio & Jetpack Systems",
+      icon: "🤖",
+      color: "#D97706",
+      bgGradient: "linear-gradient(135deg, #FFFBEB 0%, #FEF3C7 100%)",
+      badgeColor: "#B45309",
+      highlights: [
+        "Custom Views, ViewGroups & ConstraintLayout",
+        "RecyclerView, Adapters & Endless Scrolling",
+        "Retrofit2, OkHttp, Volley & API Integrations",
+        "Firebase, SQLite, Architecture Components & Services"
+      ],
+      filename: "Android0.pdf"
+    },
+    {
+      id: "ios",
+      category: "mobile",
+      title: "iOS & Swift Development",
+      subtitle: "Notes for Professionals",
+      pages: "800+ Pages",
+      edition: "Xcode, UIKit & Cocoa Touch",
+      icon: "🍏",
+      color: "#EA580C",
+      bgGradient: "linear-gradient(135deg, #FFF7ED 0%, #FFEDD5 100%)",
+      badgeColor: "#C2410C",
+      highlights: [
+        "UIKit, Storyboard, Autolayout & Size Classes",
+        "UITableView, UICollectionView & Custom Cells",
+        "Push Notifications & Grand Central Dispatch (GCD)",
+        "CoreData, Networking (Alamofire/URLSession) & Memory"
+      ],
+      filename: "iOS0.pdf"
+    },
 
-const categoryTabs = [
-  "All Tech Books",
-  "Core CS, C/C++ & Algorithms",
-  "Backend, Python, SQL & .NET",
-  "Frontend, Angular & CSS",
-  "Mobile (Android, iOS & Xamarin)",
-  "Git, Bash & Automation"
-];
+    // --- 5. DEVOPS, SCRIPTS & AUTOMATION ---
+    {
+      id: "git",
+      category: "tools",
+      title: "Git Version Control Guide",
+      subtitle: "Notes for Professionals",
+      pages: "100+ Pages",
+      edition: "Git Core, Branching & Merge Strategies",
+      icon: "🌿",
+      color: "#EA580C",
+      bgGradient: "linear-gradient(135deg, #FFF7ED 0%, #FFEDD5 100%)",
+      badgeColor: "#9A3412",
+      highlights: [
+        "Branching Workflows, Stashing & Merging",
+        "Rebase, Cherry-Pick & Resolving Conflicts",
+        "Remote Tracking, GitHub Pull Requests & Tags",
+        "Git Hooks, Submodules & Clean History"
+      ],
+      filename: "Git1.pdf"
+    },
+    {
+      id: "bash",
+      category: "tools",
+      title: "Bash Scripting & CLI",
+      subtitle: "Notes for Professionals",
+      pages: "100+ Pages",
+      edition: "Shell Automation & Linux Admin",
+      icon: "💻",
+      color: "#334155",
+      bgGradient: "linear-gradient(135deg, #F8FAFC 0%, #E2E8F0 100%)",
+      badgeColor: "#1E293B",
+      highlights: [
+        "Shell Script Structure, Loops & Conditional Tests",
+        "Pipes, Redirection (stdin/stdout) & Awk/Sed",
+        "Environment Variables & Cron Automation",
+        "Process Control, Signals & Error Handling"
+      ],
+      filename: "Bash1.pdf"
+    },
+    {
+      id: "excel-vba",
+      category: "tools",
+      title: "Excel VBA & Macros",
+      subtitle: "Notes for Professionals",
+      pages: "100+ Pages",
+      edition: "Data Processing & Office Automation",
+      icon: "📊",
+      color: "#15803D",
+      bgGradient: "linear-gradient(135deg, #F0FDF4 0%, #DCFCE7 100%)",
+      badgeColor: "#166534",
+      highlights: [
+        "Automating Spreadsheets, Workbooks & Ranges",
+        "VBA Loops, User Forms & Event Handlers",
+        "Custom Functions (UDF) & Fast Calculation Macros",
+        "Data Import / Export & Report Generation"
+      ],
+      filename: "ExcelVBA1.pdf"
+    }
+  ];
 
-export default function SkillsDirectory({ onBackToHome }) {
-  const [selectedCat, setSelectedCat] = useState("All Tech Books");
-  const [searchQuery, setSearchQuery] = useState("");
-
-  const filteredBooks = booksData.filter((b) => {
-    const matchesCat =
-      selectedCat === "All Tech Books" ||
-      b.cat.toLowerCase().trim() === selectedCat.toLowerCase().trim();
-    const matchesSearch =
-      !searchQuery ||
-      b.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      b.tagline.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      b.topics.some((t) => t.toLowerCase().includes(searchQuery.toLowerCase()));
-    return matchesCat && matchesSearch;
-  });
+  const filteredBooks = filter === "all" ? skillBooks : skillBooks.filter(b => b.category === filter);
 
   return (
-    <div style={{ maxWidth: "1280px", margin: "0 auto", padding: "24px 20px 80px", fontFamily: "system-ui, -apple-system, sans-serif" }}>
+    <div style={{ maxWidth: "1280px", margin: "0 auto", padding: "24px 20px 80px", fontFamily: "inherit" }}>
       {/* Breadcrumb */}
-      <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "20px" }}>
-        <span onClick={onBackToHome} style={{ fontSize: "13px", color: "#64748B", cursor: "pointer", fontWeight: "600" }}>Home ›</span>
-        <span style={{ fontSize: "13px", color: "#EA580C", fontWeight: "800" }}>Engineering Skills & Professional Books Vault</span>
+      <div style={{ fontSize: "13px", color: "#64748B", marginBottom: "16px", fontWeight: "500" }}>
+        <span>Home</span> <span style={{ margin: "0 6px" }}>›</span> <span style={{ color: "#0F172A", fontWeight: "700" }}>Engineering Skills & Professional Books Vault</span>
       </div>
 
-      {/* Hero Banner */}
-      <div style={{
-        background: "linear-gradient(135deg, #FFFFFF 0%, #FFF7ED 100%)",
-        border: "1.5px solid rgba(234, 88, 12, 0.2)",
-        borderRadius: "28px",
-        padding: "36px 32px",
-        marginBottom: "28px",
-        boxShadow: "0 10px 30px rgba(234, 88, 12, 0.08)",
-        display: "flex",
-        justifyContent: "space-between",
-        alignItems: "center",
-        flexWrap: "wrap",
-        gap: "24px"
-      }}>
-        <div>
-          <div style={{ display: "inline-flex", alignItems: "center", gap: "8px", background: "#FFF7ED", border: "1px solid #FFEDD5", padding: "5px 14px", borderRadius: "999px", marginBottom: "12px" }}>
-            <span style={{ fontSize: "11px", fontWeight: "800", color: "#EA580C", letterSpacing: "0.6px", textTransform: "uppercase" }}>
-              OFFICIAL DEVELOPER COMPILATIONS • {booksData.length} TECH BOOKS • 12,000+ PAGES
-            </span>
-          </div>
-          <h1 style={{ fontSize: "36px", fontWeight: "900", color: "#0F172A", margin: "0 0 10px", letterSpacing: "-0.8px" }}>
-            Engineering Skills & Career Vault ⚡
-          </h1>
-          <p style={{ fontSize: "15px", color: "#64748B", margin: 0, maxWidth: "680px", lineHeight: "1.6" }}>
-            Industry-tested computer science notes, frameworks, and programming books. Filter by domain and download complete high-quality reference PDFs directly.
-          </p>
-        </div>
-
-        <div style={{ minWidth: "280px" }}>
-          <input
-            type="text"
-            placeholder="🔍 Search tech books or topics..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            style={{
-              width: "100%",
-              padding: "12px 18px",
-              borderRadius: "14px",
-              border: "1.5px solid #CBD5E1",
-              fontSize: "14px",
-              fontWeight: "600",
-              outline: "none",
-              boxShadow: "0 2px 8px rgba(0,0,0,0.03)"
-            }}
-          />
-        </div>
+      {/* Header Banner */}
+      <div style={{ marginBottom: "26px" }}>
+        <span style={{
+          display: "inline-block",
+          background: "linear-gradient(135deg, #FFF7ED 0%, #FFEDD5 100%)",
+          color: "#C2410C",
+          fontSize: "12px",
+          fontWeight: "800",
+          letterSpacing: "0.5px",
+          padding: "6px 14px",
+          borderRadius: "8px",
+          marginBottom: "12px",
+          border: "1px solid #FED7AA",
+          textTransform: "uppercase"
+        }}>
+          OFFICIAL DEVELOPER COMPILATIONS • 19 TECH BOOKS • 5800+ PAGES
+        </span>
+        <h1 style={{ fontSize: "34px", fontWeight: "900", color: "#0F172A", margin: "0 0 10px", letterSpacing: "-0.5px" }}>
+          Engineering Skills & Career Vault ⚡
+        </h1>
+        <p style={{ color: "#475569", fontSize: "15px", margin: 0, lineHeight: "1.6" }}>
+          Industry-tested computer science notes, frameworks, and programming books. Filter by domain and download complete high-quality reference PDFs directly.
+        </p>
       </div>
 
-      {/* Category Filter Pills */}
-      <div style={{ display: "flex", gap: "10px", flexWrap: "wrap", marginBottom: "32px" }}>
-        {categoryTabs.map((cat) => (
+      {/* Domain Filters */}
+      <div style={{ display: "flex", flexWrap: "wrap", gap: "10px", marginBottom: "32px" }}>
+        {[
+          { id: "all", label: "All Tech Books (19)" },
+          { id: "core", label: "Core CS, C/C++ & Algorithms" },
+          { id: "backend", label: "Backend, Python, SQL & .NET" },
+          { id: "frontend", label: "Frontend, Angular & CSS" },
+          { id: "mobile", label: "Mobile (Android, iOS & Xamarin)" },
+          { id: "tools", label: "Git, Bash & Automation" }
+        ].map((tab) => (
           <button
-            key={cat}
-            onClick={() => setSelectedCat(cat)}
+            key={tab.id}
+            onClick={() => setFilter(tab.id)}
             style={{
-              background: selectedCat === cat ? "#EA580C" : "#FFFFFF",
-              color: selectedCat === cat ? "#FFFFFF" : "#475569",
-              border: selectedCat === cat ? "1.5px solid #EA580C" : "1.5px solid #E2E8F0",
-              padding: "8px 18px",
-              borderRadius: "999px",
-              fontSize: "12px",
-              fontWeight: "700",
+              padding: "9px 18px",
+              borderRadius: "8px",
+              border: filter === tab.id ? "1.5px solid #EA580C" : "1px solid #E2E8F0",
+              background: filter === tab.id ? "#EA580C" : "#FFFFFF",
+              color: filter === tab.id ? "#FFFFFF" : "#334155",
+              fontWeight: "800",
+              fontSize: "13px",
               cursor: "pointer",
-              transition: "all 0.2s ease",
-              boxShadow: selectedCat === cat ? "0 4px 12px rgba(234, 88, 12, 0.25)" : "none"
+              transition: "all 0.2s ease"
             }}
           >
-            {cat} {cat === "All Tech Books" ? `(${booksData.length})` : ""}
+            {tab.label}
           </button>
         ))}
       </div>
 
-      {/* Books Cards Grid */}
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))", gap: "24px" }}>
+      {/* Responsive Cards Grid */}
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(340px, 1fr))", gap: "24px" }}>
         {filteredBooks.map((book) => (
           <div
             key={book.id}
             style={{
               background: "#FFFFFF",
-              border: "1.5px solid #E2E8F0",
-              borderRadius: "24px",
-              padding: "26px",
+              borderRadius: "16px",
+              border: "1.5px solid #FED7AA",
+              padding: "24px",
               display: "flex",
               flexDirection: "column",
               justifyContent: "space-between",
-              boxShadow: "0 4px 18px rgba(0,0,0,0.03)",
-              transition: "all 0.25s ease"
+              boxShadow: "0 8px 24px rgba(234, 88, 12, 0.05)",
+              transition: "transform 0.2s ease, box-shadow 0.2s ease"
             }}
             onMouseEnter={(e) => {
-              e.currentTarget.style.borderColor = "#EA580C";
               e.currentTarget.style.transform = "translateY(-4px)";
-              e.currentTarget.style.boxShadow = "0 12px 28px rgba(234, 88, 12, 0.12)";
+              e.currentTarget.style.boxShadow = "0 14px 32px rgba(234, 88, 12, 0.12)";
             }}
             onMouseLeave={(e) => {
-              e.currentTarget.style.borderColor = "#E2E8F0";
-              e.currentTarget.style.transform = "none";
-              e.currentTarget.style.boxShadow = "0 4px 18px rgba(0,0,0,0.03)";
+              e.currentTarget.style.transform = "translateY(0)";
+              e.currentTarget.style.boxShadow = "0 8px 24px rgba(234, 88, 12, 0.05)";
             }}
           >
             <div>
-              {/* Card Header */}
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "14px" }}>
-                <div style={{ display: "flex", gap: "12px", alignItems: "center" }}>
-                  <div style={{ width: "44px", height: "44px", borderRadius: "12px", background: "#EFF6FF", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "22px" }}>
+                <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+                  <div style={{
+                    width: "48px",
+                    height: "48px",
+                    borderRadius: "12px",
+                    background: book.bgGradient,
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    fontSize: "24px"
+                  }}>
                     {book.icon}
                   </div>
                   <div>
-                    <h3 style={{ fontSize: "18px", fontWeight: "900", color: "#0F172A", margin: "0 0 2px" }}>{book.title}</h3>
-                    <div style={{ fontSize: "11px", fontWeight: "700", color: "#64748B" }}>{book.subtitle}</div>
+                    <h3 style={{ fontSize: "17.5px", fontWeight: "900", color: "#0F172A", margin: 0 }}>
+                      {book.title}
+                    </h3>
+                    <span style={{ fontSize: "12px", color: "#64748B", fontWeight: "600" }}>
+                      {book.subtitle}
+                    </span>
                   </div>
                 </div>
-                <span style={{ fontSize: "10px", fontWeight: "800", color: "#2563EB", background: "#EFF6FF", padding: "4px 10px", borderRadius: "8px", border: "1px solid #BFDBFE" }}>
+                <span style={{
+                  background: "#FFF7ED",
+                  color: book.badgeColor,
+                  border: "1px solid #FED7AA",
+                  fontSize: "11px",
+                  fontWeight: "800",
+                  padding: "4px 10px",
+                  borderRadius: "20px",
+                  whiteSpace: "nowrap"
+                }}>
                   {book.pages}
                 </span>
               </div>
 
-              {/* Tagline */}
-              <div style={{ fontSize: "12px", fontWeight: "800", color: "#EA580C", marginBottom: "14px" }}>
-                {book.tagline}
+              <div style={{ marginBottom: "14px" }}>
+                <span style={{ fontSize: "12px", fontWeight: "700", color: "#EA580C" }}>
+                  {book.edition}
+                </span>
               </div>
 
-              {/* Key Topics Box */}
-              <div style={{ background: "#F8FAFC", border: "1px solid #E2E8F0", borderRadius: "14px", padding: "14px", marginBottom: "20px" }}>
-                <div style={{ fontSize: "11px", fontWeight: "800", color: "#0F172A", textTransform: "uppercase", letterSpacing: "0.5px", marginBottom: "8px" }}>
-                  KEY TOPICS & SYLLABUS:
-                </div>
-                <ul style={{ margin: 0, paddingLeft: "16px", fontSize: "12px", color: "#475569", lineHeight: "1.6", display: "flex", flexDirection: "column", gap: "4px" }}>
-                  {book.topics.map((t, i) => (
-                    <li key={i}>{t}</li>
+              <div style={{ background: "#F8FAFC", borderRadius: "10px", padding: "12px 14px", marginBottom: "20px", border: "1px solid #E2E8F0" }}>
+                <p style={{ margin: "0 0 6px", fontSize: "12px", fontWeight: "800", color: "#334155", textTransform: "uppercase" }}>
+                  Key Topics & Syllabus:
+                </p>
+                <ul style={{ margin: 0, paddingLeft: "18px", fontSize: "12.5px", color: "#475569", lineHeight: "1.6" }}>
+                  {book.highlights.map((h, i) => (
+                    <li key={i}>{h}</li>
                   ))}
                 </ul>
               </div>
             </div>
 
             {/* Direct Download Button */}
-            <a
-              href={`/notes/${book.fileName}`}
-              download={book.fileName}
-              style={{
-                background: "linear-gradient(135deg, #EA580C 0%, #C2410C 100%)",
-                color: "#FFFFFF",
-                padding: "12px 20px",
-                borderRadius: "12px",
-                fontWeight: "800",
-                fontSize: "13px",
-                textAlign: "center",
-                textDecoration: "none",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                gap: "8px",
-                boxShadow: "0 4px 14px rgba(234, 88, 12, 0.25)"
-              }}
-            >
-              <span>📥</span> Download Complete PDF
-            </a>
+            <div>
+              <a
+                href={"/" + book.filename}
+                download={book.filename}
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  gap: "8px",
+                  background: "linear-gradient(135deg, #EA580C 0%, #C2410C 100%)",
+                  color: "#FFFFFF",
+                  padding: "11px 16px",
+                  borderRadius: "10px",
+                  textDecoration: "none",
+                  fontWeight: "800",
+                  fontSize: "13px",
+                  boxShadow: "0 4px 14px rgba(234, 88, 12, 0.25)",
+                  transition: "all 0.2s ease"
+                }}
+              >
+                <span>📥</span> Download Complete PDF
+              </a>
+            </div>
           </div>
         ))}
       </div>
     </div>
   );
-}
+};
+
+export default SkillsDirectory;
