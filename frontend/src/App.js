@@ -572,13 +572,13 @@ function App() {
       if (isLoggedIn) {
         setCurrentView("chat");
       } else {
-        setCurrentView("home");
+        isLoggedIn ? setCurrentView("chat") : setCurrentView("home");
         window.scrollTo({ top: 0, behavior: "smooth" });
       }
     } else if (tab === "chat") {
       if (!isLoggedIn) {
         alert("KalamAI Chat access karne ke liye kripya pehle Login karein!");
-        setCurrentView("home");
+        isLoggedIn ? setCurrentView("chat") : setCurrentView("home");
         window.scrollTo({ top: 0, behavior: "smooth" });
         return;
       }
@@ -595,7 +595,7 @@ function App() {
       if (isLoggedIn) {
         setCurrentView("chat");
       } else {
-        setCurrentView("home");
+        isLoggedIn ? setCurrentView("chat") : setCurrentView("home");
         setTimeout(() => {
           window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
         }, 120);
@@ -1097,7 +1097,7 @@ function App() {
               <>
                 {/* Home */}
                 <span
-                  onClick={() => (isLoggedIn ? setCurrentView("chat") : handleNavClick("home"))}
+                  onClick={() => (isLoggedIn ? setCurrentView("chat") : isLoggedIn ? setCurrentView("chat") : handleNavClick("home"))}
                   style={{
                     cursor: "pointer",
                     color: currentView === "home" ? "#EA580C" : "#4B5563",
