@@ -127,7 +127,12 @@ app.post('/api/chat', async (req, res) => {
 ${attachedFile.content || ""}`;
         }
 
-        const modelsToTry = ["openai/gpt-oss-20b", "openai/gpt-oss-120b", "qwen/qwen3.8-27b"];
+        
+        const hasImage = !!(attachedFile && (attachedFile.data || attachedFile.base64 || (typeof attachedFile === 'string' && attachedFile.startsWith('data:image'))));
+        const modelsToTry = hasImage 
+            ? ["llama-3.2-11b-vision-preview", "llama-3.2-90b-vision-preview", "llama-3.3-70b-versatile"]
+            : [
+"openai/gpt-oss-20b", "openai/gpt-oss-120b", "qwen/qwen3.8-27b"];
         let reply = null;
         let lastError = null;
 
@@ -154,7 +159,18 @@ Whenever a student asks a doubt, asks for notes, or uploads notes/questions/phot
    - 💡 **Real-world Analogy**:
      1 line quick practical analogy to remember the concept effortlessly.`
                         },
-                        { role: "user", content: fullPrompt }
+                        {
+                            role: "user",
+                            content: hasImage ? [
+                                { type: "text", text: fullPrompt },
+                                { 
+                                    type: "image_url", 
+                                    image_url: { 
+                                        url: attachedFile.data || attachedFile.base64 || (typeof attachedFile === 'string' ? attachedFile : `data:image/jpeg;base64,${attachedFile}`)
+                                    } 
+                                }
+                            ] : fullPrompt
+                        }
                     ],
                     model: model
                 });
