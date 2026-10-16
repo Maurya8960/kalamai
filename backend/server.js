@@ -46,7 +46,7 @@ app.get('/', (req, res) => {
 
 app.post('/api/auth/register', async (req, res) => {
     try {
-        const { name, email, password } = req.body;
+        const { name, email, password, imageBase64, attachedBase64 } = req.body;
         
         if (isMongoConnected) {
             const userExists = await User.findOne({ email });
@@ -129,10 +129,11 @@ ${attachedFile.content || ""}`;
 
         
         const hasImage = !!(attachedFile && (attachedFile.data || attachedFile.base64 || (typeof attachedFile === 'string' && attachedFile.startsWith('data:image'))));
+        const imgPayload = imageBase64 || attachedBase64 || (attachedFile && (attachedFile.data || attachedFile.base64 || (typeof attachedFile === 'string' && attachedFile.startsWith('data:') ? attachedFile : null)));
+        const hasImage = !!imgPayload;
         const modelsToTry = hasImage 
             ? ["llama-3.2-11b-vision-preview", "llama-3.2-90b-vision-preview", "llama-3.3-70b-versatile"]
-            : [
-"openai/gpt-oss-20b", "openai/gpt-oss-120b", "qwen/qwen3.8-27b"];
+            : ["llama-3.3-70b-versatile", "llama-3.1-8b-instant"];
         let reply = null;
         let lastError = null;
 
@@ -162,7 +163,15 @@ Whenever a student asks a doubt, asks for notes, or uploads notes/questions/phot
                         {
                             role: "user",
                             content: hasImage ? [
-                                { type: "text", text: fullPrompt },
+                                { type: "text", text: fullPrompt || text || "Please examine this image carefully and provide the complete syllabus text and analysis." },
+                                { 
+                                    type: "image_url", 
+                                    image_url: { 
+                                        url: imgPayload.startsWith("data:") ? imgPayload : `data:image/jpeg;base64,${imgPayload}` 
+                                    } 
+                                }
+                            ] : fullPrompt
+                        },
                                 { 
                                     type: "image_url", 
                                     image_url: { 
