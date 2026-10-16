@@ -139,7 +139,18 @@ ${attachedFile.content || ""}`;
 
         for (const model of modelsToTry) {
             try {
-                const completion = await groq.chat.completions.create({
+                
+        const incomingImg = imageBase64 || (attachedFile && attachedFile.data ? attachedFile.data : null);
+        const hasValidImg = incomingImg && (typeof incomingImg === "string") && (incomingImg.startsWith("data:") || incomingImg.length > 500);
+
+        const currentModel = hasValidImg ? "llama-3.2-11b-vision-preview" : "llama-3.3-70b-versatile";
+
+        const userMsgContent = hasValidImg ? [
+            { type: "text", text: fullPrompt || text || "Please examine the attached image and extract all text and solutions accurately." },
+            { type: "image_url", image_url: { url: incomingImg.startsWith("data:") ? incomingImg : `data:image/jpeg;base64,${incomingImg}` } }
+        ] : (fullPrompt || text);
+
+        const completion = await groq.chat.completions.create({
                     messages: [
                         {
                             role: "system",
