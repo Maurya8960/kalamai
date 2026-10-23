@@ -9,6 +9,7 @@ import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { GoogleOAuthProvider, GoogleLogin } from "@react-oauth/google";
 import { 
+import ModernAIHub from "./ModernAIHub";
 
 
 
@@ -214,7 +215,8 @@ function App() {
       else if (hash.includes("pyq")) setCurrentView("pyq");
       else if (hash.includes("cheatsheet")) setCurrentView("cheatsheet");
       else if (hash.includes("skill")) setCurrentView("skills");
-      else if (hash.includes("tool")) setCurrentView("tools");
+      else if (hash.includes("tool")) setCurrentView("tools")
+                <button onClick={() => setCurrentView("ai-hub")} style={{ background: currentView === "ai-hub" ? "#EA580C" : "transparent", color: currentView === "ai-hub" ? "#FFF" : "#475569", border: "none", padding: "8px 14px", borderRadius: "8px", fontWeight: "700", cursor: "pointer", fontSize: "13px" }}>⚡ AI Studio</button>;
     };
     window.addEventListener("hashchange", handleHashChange);
     return () => window.removeEventListener("hashchange", handleHashChange);
@@ -1074,7 +1076,8 @@ function App() {
 
                 {/* Tools Tab */}
                 <span
-                  onClick={() => setCurrentView("tools")}
+                  onClick={() => setCurrentView("tools")
+                <button onClick={() => setCurrentView("ai-hub")} style={{ background: currentView === "ai-hub" ? "#EA580C" : "transparent", color: currentView === "ai-hub" ? "#FFF" : "#475569", border: "none", padding: "8px 14px", borderRadius: "8px", fontWeight: "700", cursor: "pointer", fontSize: "13px" }}>⚡ AI Studio</button>}
                   style={{
                     cursor: "pointer",
                     color: currentView === "tools" ? "#EA580C" : "#4B5563",
